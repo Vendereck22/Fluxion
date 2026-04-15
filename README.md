@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 Fluxion | Identité Digital & Innovation
 
-## Getting Started
+Bienvenue dans le dépôt officiel de **Fluxion**, une plateforme de l'entreprise fluxion
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 🛠️ Démarche à suivre (Installation)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Pour mettre en place le projet localement et commencer à contribuer, suivez ces étapes :
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clonage du projet**
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+   ```bash
+   git clone [url-du-repo]
+   cd fluxion
+   ```
 
-## Learn More
+2. **Installation des dépendances**
+   Nous recommandons l'utilisation de `npm` (installé par défaut avec Node.js).
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+3. **Lancement du serveur de développement**
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   npm run dev
+   ```
 
-## Deploy on Vercel
+   Accédez ensuite à [http://localhost:3000](http://localhost:3000) dans votre navigateur.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Accès au Tableau de Bord Admin**
+   Le panneau d'administration est disponible sur la route `/admin`.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## 💻 Technologies Utilisées
+
+Ce projet repose sur une stack technologique de pointe pour garantir performance, SEO et maintenabilité :
+
+- **Framework** : [Next.js 16.2](https://nextjs.org/) (App Router)
+- **Langage** : [TypeScript](https://www.typescriptlang.org/)
+- **Style** : [Tailwind CSS v4](https://tailwindcss.com/) (Nouvel engine haute performance)
+- **UI Components** : [Shadcn/UI](https://ui.shadcn.com/) (Composants accessibles et personnalisables)
+- **Icônes** : [Lucide-React](https://lucide.dev/)
+- **Animations** : [tw-animate-css](https://github.com/ecklf/tailwindcss-animatecss) & Transitions Tailwind natives.
+
+---
+
+## 🎨 Rapport de Configuration CSS (`global.css`)
+
+Le fichier `app/globals.css` a été entièrement refondu pour exploiter la puissance de **Tailwind v4** tout en préservant l'identité Fluxion. Voici les points clés à comprendre pour les développeurs :
+
+### 1. Variables de Branding Fluxion
+
+Nous n'utilisons pas de couleurs hexadécimales brutes dans les composants. Tout passe par des variables CSS définies dans `:root` :
+
+- `--fluxion-deep-blue`: Le bleu signature pour les titres et fonds profonds.
+- `--fluxion-rose`: La couleur d'accentuation dynamique.
+- `--fluxion-cobalt`: Couleur secondaire pour les gradients et actions.
+- `.bg-fluxion-gradient`: Un utilitaire personnalisé combinant Cobalt et Rose.
+
+### 2. Mapping Shadcn/UI
+
+Les composants Shadcn sont "mappés" directement sur ces variables de branding.
+
+- La couleur `primary` du projet est liée à `--fluxion-cobalt`.
+- La couleur `foreground` est liée à `--fluxion-deep-blue`.
+  Cela garantit que n'importe quel nouveau composant Shadcn ajouté sera **automatiquement aux couleurs de Fluxion**.
+
+### 3. Tailwind v4 Engine
+
+Nous utilisons la nouvelle directive `@theme inline`. Cela permet de déclarer nos tokens (couleurs, polices, radius) directement en CSS sans avoir besoin d'un fichier `tailwind.config.js` complexe :
+
+- **Fonts** : `--font-sans` (Schibsted Grotesk) et `--font-heading` (Archivo).
+- **Radius** : Centralisé via `--radius` pour un aspect "Luxury Tech" arrondi et moderne.
+
+---
+
+## 📂 Structure du Projet
+
+- `app/(client)` : Tout l'univers public visible par les utilisateurs (Navbar, Hero, Features).
+- `app/(admin)` : L'interface de gestion sécurisée (Sidebar, Dashboard).
+- `components/ui` : Composants de base issus de Shadcn.
+- `components/client` : Composants interactifs métiers (SocialMedia, HeroSection, etc.).
+
+---
+
+© {new Date().getFullYear()} Fluxion. Tous droits réservés.

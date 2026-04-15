@@ -2,10 +2,7 @@ import type { Metadata } from "next";
 import { Schibsted_Grotesk, Archivo, Geist } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
-
-
 // Police principale pour l'UI et les titres (Schibsted Grotesk)
 const schibstedGrotesk = Schibsted_Grotesk({
   variable: "--font-schibsted",
