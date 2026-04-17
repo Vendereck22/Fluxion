@@ -1,4 +1,4 @@
-import { linkSync } from "fs";
+
 import SocialMedia from "./SocialMedia";
 import Link from "next/link";
 
@@ -18,7 +18,7 @@ export default function Footer() {
             <div>
               <h2 className="font-heading text-3xl font-black mb-2">FLUXION</h2>
               <p className="text-blue-100/70 max-w-sm font-sans">
-                Propulser l'innovation via une identité technologique forte et cohérente.
+                Propulser l&apos;innovation via une identité technologique forte et cohérente.
               </p>
             </div>
             
