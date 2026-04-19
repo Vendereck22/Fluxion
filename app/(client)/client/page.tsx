@@ -1,5 +1,10 @@
+import Approach from "@/components/client/Approach";
 import FeaturesSection from "@/components/client/FeaturesSection";
 import VideoSection from "@/components/client/VideoSection";
+import Testimonials from "@/components/client/Testimonials";
+import Partners from "@/components/client/Partners";
+import FinalCTA from "@/components/client/FinalCTA";
+import WhyUs from "@/components/client/WhyUs";
 
 export default function ClientPage() {
   return (
@@ -7,7 +12,12 @@ export default function ClientPage() {
       <div className="relative">
         <VideoSection />
       </div>
-      <FeaturesSection />
+      <Approach />
+      <Partners />
+      {/*<FeaturesSection />*/}
+      <WhyUs />
+      <Testimonials />
+      <FinalCTA />
     </div>
   );
 }

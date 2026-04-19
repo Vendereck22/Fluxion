@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Play, Pause } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { siteContent } from "@/constants/site-content";
 
 export default function VideoSection() {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -55,20 +56,18 @@ export default function VideoSection() {
       )}
       <div className="relative z-20 text-center px-6 max-w-5xl mx-auto space-y-6">
         <span className="text-white/60 font-black uppercase tracking-[0.3em] text-[10px] md:text-xs mb-4 block">
-          L&apos;expérience Fluxion
+          {siteContent.video.badge}
         </span>
         <h2 className="text-4xl md:text-7xl font-heading font-black text-white leading-[1.1] md:leading-tight tracking-tighter">
-          L&apos;innovation au service <br />
-          de votre <span className="text-fluxion-rose">vision stratégique</span>
+          {siteContent.video.title.split("votre")[0]} <br />
+          de votre <span className="text-fluxion-rose">{siteContent.video.title.split("votre")[1]}</span>
         </h2>
         <p className="text-white/80 max-w-xl mx-auto text-base md:text-xl font-medium leading-relaxed">
-          Plongez au cœur de notre écosystème technique et découvrez comment
-          nous redéfinissons les standards du développement digital à Kinshasa
-          et ailleurs.
+          {siteContent.video.description}
         </p>
         <div className="flex flex-wrap justify-center gap-4 pt-6">
           <Button className="h-14 px-10 rounded-2xl bg-fluxion-rose text-white font-bold text-lg shadow-xl shadow-fluxion-rose/20 hover:scale-105 transition-all border-none">
-            Démarrer un projet
+            {siteContent.video.ctaProject}
           </Button>
 
           <Button
@@ -77,11 +76,11 @@ export default function VideoSection() {
           >
             {isPlaying ? (
               <span className="flex items-center gap-2">
-                <Pause className="w-5 h-5 fill-current" /> Pause Video
+                <Pause className="w-5 h-5 fill-current" /> {siteContent.video.ctaPause}
               </span>
             ) : (
               <span className="flex items-center gap-2">
-                <Play className="w-5 h-5 fill-current" /> Regarder la vision
+                <Play className="w-5 h-5 fill-current" /> {siteContent.video.ctaWatch}
               </span>
             )}
           </Button>
@@ -94,7 +93,7 @@ export default function VideoSection() {
             isPlaying ? "bg-fluxion-rose animate-pulse" : "bg-white",
           )}
         />
-        {isPlaying ? "Actual Stream : 4K Cinema" : "Fluxion "}
+        {isPlaying ? siteContent.video.statusStream : siteContent.video.statusStandby}
       </div>
     </section>
   );

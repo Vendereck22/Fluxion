@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { siteContent } from "@/constants/site-content";
 const LinkedInIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     viewBox="0 0 24 24"
