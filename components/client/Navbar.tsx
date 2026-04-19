@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import Logo from "./Logo";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -23,17 +24,7 @@ export default function Navbar() {
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-white/70 backdrop-blur-xl antialiased transition-all duration-300">
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
-        <Link
-          href="/"
-          className="flex items-center space-x-3 group transition-transform active:scale-95"
-        >
-          <div className="w-10 h-10 bg-fluxion-gradient rounded-xl flex items-center justify-center text-white font-black text-xl shadow-lg shadow-fluxion-cobalt/20 rotate-3 group-hover:rotate-0 transition-all">
-            F
-          </div>
-          <span className="text-xl font-heading font-black text-fluxion-blue tracking-tighter">
-            {siteContent.brand.name}
-          </span>
-        </Link>
+        <Logo size="sm" className="group transition-transform active:scale-95" />
         <div className="hidden md:flex items-center gap-10">
           <ul className="flex items-center gap-8">
             {VISIBLE_LINKS.map((link) => (

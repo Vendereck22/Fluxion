@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
 import { siteContent } from "@/constants/site-content";
+import Logo from "./Logo";
 
 export default function HeroSection() {
   return (
@@ -13,9 +14,7 @@ export default function HeroSection() {
           <Badge variant="secondary" className="mb-4 bg-white/10 text-white hover:bg-white/20 border-none">
             {siteContent.hero.badge}
           </Badge>
-          <div className="w-14 h-14 bg-fluxion-gradient rounded-2xl flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-fluxion-cobalt/20 rotate-3 hover:rotate-0 transition-transform cursor-default">
-            F
-          </div>
+          <Logo size="md" light />
         </header>
 
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-150">

@@ -4,6 +4,7 @@ import SocialMedia from "./SocialMedia";
 import Link from "next/link";
 import { siteContent } from "@/constants/site-content";
 import Newsletter from "./Newsletter";
+import Logo from "./Logo";
 
 export default function Footer() {
   const NavLinks = siteContent.navigation.links;
@@ -14,12 +15,9 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-1 space-y-6 text-center md:text-left">
             <div>
-              <h2 className="font-heading text-4xl font-black mb-4 tracking-tighter">
-                {siteContent.brand.name.slice(0, 4)}
-                <span className="text-fluxion-rose">
-                  {siteContent.brand.name.slice(4)}
-                </span>
-              </h2>
+              <div className="flex justify-center md:justify-start mb-6">
+                <Logo size="md" light />
+              </div>
               <p className="text-blue-100/70 text-sm font-sans leading-relaxed">
                 {siteContent.brand.tagline}
               </p>
