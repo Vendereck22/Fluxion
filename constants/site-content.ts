@@ -1,8 +1,3 @@
-/**
- * Centralized content for the Fluxion platform.
- * Use this file to modify any text on the site (titles, paragraphs, labels, etc.).
- */
-
 export const siteContent = {
   brand: {
     name: "FLUXION",
@@ -14,7 +9,7 @@ export const siteContent = {
 
   navigation: {
     links: [
-      { name: "Accueil", href: "/" },
+      { name: "Accueil", href: "#" },
       { name: "Nos Services", href: "/services" },
       { name: "À propos", href: "/a-propos" },
       { name: "Nos Projets", href: "/nos-projets" },
@@ -247,6 +242,11 @@ export const siteContent = {
       title: "Contact",
       description: "Prêt à démarrer ? Parlons de votre prochain grand projet.",
     },
+  },
+
+  products: {
+    title: "Nos Produits",
+    description: "Découvrez notre gamme de produits innovants.",
   },
 
   footer: {
