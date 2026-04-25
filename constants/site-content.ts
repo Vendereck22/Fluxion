@@ -249,6 +249,60 @@ export const siteContent = {
     description: "Découvrez notre gamme de produits innovants.",
   },
 
+  team: {
+    title: "NOTRE EQUIPE",
+    members: [
+      {
+        id: 1,
+        name: "Doxel Kanda",
+        role: "Design & Dev",
+        bio: "Lorem ipsum dolor sit amet, consecte- tuer adipiscing elit,",
+        img: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=800",
+        socials: { linkedin: "#", twitter: "#", instagram: "#" },
+      },
+      {
+        id: 2,
+        name: "Precieux Mwanza",
+        role: "Expert UI/UX",
+        bio: "Création d'interfaces intuitives et esthétiques centrées sur l'utilisateur.",
+        img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800",
+        socials: { linkedin: "#", twitter: "#", instagram: "#" },
+      },
+      {
+        id: 3,
+        name: "Ciel Wembi",
+        role: "Tech Lead",
+        bio: "Architecture robuste et expertise technique avancée pour Fluxion.",
+        img: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+        socials: { linkedin: "#", twitter: "#", instagram: "#" },
+      },
+      {
+        id: 4,
+        name: "Emmanuel Tansia",
+        role: "Marketing",
+        bio: "Stratégies de communication et marketing digital innovantes.",
+        img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=800",
+        socials: { linkedin: "#", twitter: "#", instagram: "#" },
+      },
+      {
+        id: 5,
+        name: "Junior Smoda",
+        role: "Product Manager",
+        bio: "Gestion de produit et vision stratégique à long terme.",
+        img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=800",
+        socials: { linkedin: "#", twitter: "#", instagram: "#" },
+      },
+      {
+        id: 6,
+        name: "Vendereck Nguala",
+        role: "Développeur Fullstack",
+        bio: "Développement d'applications modernes et d'architectures scalables.",
+        img: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=800",
+        socials: { linkedin: "#", twitter: "#", instagram: "#" },
+      },
+    ],
+  },
+
   footer: {
     socialBadge: "Suivez l'agence",
     location: "Kinshasa, RD Congo",
