@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import {
   LayoutDashboard,
   Terminal,
@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/client/Logo";
+import { logout } from "@/app/actions/auth";
 
 interface NavItem {
   name: string;
@@ -73,6 +74,12 @@ const NAV_GROUPS: Group[] = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push("/admin/login");
+  };
 
   return (
     <div className="w-64 h-screen border-r border-slate-200 bg-white flex flex-col antialiased sticky top-0 overflow-y-auto z-30">
@@ -82,8 +89,8 @@ export function Sidebar() {
       </div>
 
       <div className="flex-1 w-full px-4 flex flex-col gap-6 pb-6">
-        {NAV_GROUPS.map((group) => (
-          <div key={group.items.length} className="flex flex-col gap-1">
+        {NAV_GROUPS.map((group, index) => (
+          <div key={index} className="flex flex-col gap-1">
 
             {group.items.map((item) => {
               const isActive = pathname === item.href || (item.href !== "/admin" && pathname?.startsWith(item.href));
@@ -109,13 +116,13 @@ export function Sidebar() {
       </div>
 
       <div className="p-4 border-t border-slate-100">
-        <Link
-          href="/"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 text-sm font-medium transition-colors"
+        <button
+          onClick={handleLogout}
+          className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-500 hover:text-red-600 hover:bg-red-50 text-sm font-medium transition-colors text-left"
         >
           <LogOut size={18} />
           Quitter l'admin
-        </Link>
+        </button>
       </div>
     </div>
   );
