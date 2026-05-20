@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Schibsted_Grotesk, Archivo, Geist } from "next/font/google";
+import { Schibsted_Grotesk, Archivo, Geist, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
@@ -14,6 +14,12 @@ const archivo = Archivo({
   variable: "--font-archivo",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
@@ -36,6 +42,7 @@ export default function RootLayout({
         archivo.variable,
         "font-sans",
         geist.variable,
+        inter.variable,
       )}
     >
       <body className="min-h-full flex flex-col font-sans">{children}</body>

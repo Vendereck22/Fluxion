@@ -81,6 +81,7 @@
   --color-fluxion-mauve: var(--fluxion-mauve);
   --color-fluxion-rose: var(--fluxion-rose);
   --color-fluxion-red: var(--fluxion-red);
+  --color-fluxion-pink-neon: #FF007F;
 
   /* Shadcn Semantic Colors */
   --color-background: var(--background);
@@ -106,6 +107,7 @@
   /* Fonts */
   --font-sans: var(--font-schibsted), ui-sans-serif, system-ui;
   --font-heading: var(--font-archivo), ui-sans-serif, system-ui;
+  --font-inter: var(--font-inter), ui-sans-serif, system-ui;
 
   /* Radius */
   --radius-xl: var(--radius);
