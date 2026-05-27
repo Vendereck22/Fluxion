@@ -9,6 +9,7 @@ export default function SystemMorphing() {
   const textRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const mountNode = mountRef.current;
     // 1. Setup de base
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -22,7 +23,7 @@ export default function SystemMorphing() {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    if (mountRef.current) mountRef.current.appendChild(renderer.domElement);
+    if (mountNode) mountNode.appendChild(renderer.domElement);
 
     // 2. Particules
     const count = 2000;
@@ -155,7 +156,7 @@ export default function SystemMorphing() {
       clearTimeout(interval);
       window.removeEventListener("resize", handleResize);
       renderer.dispose();
-      if (mountRef.current) mountRef.current.removeChild(renderer.domElement);
+      if (mountNode) mountNode.removeChild(renderer.domElement);
     };
   }, []);
 

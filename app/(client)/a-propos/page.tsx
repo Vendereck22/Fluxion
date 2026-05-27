@@ -1,14 +1,14 @@
-import { siteContent } from "@/constants/site-content";
+import AboutHero from "@/components/client/about/AboutHero";
+import AboutPillars from "@/components/client/about/AboutPillars";
+import AboutVisual from "@/components/client/about/AboutVisual";
 
 export default function APropos() {
   return (
-    <div className="min-h-screen pt-24 pb-12 flex flex-col items-center justify-center text-center px-6">
-      <h1 className="text-4xl md:text-6xl font-heading font-black text-fluxion-blue mb-4">
-        {siteContent.pages.about.title}
-      </h1>
-      <p className="text-fluxion-blue/70 text-lg max-w-xl">
-        {siteContent.pages.about.description}
-      </p>
+    <div className="w-full min-h-screen bg-slate-50">
+      <AboutHero />
+      <AboutPillars />
+      <AboutVisual />
+      
     </div>
   );
 }

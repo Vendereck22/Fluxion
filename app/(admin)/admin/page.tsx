@@ -4,15 +4,11 @@ import {
   Layers, 
   Inbox, 
   Cpu, 
-  ArrowUpRight,
-  Sparkles,
-  TrendingUp,
-  Server
+  ArrowUpRight
 } from "lucide-react";
 import Link from "next/link";
 import { getLeads } from "@/app/actions/leads";
 import { siteContent } from "@/constants/site-content";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
 export const revalidate = 0; // Dynamic server component

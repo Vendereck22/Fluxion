@@ -10,6 +10,15 @@ interface LogEntry {
   level: "INFO" | "SUCCESS" | "WARN" | "ERROR";
 }
 
+type LogCategory = LogEntry["category"];
+type LogLevel = LogEntry["level"];
+
+interface MockMessage {
+  category: LogCategory;
+  message: string;
+  level: LogLevel;
+}
+
 const INITIAL_LOGS: LogEntry[] = [
   { timestamp: "16:53:10", category: "SYSTEM", message: "Starting Fluxion server environment...", level: "INFO" },
   { timestamp: "16:53:11", category: "SYSTEM", message: "Docker daemon connection established.", level: "SUCCESS" },
@@ -22,7 +31,7 @@ const INITIAL_LOGS: LogEntry[] = [
   { timestamp: "16:55:01", category: "SYSTEM", message: "Memory usage telemetry: heapUsed=48MB, heapTotal=82MB", level: "INFO" },
 ];
 
-const MOCK_MESSAGES = [
+const MOCK_MESSAGES: MockMessage[] = [
   { category: "SYSTEM", message: "API endpoint latency telemetry ping: Vercel CDN -> Kinshasa (21ms)", level: "INFO" },
   { category: "SYSTEM", message: "Prisma client heartbeat check OK.", level: "SUCCESS" },
   { category: "LEADS", message: "New contact lead submission processed. Dispatched email notification to contact@fluxion.cd", level: "SUCCESS" },
@@ -59,9 +68,9 @@ export default function LogsPage() {
       
       const newLog: LogEntry = {
         timestamp: timeStr,
-        category: randomMsg.category as any,
+        category: randomMsg.category,
         message: randomMsg.message,
-        level: randomMsg.level as any
+        level: randomMsg.level,
       };
       
       setLogs((prev) => [...prev, newLog]);

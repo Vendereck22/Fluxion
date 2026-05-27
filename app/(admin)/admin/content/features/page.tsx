@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronLeft, Save, RotateCcw, Layers, Plus, Trash2 } from "lucide-react";
+import { ChevronLeft, RotateCcw, Layers } from "lucide-react";
 import Link from "next/link";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";

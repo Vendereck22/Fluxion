@@ -2,16 +2,17 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, Mail, Eye, EyeOff, ShieldAlert, Info, ArrowRight } from "lucide-react";
+import { useSearchParams } from "next/navigation";
+import { Lock, Mail, Eye, EyeOff, ShieldAlert, ArrowRight } from "lucide-react";
 import Logo from "@/components/client/Logo";
 import { login } from "@/app/actions/auth";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [showCredentialsHelp, setShowCredentialsHelp] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,40 +24,52 @@ export default function LoginPage() {
       try {
         const res = await login(formData);
         if (res.success) {
-          router.push("/admin");
+          const next = searchParams.get("next");
+          router.push(next && next.startsWith("/admin") ? next : "/admin");
           router.refresh();
         } else {
           setError(res.error || "Une erreur s'est produite.");
         }
-      } catch (err) {
+      } catch {
         setError("Erreur réseau. Veuillez réessayer.");
       }
     });
   };
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-[#f8fafc] px-6 py-12 overflow-hidden font-sans select-none">
-
-      {/* Background Brand Blobs */}
-      <div className="absolute -left-40 -top-40 w-96 h-96 bg-fluxion-rose/5 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute -right-40 -bottom-40 w-96 h-96 bg-fluxion-blue/5 rounded-full blur-[120px] pointer-events-none" />
-
-      {/* Subtle grid background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00000003_1px,transparent_1px),linear-gradient(to_bottom,#00000003_1px,transparent_1px)] bg-[size:4rem_4rem] pointer-events-none" />
-
-      <div className="w-full max-w-md relative z-10 space-y-8 animate-in fade-in zoom-in-95 duration-500">
-
-        {/* Brand Header */}
-        <div className="flex flex-col items-center justify-center text-center space-y-4">
-          <div className="p-3 bg-white border border-slate-100 rounded-2xl shadow-md">
-            <Logo size="lg" />
+    <div className="min-h-screen bg-[#f8fafc] font-sans">
+      <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
+        {/* Brand / Gradient Panel */}
+        <div className="bg-fluxion-gradient text-white flex items-center justify-center p-10 md:p-12 lg:p-14">
+          <div className="flex flex-col items-center justify-center text-center gap-4">
+            <Logo
+              size="xl"
+              light
+              href="/admin/login"
+              className="active:scale-95 transition-transform"
+            />
+            
           </div>
-
         </div>
 
-        {/* Login Card */}
-        <div className="bg-white border border-slate-100 rounded-3xl p-8 shadow-xl shadow-slate-100/50 space-y-6">
-          <form onSubmit={handleSubmit} className="space-y-4 text-xs font-inter">
+        {/* Form Panel */}
+        <div className="relative flex items-center justify-center px-6 py-12">
+          {/* Subtle light background */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_10%,rgba(52,61,145,0.08),transparent_55%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(255,43,93,0.08),transparent_55%)] pointer-events-none" />
+
+          <div className="w-full max-w-md relative z-10 animate-in fade-in zoom-in-95 duration-500">
+            <div className="mb-8 text-center lg:text-left">
+              <h2 className="text-2xl md:text-3xl font-heading font-black text-slate-900 tracking-tight">
+                Se connecter
+              </h2>
+              <p className="mt-2 text-slate-500 text-sm">
+                Entrez vos identifiants pour acceder au tableau de bord.
+              </p>
+            </div>
+
+            <div className="bg-white border border-slate-200 rounded-2xl p-8 space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-4 text-xs font-inter">
 
             {/* Email Input */}
             <div className="space-y-1.5">
@@ -114,7 +127,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isPending}
-              className="w-full h-11 bg-fluxion-rose hover:bg-slate-900 text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all shadow-md shadow-fluxion-rose/20 flex items-center justify-center gap-2 group cursor-pointer border border-transparent"
+              className="w-full h-11 bg-fluxion-rose hover:bg-slate-900 text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 group cursor-pointer border border-transparent"
             >
               {isPending ? (
                 <>
@@ -131,13 +144,13 @@ export default function LoginPage() {
           </form>
 
 
+            </div>
+
+            <p className="mt-6 text-center text-[10px] text-slate-400">
+              Propulse par le moteur de securite Fluxion Core v3.2.0
+            </p>
+          </div>
         </div>
-
-        {/* Footer info link */}
-        <p className="text-center text-[10px] text-slate-400">
-          Propulsé par le moteur de sécurité Fluxion Core v3.2.0
-        </p>
-
       </div>
     </div>
   );

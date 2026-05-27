@@ -172,7 +172,7 @@ export default function TeamInteractive() {
               <div
                 key={member.id}
                 onClick={() => animateTransition(i)}
-                className="absolute rounded-[1.5rem] overflow-hidden shadow-sm transition-all duration-700 ease-in-out cursor-pointer hover:shadow-lg"
+                className="absolute rounded-2xl overflow-hidden transition-all duration-700 ease-in-out cursor-pointer"
                 style={{
                   top: pos.top,
                   left: pos.left,
@@ -296,7 +296,7 @@ export default function TeamInteractive() {
               <div
                 key={member.id}
                 onClick={() => animateTransition(i)}
-                className="absolute rounded-[2rem] overflow-hidden shadow-sm transition-all duration-700 ease-in-out cursor-pointer hover:shadow-lg"
+                className="absolute rounded-2xl overflow-hidden transition-all duration-700 ease-in-out cursor-pointer"
                 style={{
                   top: pos.top,
                   left: pos.left,

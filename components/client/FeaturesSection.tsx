@@ -46,9 +46,9 @@ export default function FeaturesSection() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature) => (
-            <Card 
+            <Card
               key={feature.title}
-              className="group p-4 rounded-[2.5rem] border border-slate-100 bg-slate-50/50 hover:bg-white hover:shadow-2xl hover:shadow-fluxion-cobalt/5 transition-all duration-500 overflow-visible ring-0"
+              className="group p-4 border border-slate-100 bg-slate-50/50 hover:bg-white transition-all duration-500 overflow-visible ring-0"
             >
               <CardHeader className="pt-4 px-4 pb-2">
              

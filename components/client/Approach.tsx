@@ -52,7 +52,7 @@ export default function Approach() {
               {/* Côté Image avec effet de profondeur (Shadow + Glow) */}
               <div className="flex-1 relative group w-full">
                 <div className="absolute -inset-4 bg-fluxion-gradient opacity-10 blur-2xl group-hover:opacity-30 transition-opacity duration-500 rounded-[3rem]" />
-                <div className="relative aspect-video md:aspect-[4/3] lg:aspect-video rounded-[2.5rem] overflow-hidden border border-slate-100 shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
+                <div className="relative aspect-video md:aspect-[4/3] lg:aspect-video rounded-2xl overflow-hidden border border-slate-100 transition-transform duration-500 group-hover:scale-[1.02]">
                   <Image
                     src={step.image}
                     alt={step.title}

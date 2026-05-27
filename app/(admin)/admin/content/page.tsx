@@ -1,10 +1,8 @@
 import { 
-  Layout, 
   Type, 
   Compass, 
   Sparkles, 
   Layers, 
-  Handshake, 
   BarChart3, 
   MessageSquareQuote, 
   HelpCircle, 
@@ -13,7 +11,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 
 const SECTIONS = [
   { id: "brand", title: "Marque", description: "Nom, tagline et descriptions légales.", icon: Type },

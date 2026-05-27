@@ -58,7 +58,7 @@ export default function ConfigManager({ initialFooter, initialSocial }: ConfigMa
       } else {
         setStatus("error");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
     } finally {
       setIsSaving(false);

@@ -47,8 +47,8 @@ export default function WhyUs() {
             <Card
               key={index}
               className={cn(
-                "p-4 rounded-[2.5rem] bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10",
-                "hover:border-fluxion-rose/30 transition-all duration-300 group shadow-sm hover:shadow-xl",
+                "p-4 bg-slate-50 dark:bg-white/5 border-slate-100 dark:border-white/10",
+                "hover:border-fluxion-rose/30 transition-all duration-300 group",
                 "flex flex-col h-full",
               )}
             >

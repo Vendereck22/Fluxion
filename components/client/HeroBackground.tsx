@@ -7,6 +7,7 @@ export default function HeroBackground() {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const mountNode = mountRef.current;
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -21,7 +22,7 @@ export default function HeroBackground() {
     renderer.setPixelRatio(pixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
 
-    if (mountRef.current) mountRef.current.appendChild(renderer.domElement);
+    if (mountNode) mountNode.appendChild(renderer.domElement);
 
     // ADAPTATION MOBILE : On réduit le nombre de particules sur petit écran
     const isMobile = window.innerWidth < 768;
@@ -93,7 +94,7 @@ export default function HeroBackground() {
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("resize", handleResize);
       renderer.dispose();
-      if (mountRef.current) mountRef.current.removeChild(renderer.domElement);
+      if (mountNode) mountNode.removeChild(renderer.domElement);
     };
   }, []);
 

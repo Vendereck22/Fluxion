@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Save, Plus, Trash2, Shield, FolderGit } from "lucide-react";
+import { Save, Plus, Trash2 } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 
 interface PartnersData {
@@ -60,7 +60,7 @@ export default function PortfolioManager({ initialData }: PortfolioManagerProps)
       } else {
         setStatus("error");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
     } finally {
       setIsSaving(false);

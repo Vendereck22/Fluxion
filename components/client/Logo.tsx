@@ -8,12 +8,14 @@ interface LogoProps {
   className?: string;
   size?: "sm" | "md" | "lg" | "xl";
   light?: boolean;
+  href?: string;
 }
 
 export default function Logo({
   className,
   size = "md",
   light = false,
+  href = "/",
 }: LogoProps) {
   const dimensions = {
     sm: { width: 120, height: 40 },
@@ -22,18 +24,18 @@ export default function Logo({
     xl: { width: 320, height: 106 },
   };
 
-  const logoSrc = light ? "/logo-fluxion-light.svg" : "/logo-fluxion.svg";
+  const logoSrc = "/images/Fluxion-logo.png";
 
   return (
     <Link
-      href="#"
+      href={href}
       className={cn(
         "flex items-center transition-opacity hover:opacity-90",
         className,
       )}
     >
       <Image
-        src={"/images/Fluxion-logo.png"}
+        src={logoSrc}
         alt="FLUXION - Agence Technologique"
         width={dimensions[size].width}
         height={dimensions[size].height}

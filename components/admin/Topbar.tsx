@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { ChevronRight, Server, Wifi } from "lucide-react";
+import { ChevronRight, Wifi } from "lucide-react";
 import { useEffect, useState } from "react";
 
 const ROUTE_NAMES: Record<string, string> = {
@@ -40,7 +40,7 @@ export default function Topbar() {
       {/* Dynamic Breadcrumbs */}
       <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
         <Link 
-          href="/admin" 
+          href="/admin/login" 
           className="hover:text-slate-900 transition-colors duration-200"
         >
           FLUXION

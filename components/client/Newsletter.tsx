@@ -37,7 +37,7 @@ export default function Newsletter({
         setStatus("error");
         setErrorMessage(res.error || "Une erreur s'est produite.");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
       setErrorMessage("Connexion au serveur impossible.");
     }
@@ -95,7 +95,7 @@ export default function Newsletter({
   return (
     <section className={cn("relative py-12 px-6", className)}>
       <div className="container mx-auto max-w-5xl">
-        <div className="relative overflow-hidden rounded-[2.5rem] bg-fluxion-blue p-8 md:p-12 shadow-2xl border border-white/5">
+        <div className="relative overflow-hidden rounded-2xl bg-fluxion-blue p-8 md:p-12 border border-white/5">
           <div className="absolute -right-20 -top-20 w-80 h-80 bg-fluxion-rose/20 rounded-full blur-[100px]" />
           <div className="absolute -left-20 -bottom-20 w-80 h-80 bg-fluxion-blue/40 rounded-full blur-[100px]" />
 
@@ -111,7 +111,7 @@ export default function Newsletter({
             </div>
             <div className="w-full lg:w-auto min-w-[320px] md:min-w-[450px] space-y-2">
               {status === "success" ? (
-                <div className="flex flex-col items-center justify-center p-6 bg-white/5 rounded-3xl border border-green-500/30 animate-in fade-in zoom-in duration-500">
+                <div className="flex flex-col items-center justify-center p-6 bg-white/5 rounded-2xl border border-green-500/30 animate-in fade-in zoom-in duration-500">
                   <CheckCircle2 className="w-12 h-12 text-green-400 mb-4" />
                   <p className="text-white font-bold">
                     {siteContent.newsletter.successTitle}

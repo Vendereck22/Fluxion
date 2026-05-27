@@ -1,15 +1,6 @@
 "use client";
 
-import * as React from "react";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
 import { Quote } from "lucide-react";
-import Image from "next/image";
 import { siteContent } from "@/constants/site-content";
 
 const reviews = siteContent.testimonials.reviews;
@@ -35,7 +26,7 @@ export default function Testimonials() {
             {reviews.map((review, index) => (
               <div
                 key={index}
-                className="bg-white dark:bg-white/5 p-8 rounded-[2.5rem] shadow-xl shadow-slate-200/50 dark:shadow-none border border-slate-100 dark:border-white/10 relative"
+                className="bg-white dark:bg-white/5 p-8 rounded-2xl border border-slate-100 dark:border-white/10 relative"
               >
                 <p className="text-slate-600 dark:text-slate-400 italic mb-8 leading-relaxed">
                   "{review.content}"

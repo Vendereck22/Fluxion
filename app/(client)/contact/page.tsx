@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { submitLead } from "@/app/actions/leads";
 import { siteContent } from "@/constants/site-content";
+import SocialMedia from "@/components/client/SocialMedia";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -29,14 +30,7 @@ export default function ContactPage() {
     if (status !== "idle") setStatus("idle");
   };
 
-  const handleSelectBudget = (val: string) => {
-    setFormData((prev) => ({ ...prev, budget: val }));
-  };
-
-  const handleSelectService = (val: string) => {
-    setFormData((prev) => ({ ...prev, service: val }));
-  };
-
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
@@ -64,7 +58,7 @@ export default function ContactPage() {
         setStatus("error");
         setErrorMessage(res.error || "Une erreur s'est produite.");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
       setErrorMessage("Une erreur de réseau s'est produite.");
     } finally {
@@ -91,10 +85,10 @@ export default function ContactPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 bg-white/60 backdrop-blur-xl border border-slate-100 rounded-[2.5rem] p-6 md:p-10 shadow-2xl shadow-slate-200/50">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 bg-white/60 backdrop-blur-xl border border-slate-100 rounded-2xl p-6 md:p-10">
           
           {/* Contact Details Column */}
-          <div className="lg:col-span-5 flex flex-col justify-between bg-fluxion-blue text-white rounded-[2rem] p-8 md:p-10 relative overflow-hidden group">
+          <div className="lg:col-span-5 flex flex-col justify-between bg-fluxion-blue text-white rounded-2xl p-8 md:p-10 relative overflow-hidden group">
             <div className="absolute inset-0 bg-fluxion-gradient opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
             <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-white/5 rounded-full blur-2xl pointer-events-none" />
 
@@ -143,11 +137,8 @@ export default function ContactPage() {
               </div>
             </div>
 
-            <div className="relative z-10 pt-10 border-t border-white/10 flex items-center gap-2">
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-              <span className="text-[10px] uppercase font-bold tracking-widest text-white/70">
-                Disponibilité : Projets immédiats
-              </span>
+            <div className="relative z-10 pt-10 border-t border-white/10 flex items-center justify-center">
+              <SocialMedia className="justify-center" />
             </div>
           </div>
 
@@ -210,49 +201,6 @@ export default function ContactPage() {
                     className="border-slate-200 focus:border-fluxion-cobalt rounded-xl h-11 bg-slate-50/50"
                   />
                 </div>
-
-                {/* Service requested selector */}
-                <div className="space-y-2">
-                  <Label className="text-xs font-bold text-slate-700">De quel service avez-vous besoin ?</Label>
-                  <div className="flex flex-wrap gap-2">
-                    {["Next.js Development", "Branding & Identity", "MacBook Pro Offer", "Consulting"].map((srv) => (
-                      <button
-                        key={srv}
-                        type="button"
-                        onClick={() => handleSelectService(srv)}
-                        className={`px-4 py-2 text-xs font-semibold rounded-full border transition-all duration-300 ${
-                          formData.service === srv
-                            ? "bg-fluxion-blue text-white border-fluxion-blue shadow-md"
-                            : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
-                        }`}
-                      >
-                        {srv}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Budget selector */}
-                <div className="space-y-2">
-                  <Label className="text-xs font-bold text-slate-700">Quel est votre budget estimé ?</Label>
-                  <div className="flex flex-wrap gap-2">
-                    {["< 5k$", "5k-15k$", "15k-50k$", "50k$+"].map((bdg) => (
-                      <button
-                        key={bdg}
-                        type="button"
-                        onClick={() => handleSelectBudget(bdg)}
-                        className={`px-4 py-2 text-xs font-semibold rounded-full border transition-all duration-300 ${
-                          formData.budget === bdg
-                            ? "bg-fluxion-rose text-white border-fluxion-rose shadow-md"
-                            : "bg-white text-slate-600 border-slate-200 hover:border-slate-300"
-                        }`}
-                      >
-                        {bdg}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="message" className="text-xs font-bold text-slate-700">Votre Message *</Label>
                   <Textarea

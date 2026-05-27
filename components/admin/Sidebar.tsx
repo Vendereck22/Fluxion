@@ -13,8 +13,7 @@ import {
   Sliders,
   ShieldAlert,
   LogOut,
-  Mail,
-  FileText
+  Mail
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Logo from "@/components/client/Logo";
@@ -84,7 +83,7 @@ export function Sidebar() {
   return (
     <div className="w-64 h-screen border-r border-slate-200 bg-white flex flex-col antialiased sticky top-0 overflow-y-auto z-30">
       <div className="flex flex-col items-center justify-center p-6 border-b border-slate-100 mb-4 bg-slate-50/50">
-        <Logo size="md" />
+        <Logo size="md" href="/admin/login" />
         <span className="text-[10px] font-bold text-slate-400 mt-2 uppercase tracking-widest">Admin Control</span>
       </div>
 

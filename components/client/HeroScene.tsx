@@ -8,6 +8,7 @@ export default function HeroScene() {
   const mountRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    const mountNode = mountRef.current;
     // 1. Scene setup
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
@@ -19,7 +20,7 @@ export default function HeroScene() {
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    if (mountRef.current) mountRef.current.appendChild(renderer.domElement);
+    if (mountNode) mountNode.appendChild(renderer.domElement);
 
     // 2. Particules (même logique)
     const geometry = new THREE.BufferGeometry();
@@ -52,7 +53,7 @@ export default function HeroScene() {
     // Nettoyage (Crucial pour Next.js)
     return () => {
       renderer.dispose();
-      if (mountRef.current) mountRef.current.removeChild(renderer.domElement);
+      if (mountNode) mountNode.removeChild(renderer.domElement);
     };
   }, []);
 

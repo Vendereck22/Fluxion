@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Plus, Trash2, Edit2, Save, X, Users, Upload } from "lucide-react";
+import { Plus, Trash2, Edit2, Save, Upload } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 import { uploadImage } from "@/app/actions/upload";
 
@@ -107,7 +107,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
       } else {
         alert(res.error || "Une erreur s'est produite lors du téléchargement.");
       }
-    } catch (error) {
+    } catch {
       alert("Une erreur de communication est survenue.");
     } finally {
       setIsUploadingFile(false);
@@ -166,7 +166,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
       } else {
         setStatus("error");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
     } finally {
       setIsSaving(false);
@@ -295,6 +295,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                         <div className="flex flex-col sm:flex-row items-center gap-4 p-4 border border-dashed border-slate-200 rounded-lg bg-white shadow-inner">
                           <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-slate-50 border border-slate-200 flex-shrink-0 flex items-center justify-center shadow-sm">
                             {editForm.img ? (
+                              // eslint-disable-next-line @next/next/no-img-element
                               <img src={editForm.img} alt="Preview" className="w-full h-full object-cover" />
                             ) : (
                               <Upload className="text-slate-300" size={20} />
@@ -397,6 +398,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                     /* Display view */
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                       <div className="flex items-center gap-4">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                           src={member.img} 
                           alt={member.name}
@@ -486,6 +488,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                         : "bg-slate-50 border-slate-100 hover:border-slate-300"
                     }`}
                   >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img 
                       src={m.img} 
                       alt={m.name}
@@ -504,6 +507,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
             {selectedMember ? (
               <div className="border border-slate-200 rounded-2xl bg-slate-50 overflow-hidden shadow-inner p-4 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div className="flex gap-4">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={selectedMember.img}
                     alt={selectedMember.name}

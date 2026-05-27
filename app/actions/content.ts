@@ -6,14 +6,16 @@ import { revalidatePath } from "next/cache";
 
 const CONTENT_PATH = path.join(process.cwd(), "constants", "site-content.json");
 
-export async function updateContent(section: string, data: any) {
+export async function updateContent(section: string, data: Record<string, unknown>) {
   try {
     // 1. Read the existing content
     const fileContent = await fs.readFile(CONTENT_PATH, "utf-8");
-    const content = JSON.parse(fileContent);
+    const content = JSON.parse(fileContent) as Record<string, unknown>;
 
     // 2. Update the specific section
-    content[section] = { ...content[section], ...data };
+    const currentSection =
+      (content[section] as Record<string, unknown> | undefined) ?? {};
+    content[section] = { ...currentSection, ...data };
 
     // 3. Write back to the file
     await fs.writeFile(CONTENT_PATH, JSON.stringify(content, null, 2), "utf-8");

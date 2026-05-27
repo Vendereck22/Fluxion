@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { siteContent } from "@/constants/site-content";
+import { cn } from "@/lib/utils";
 const LinkedInIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
     viewBox="0 0 24 24"
@@ -85,9 +85,9 @@ const socialLinks = [
   },
 ];
 
-export default function SocialMedia() {
+export default function SocialMedia({ className }: { className?: string }) {
   return (
-    <div className="flex items-center gap-4">
+    <div className={cn("flex items-center gap-4", className)}>
       {socialLinks.map((social) => (
         <Link
           key={social.name}

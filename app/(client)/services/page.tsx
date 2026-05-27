@@ -1,14 +1,23 @@
-import { siteContent } from "@/constants/site-content";
+import ServicesHero from "@/components/client/services/ServicesHero";
+import ServiceSpacer from "@/components/client/services/ServiceSpacer";
+import DesignSection from "@/components/client/services/sections/DesignSection";
+import ProgrammationSection from "@/components/client/services/sections/ProgrammationSection";
+import VideoGraphieSection from "@/components/client/services/sections/VideoGraphieSection";
+import ElectroniqueSection from "@/components/client/services/sections/ElectroniqueSection";
 
 export default function Services() {
   return (
-    <div className="min-h-screen pt-24 pb-12 flex flex-col items-center justify-center text-center px-6">
-      <h1 className="text-4xl md:text-6xl font-heading font-black text-fluxion-blue mb-4">
-        {siteContent.pages.services.title}
-      </h1>
-      <p className="text-fluxion-blue/70 text-lg max-w-xl">
-        {siteContent.pages.services.description}
-      </p>
+    <div className="min-h-screen bg-white">
+      <ServicesHero />
+      <DesignSection />
+      <ServiceSpacer />
+      <ProgrammationSection />
+      <ServiceSpacer />
+      <VideoGraphieSection />
+      <ServiceSpacer />
+      <ElectroniqueSection />
+      <ServiceSpacer />
+      <div className="h-6 md:h-10 bg-white" />
     </div>
   );
 }

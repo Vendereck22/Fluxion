@@ -1,5 +1,4 @@
 import Approach from "@/components/client/Approach";
-import FeaturesSection from "@/components/client/FeaturesSection";
 import VideoSection from "@/components/client/VideoSection";
 import Testimonials from "@/components/client/Testimonials";
 import Partners from "@/components/client/Partners";

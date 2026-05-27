@@ -2,8 +2,8 @@
 
 import { useState, useMemo } from "react";
 import { 
-  Search, Trash2, Send, CheckCircle2, History, User, 
-  MailCheck, MailX, ChevronDown, ChevronUp, AlertCircle, Trash
+  Search, Trash2, Send, CheckCircle2, History,
+  MailCheck, MailX, ChevronDown, ChevronUp, AlertCircle
 } from "lucide-react";
 import { 
   toggleSubscriberStatus, deleteSubscriber, sendNewsletter,
@@ -73,7 +73,7 @@ export default function NewsletterManager({
       } else {
         alert(res.error || "Une erreur s'est produite.");
       }
-    } catch (err) {
+    } catch {
       alert("Erreur de connexion serveur.");
     }
   };
@@ -89,7 +89,7 @@ export default function NewsletterManager({
       } else {
         alert(res.error || "Une erreur s'est produite.");
       }
-    } catch (err) {
+    } catch {
       alert("Erreur de connexion serveur.");
     }
   };
@@ -133,7 +133,7 @@ export default function NewsletterManager({
         setStatus("error");
         setErrorMessage(res.error || "Une erreur s'est produite lors de l'envoi.");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
       setErrorMessage("Une erreur de communication est survenue.");
     } finally {

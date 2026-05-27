@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Save, RefreshCw, Briefcase, Eye } from "lucide-react";
+import { Save } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 
 interface ServiceItem {
@@ -49,7 +49,7 @@ export default function ServicesManager({ initialData }: ServicesManagerProps) {
       } else {
         setStatus("error");
       }
-    } catch (err) {
+    } catch {
       setStatus("error");
     } finally {
       setIsSaving(false);

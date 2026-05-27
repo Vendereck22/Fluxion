@@ -6,7 +6,7 @@ export default function FinalCTA() {
   return (
     <section className="py-24 px-6 bg-white">
       <div className="container mx-auto">
-        <div className="relative rounded-[3rem] bg-fluxion-blue p-12 md:p-24 overflow-hidden text-center shadow-2xl">
+        <div className="relative rounded-[3rem] bg-fluxion-blue p-12 md:p-24 overflow-hidden text-center">
           {/* Effet de flux (Gradient animé en fond) */}
           <div className="absolute inset-0 bg-fluxion-gradient opacity-20" />
 

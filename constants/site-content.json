@@ -9,7 +9,7 @@
     "links": [
       {
         "name": "Accueil",
-        "href": "#"
+        "href": "/"
       },
       {
         "name": "Nos Services",
@@ -220,7 +220,7 @@
       "description": "Découvrez notre expertise technologique pour propulser votre entreprise."
     },
     "about": {
-      "title": "À Propos",
+      "title": "A Propos",
       "description": "Apprenez-en plus sur notre vision et notre engagement envers l'innovation."
     },
     "projects": {
@@ -233,8 +233,121 @@
     }
   },
   "products": {
-    "title": "Nos Produits",
-    "description": "Découvrez notre gamme de produits innovants."
+    "title": "Nos produits",
+    "description": "Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur",
+    "finalStatement": "Ici on crée<br />le futur"
+  },
+  "aboutPage": {
+    "title": "A Propos",
+    "intro": "Fluxion est une agence creative et technique. Nous concevons des identites visuelles, des experiences web et des produits numeriques qui inspirent confiance. Notre methode: clarte, exigence, et execution.",
+    "whoWeAre": {
+      "title": "Qui sommes-nous ?",
+      "text": "Une equipe pluridisciplinaire (design, developpement, contenu) qui accompagne les marques et organisations, de la strategie jusqu'a la mise en production. Nous privilegions la simplicite, la performance et une direction artistique forte."
+    },
+    "mission": {
+      "title": "Notre mission",
+      "text": "Transformer des idees en solutions concretes et mesurables: une presence en ligne qui convertit, des interfaces qui plaisent, et une base technique solide qui dure."
+    },
+    "vision": {
+      "title": "Notre vision",
+      "text": "Elever le niveau des produits numeriques en Afrique et au-dela, en creant des experiences accessibles, rapides et belles, capables de grandir avec vos ambitions."
+    }
+  },
+  "projectsPage": {
+    "title": "Nos Projets",
+    "description": "Quelques realisations qui illustrent notre exigence en design, developpement et storytelling. Chaque projet est pense pour etre utile, performant et coherent avec l'identite de la marque.",
+    "filters": ["Tous", "Identite visuelle", "UI/UX", "Developpement", "Video"],
+    "items": [
+      {
+        "slug": "identite-fluxion",
+        "title": "Identite Fluxion",
+        "description": "Refonte de l'identite visuelle: systeme typographique, palette, grid et declinaisons pour web et supports.",
+        "category": "Identite visuelle",
+        "imageSrc": "/images/projects/brand-board.jpg",
+        "tags": ["Branding", "Guidelines", "Print"],
+        "href": "/nos-projets/identite-fluxion"
+      },
+      {
+        "slug": "application-mobile",
+        "title": "Application Mobile",
+        "description": "Design UI/UX d'une app mobile: parcours utilisateur, ecrans cles, composants et design system.",
+        "category": "UI/UX",
+        "imageSrc": "/images/projects/team-collab.jpg",
+        "tags": ["UX", "UI", "Design system"],
+        "href": "/nos-projets/application-mobile"
+      },
+      {
+        "slug": "plateforme-web",
+        "title": "Plateforme Web",
+        "description": "Developpement d'une plateforme web moderne avec une architecture scalable et des performances optimisees.",
+        "category": "Developpement",
+        "imageSrc": "/images/projects/code-screen.jpg",
+        "tags": ["Next.js", "Performance", "SEO"],
+        "href": "/nos-projets/plateforme-web"
+      },
+      {
+        "slug": "workshop-produit",
+        "title": "Workshop Produit",
+        "description": "Atelier de cadrage: objectifs, roadmap, risques, et priorites. On aligne vision, business et execution.",
+        "category": "UI/UX",
+        "imageSrc": "/images/projects/meeting.jpg",
+        "tags": ["Strategy", "Roadmap", "Discovery"],
+        "href": "/nos-projets/workshop-produit"
+      },
+      {
+        "slug": "equipe-culture",
+        "title": "Equipe & Culture",
+        "description": "Contenus pour valoriser l'equipe et la culture: visuels, mise en page et storytelling.",
+        "category": "Identite visuelle",
+        "imageSrc": "/images/projects/workspace.jpg",
+        "tags": ["Story", "Content", "Art direction"],
+        "href": "/nos-projets/equipe-culture"
+      },
+      {
+        "slug": "production-video",
+        "title": "Production Video",
+        "description": "Production et montage: teaser, video produit et declinaisons reseaux sociaux avec une DA coherente.",
+        "category": "Video",
+        "imageSrc": "/images/projects/video-production.jpg",
+        "tags": ["Video", "Motion", "Social"],
+        "href": "/nos-projets/production-video"
+      }
+    ]
+  },
+  "productsPage": {
+    "items": [
+      {
+        "slug": "setly",
+        "name": "Setly",
+        "onlineUrl": "https://www.behance.net/",
+        "gallery": [
+          { "src": "/images/products/setly-restaurant-1.jpg", "alt": "Setly - Restaurant (apercu 1)" },
+          { "src": "/images/products/setly-restaurant-2.jpg", "alt": "Setly - Restaurant (apercu 2)" },
+          { "src": "/images/products/setly-restaurant-3.jpg", "alt": "Setly - Restaurant (apercu 3)" },
+          { "src": "/images/products/setly.jpg", "alt": "Setly - Apercu produit" }
+        ],
+        "shortDescription": "Plateforme restaurant: commandes, menu et experience client.",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel",
+        "theme": "red",
+        "imageSrc": "/images/products/setly-restaurant-1.jpg",
+        "rightImageSrc": "/images/products/setly-restaurant-2.jpg"
+      },
+      {
+        "slug": "trim",
+        "name": "Trim",
+        "onlineUrl": "https://dribbble.com/",
+        "gallery": [
+          { "src": "/images/products/trim.jpg", "alt": "Trim - Apercu produit" },
+          { "src": "/images/products/trim-gallery-1.jpg", "alt": "Trim - Interface (apercu 1)" },
+          { "src": "/images/products/trim-gallery-2.jpg", "alt": "Trim - Interface (apercu 2)" },
+          { "src": "/images/products/trim-gallery-3.jpg", "alt": "Trim - Interface (apercu 3)" }
+        ],
+        "shortDescription": "Produit digital: interface claire et experience premium.",
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel",
+        "theme": "purple",
+        "imageSrc": "/images/products/trim.jpg"
+      }
+    ]
   },
   "team": {
     "title": "NOTRE EQUIPE",

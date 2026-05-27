@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Inbox, Trash2, Calendar, Building, User } from "lucide-react";
+import { Inbox, Trash2, Calendar, Building } from "lucide-react";
 import { updateLeadStatus, deleteLead, Lead } from "@/app/actions/leads";
 
 interface ArchiveListProps {
@@ -21,7 +21,7 @@ export default function ArchiveList({ initialLeads }: ArchiveListProps) {
       } else {
         alert(res.error || "Une erreur s'est produite.");
       }
-    } catch (err) {
+    } catch {
       alert("Erreur de communication.");
     } finally {
       setIsUpdating(false);
@@ -38,7 +38,7 @@ export default function ArchiveList({ initialLeads }: ArchiveListProps) {
       } else {
         alert(res.error || "Une erreur s'est produite.");
       }
-    } catch (err) {
+    } catch {
       alert("Erreur de communication.");
     } finally {
       setIsUpdating(false);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Check, Archive, Trash2, Calendar, User, Building, AlertCircle } from "lucide-react";
+import { Mail, Check, Archive, Trash2, Calendar, Building } from "lucide-react";
 import { updateLeadStatus, deleteLead, Lead } from "@/app/actions/leads";
 
 interface InboxListProps {
@@ -25,7 +25,7 @@ export default function InboxList({ initialLeads }: InboxListProps) {
       } else {
         alert(res.error || "Une erreur s'est produite.");
       }
-    } catch (err) {
+    } catch {
       alert("Erreur de communication.");
     } finally {
       setIsUpdating(false);
@@ -43,7 +43,7 @@ export default function InboxList({ initialLeads }: InboxListProps) {
       } else {
         alert(res.error || "Une erreur s'est produite.");
       }
-    } catch (err) {
+    } catch {
       alert("Erreur de communication.");
     } finally {
       setIsUpdating(false);
