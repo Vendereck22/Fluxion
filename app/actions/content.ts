@@ -1,31 +1,66 @@
 "use server";
 
-import fs from "fs/promises";
 import path from "path";
 import { revalidatePath } from "next/cache";
+import { verifySession } from "@/app/actions/auth";
+import {
+  readJsonPreferFallback,
+  tmpDataPath,
+  writeJsonWithFallback,
+} from "@/lib/server/json-store";
 
 const CONTENT_PATH = path.join(process.cwd(), "constants", "site-content.json");
+const CONTENT_FALLBACK_PATH = tmpDataPath("site-content.json");
 
-export async function updateContent(section: string, data: Record<string, unknown>) {
+const ALLOWED_SECTIONS = new Set([
+  "hero",
+  "features",
+  "partners",
+  "footer",
+  "social",
+  "team",
+]);
+
+export async function updateContent(section: string, data: unknown) {
   try {
-    // 1. Read the existing content
-    const fileContent = await fs.readFile(CONTENT_PATH, "utf-8");
-    const content = JSON.parse(fileContent) as Record<string, unknown>;
+    const isAdmin = await verifySession();
+    if (!isAdmin) {
+      return { success: false, error: "Non autorisé." };
+    }
 
-    // 2. Update the specific section
+    if (!ALLOWED_SECTIONS.has(section)) {
+      return { success: false, error: "Section invalide." };
+    }
+
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
+      return { success: false, error: "Données invalides pour la mise à jour." };
+    }
+
+
+    const content = await readJsonPreferFallback<Record<string, unknown>>(
+      CONTENT_PATH,
+      CONTENT_FALLBACK_PATH,
+      {}
+    );
+
+
     const currentSection =
       (content[section] as Record<string, unknown> | undefined) ?? {};
-    content[section] = { ...currentSection, ...data };
+    content[section] = { ...currentSection, ...(data as Record<string, unknown>) };
 
-    // 3. Write back to the file
-    await fs.writeFile(CONTENT_PATH, JSON.stringify(content, null, 2), "utf-8");
 
-    // 4. Revalidate paths to reflect changes
+    const { used } = await writeJsonWithFallback(
+      CONTENT_PATH,
+      CONTENT_FALLBACK_PATH,
+      content
+    );
+
+
     revalidatePath("/");
     revalidatePath("/admin");
     revalidatePath("/admin/content");
-    
-    return { success: true };
+
+    return { success: true, storage: used };
   } catch (error) {
     console.error("Failed to update content:", error);
     return { success: false, error: "Erreur lors de la sauvegarde du contenu." };

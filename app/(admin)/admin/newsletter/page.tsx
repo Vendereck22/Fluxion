@@ -2,7 +2,7 @@ import { getSubscribers, getNewsletterLogs } from "@/app/actions/newsletter";
 import NewsletterManager from "./NewsletterManager";
 import { Mail } from "lucide-react";
 
-export const revalidate = 0; // Disable caching
+export const revalidate = 0;
 
 export default async function NewsletterCMSPage() {
   const subscribers = await getSubscribers();
@@ -10,7 +10,7 @@ export default async function NewsletterCMSPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-sans">
-      {/* Header */}
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8">
         <div>
           <div className="flex items-center gap-2">

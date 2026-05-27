@@ -10,10 +10,10 @@ import HeroBackground from "./HeroBackground";
 export default function HeroSection() {
   return (
     <section className="relative w-full min-h-screen flex flex-col justify-center py-20 px-6 overflow-hidden bg-[#050505] antialiased">
-      {/* L'Animation Three.js en arrière-plan */}
+
       <HeroBackground />
 
-      {/* Overlay de gradient pour la profondeur */}
+
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-[#050505] z-1" />
 
       <div className="container mx-auto max-w-5xl flex flex-col items-center text-center space-y-10 relative z-10">
@@ -58,7 +58,7 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Décoration de côté (Glow) */}
+
       <div className="absolute -left-24 top-1/4 w-96 h-96 bg-fluxion-rose/10 rounded-full blur-[120px] pointer-events-none" />
     </section>
   );

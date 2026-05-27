@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { 
+import {
   Search, Trash2, Send, CheckCircle2, History,
   MailCheck, MailX, ChevronDown, ChevronUp, AlertCircle
 } from "lucide-react";
-import { 
+import {
   toggleSubscriberStatus, deleteSubscriber, sendNewsletter,
-  Subscriber, NewsletterLog 
+  Subscriber, NewsletterLog
 } from "@/app/actions/newsletter";
 
 interface NewsletterManagerProps {
@@ -15,9 +15,9 @@ interface NewsletterManagerProps {
   initialLogs: NewsletterLog[];
 }
 
-export default function NewsletterManager({ 
-  initialSubscribers, 
-  initialLogs 
+export default function NewsletterManager({
+  initialSubscribers,
+  initialLogs
 }: NewsletterManagerProps) {
   const [subscribers, setSubscribers] = useState<Subscriber[]>(initialSubscribers);
   const [logs, setLogs] = useState<NewsletterLog[]>(initialLogs);
@@ -26,19 +26,19 @@ export default function NewsletterManager({
     initialSubscribers.filter(s => s.status === "active").map(s => s.id)
   );
 
-  // Composer Form
+
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // UI state
+
   const [expandedLogId, setExpandedLogId] = useState<string | null>(null);
 
-  // Filter subscribers based on search
+
   const filteredSubscribers = useMemo(() => {
-    return subscribers.filter(s => 
+    return subscribers.filter(s =>
       s.email.toLowerCase().includes(search.toLowerCase())
     );
   }, [subscribers, search]);
@@ -53,7 +53,7 @@ export default function NewsletterManager({
   };
 
   const handleToggleSelect = (id: string) => {
-    setSelectedIds(prev => 
+    setSelectedIds(prev =>
       prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
     );
   };
@@ -63,10 +63,10 @@ export default function NewsletterManager({
     try {
       const res = await toggleSubscriberStatus(subscriber.id, nextStatus);
       if (res.success) {
-        setSubscribers(prev => 
+        setSubscribers(prev =>
           prev.map(s => s.id === subscriber.id ? { ...s, status: nextStatus } : s)
         );
-        // If unsubscribing, remove from selected
+
         if (nextStatus === "unsubscribed") {
           setSelectedIds(prev => prev.filter(id => id !== subscriber.id));
         }
@@ -119,7 +119,7 @@ export default function NewsletterManager({
         setStatus("success");
         setSubject("");
         setMessage("");
-        // Reload logs list (just simulated prepending)
+
         const newLog: NewsletterLog = {
           id: "campaign-" + Math.random().toString(36).substring(2, 11),
           subject: subject.trim(),
@@ -143,11 +143,11 @@ export default function NewsletterManager({
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 font-sans">
-      
-      {/* Left Column: Subscribers list & History */}
+
+
       <div className="lg:col-span-7 space-y-8">
-        
-        {/* Subscribers card */}
+
+
         <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
@@ -158,11 +158,11 @@ export default function NewsletterManager({
                 Sélectionnez les destinataires de votre prochaine campagne.
               </p>
             </div>
-            
-            {/* Search */}
+
+
             <div className="relative w-full sm:w-64">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" />
-              <input 
+              <input
                 type="text"
                 placeholder="Rechercher un email..."
                 value={search}
@@ -172,21 +172,21 @@ export default function NewsletterManager({
             </div>
           </div>
 
-          {/* Bulk Selection Bar */}
+
           <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-50 border border-slate-100 rounded-lg p-3 text-[10px] font-bold uppercase tracking-wider text-slate-500">
             <div className="flex items-center gap-1.5">
               <span>{selectedIds.length} sélectionné(s)</span>
             </div>
             <div className="flex items-center gap-2">
-              <button 
-                onClick={handleSelectAll} 
+              <button
+                onClick={handleSelectAll}
                 className="hover:text-slate-900 px-2 py-1 rounded hover:bg-slate-200/50 transition-colors"
               >
                 Tout sélectionner
               </button>
               <span className="text-slate-300">|</span>
-              <button 
-                onClick={handleSelectNone} 
+              <button
+                onClick={handleSelectNone}
                 className="hover:text-slate-900 px-2 py-1 rounded hover:bg-slate-200/50 transition-colors"
               >
                 Désélectionner tout
@@ -194,7 +194,7 @@ export default function NewsletterManager({
             </div>
           </div>
 
-          {/* Subscribers Checklist */}
+
           <div className="border border-slate-200 rounded-lg overflow-hidden bg-white max-h-[350px] overflow-y-auto pr-1">
             {filteredSubscribers.length === 0 ? (
               <div className="p-8 text-center text-slate-500 text-xs">
@@ -207,14 +207,14 @@ export default function NewsletterManager({
                   const isActive = sub.status === "active";
 
                   return (
-                    <div 
-                      key={sub.id} 
+                    <div
+                      key={sub.id}
                       className={`flex items-center justify-between gap-4 p-3 hover:bg-slate-50/50 transition-colors ${
                         !isActive ? "opacity-60" : ""
                       }`}
                     >
                       <div className="flex items-center gap-3">
-                        <input 
+                        <input
                           type="checkbox"
                           checked={isSelected}
                           disabled={!isActive}
@@ -230,12 +230,12 @@ export default function NewsletterManager({
                       </div>
 
                       <div className="flex items-center gap-3">
-                        {/* Status pill badge */}
+
                         <button
                           onClick={() => handleToggleStatus(sub)}
                           className={`px-2 py-0.5 rounded text-[9px] font-bold uppercase tracking-wider flex items-center gap-1 transition-all ${
-                            isActive 
-                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100" 
+                            isActive
+                              ? "bg-emerald-50 text-emerald-700 border border-emerald-200 hover:bg-emerald-100"
                               : "bg-amber-50 text-amber-700 border border-amber-200 hover:bg-amber-100"
                           }`}
                           title={isActive ? "Suspendre l'abonnement" : "Activer l'abonnement"}
@@ -251,7 +251,7 @@ export default function NewsletterManager({
                           )}
                         </button>
 
-                        {/* Delete btn */}
+
                         <button
                           onClick={() => handleDeleteSubscriber(sub.id)}
                           className="p-1.5 rounded hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"
@@ -268,7 +268,7 @@ export default function NewsletterManager({
           </div>
         </div>
 
-        {/* Campaign Logs History */}
+
         <div className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-4">
           <div className="flex items-center gap-2">
             <History className="text-slate-400" size={16} />
@@ -286,12 +286,12 @@ export default function NewsletterManager({
               {logs.map((log) => {
                 const isExpanded = expandedLogId === log.id;
                 return (
-                  <div 
-                    key={log.id} 
+                  <div
+                    key={log.id}
                     className="border border-slate-200 rounded-xl bg-slate-50 overflow-hidden hover:border-slate-300 transition-all duration-200"
                   >
-                    {/* Collapsible header */}
-                    <div 
+
+                    <div
                       onClick={() => setExpandedLogId(isExpanded ? null : log.id)}
                       className="p-4 flex items-center justify-between gap-4 cursor-pointer select-none"
                     >
@@ -308,7 +308,7 @@ export default function NewsletterManager({
                       </div>
                     </div>
 
-                    {/* Expandable content */}
+
                     {isExpanded && (
                       <div className="px-4 pb-4 border-t border-slate-200/60 pt-4 bg-white space-y-3 font-inter text-xs">
                         <div className="space-y-1">
@@ -339,7 +339,7 @@ export default function NewsletterManager({
 
       </div>
 
-      {/* Right Column: Compose Form */}
+
       <div className="lg:col-span-5">
         <div className="sticky top-24 bg-white border border-slate-200 rounded-xl p-6 shadow-sm space-y-6">
           <div>
@@ -352,8 +352,8 @@ export default function NewsletterManager({
           </div>
 
           <form onSubmit={handleSendCampaign} className="space-y-4 font-inter text-xs">
-            
-            {/* Target Display Panel */}
+
+
             <div className="flex items-center gap-3 p-3 bg-[#FF007F]/5 border border-[#FF007F]/10 rounded-xl text-slate-800">
               <div className="w-8 h-8 rounded-lg bg-[#FF007F]/10 flex items-center justify-center text-fluxion-pink-neon flex-shrink-0">
                 <Send size={14} />
@@ -361,18 +361,18 @@ export default function NewsletterManager({
               <div>
                 <p className="font-bold text-[10px] uppercase text-slate-600 tracking-wider">Cible de diffusion</p>
                 <p className="text-xs font-bold text-fluxion-pink-neon mt-0.5">
-                  {selectedIds.length === 0 
-                    ? "Aucun destinataire sélectionné" 
+                  {selectedIds.length === 0
+                    ? "Aucun destinataire sélectionné"
                     : `${selectedIds.length} abonné(s) sélectionné(s)`
                   }
                 </p>
               </div>
             </div>
 
-            {/* Subject */}
+
             <div className="space-y-1.5">
               <label className="text-slate-500 text-[10px] uppercase font-bold">Objet / Sujet</label>
-              <input 
+              <input
                 type="text"
                 placeholder="ex: Lancement de notre nouvelle plateforme !"
                 value={subject}
@@ -382,10 +382,10 @@ export default function NewsletterManager({
               />
             </div>
 
-            {/* Message Body */}
+
             <div className="space-y-1.5">
               <label className="text-slate-500 text-[10px] uppercase font-bold">Message de la Campagne</label>
-              <textarea 
+              <textarea
                 rows={8}
                 placeholder="Saisissez le contenu de l'email ici..."
                 value={message}
@@ -395,7 +395,7 @@ export default function NewsletterManager({
               />
             </div>
 
-            {/* Error/Success Feedbacks */}
+
             {status === "success" && (
               <div className="flex items-start gap-2 p-3 bg-emerald-50 border border-emerald-200 rounded-lg text-emerald-800 animate-in fade-in">
                 <CheckCircle2 size={16} className="text-emerald-600 flex-shrink-0 mt-0.5" />
@@ -418,13 +418,13 @@ export default function NewsletterManager({
               </div>
             )}
 
-            {/* Submit */}
+
             <button
               type="submit"
               disabled={isSending || selectedIds.length === 0}
               className={`w-full h-10 rounded-lg text-[11px] font-bold tracking-wider uppercase flex items-center justify-center gap-2 transition-all ${
-                selectedIds.length === 0 
-                  ? "bg-slate-100 border border-slate-200 text-slate-400 cursor-not-allowed" 
+                selectedIds.length === 0
+                  ? "bg-slate-100 border border-slate-200 text-slate-400 cursor-not-allowed"
                   : "bg-slate-900 hover:bg-slate-800 text-white shadow-md cursor-pointer"
               }`}
             >

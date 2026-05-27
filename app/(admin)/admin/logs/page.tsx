@@ -50,14 +50,14 @@ export default function LogsPage() {
   const [isLive, setIsLive] = useState(true);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Auto scroll to bottom of logs
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
     }
   }, [logs]);
 
-  // Live log simulation
+
   useEffect(() => {
     if (!isLive) return;
 
@@ -65,14 +65,14 @@ export default function LogsPage() {
       const randomMsg = MOCK_MESSAGES[Math.floor(Math.random() * MOCK_MESSAGES.length)];
       const now = new Date();
       const timeStr = now.toTimeString().split(" ")[0];
-      
+
       const newLog: LogEntry = {
         timestamp: timeStr,
         category: randomMsg.category,
         message: randomMsg.message,
         level: randomMsg.level,
       };
-      
+
       setLogs((prev) => [...prev, newLog]);
     }, 4500);
 
@@ -90,8 +90,8 @@ export default function LogsPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-sans">
-      
-      {/* Header */}
+
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8">
         <div>
           <div className="flex items-center gap-2">
@@ -109,8 +109,8 @@ export default function LogsPage() {
           <button
             onClick={() => setIsLive(!isLive)}
             className={`px-3 py-1.5 rounded-lg border text-[10px] font-bold tracking-wider uppercase flex items-center gap-2 transition-all duration-300 ${
-              isLive 
-                ? "bg-fluxion-pink-neon/10 border-fluxion-pink-neon/30 text-fluxion-pink-neon" 
+              isLive
+                ? "bg-fluxion-pink-neon/10 border-fluxion-pink-neon/30 text-fluxion-pink-neon"
                 : "bg-slate-100 border-slate-200 text-slate-500"
             }`}
           >
@@ -127,7 +127,7 @@ export default function LogsPage() {
         </div>
       </div>
 
-      {/* Filter Tabs */}
+
       <div className="flex gap-2 border-b border-slate-200 pb-4">
         {(["ALL", "SYSTEM", "CMS", "LEADS"] as const).map((tab) => (
           <button
@@ -144,8 +144,8 @@ export default function LogsPage() {
         ))}
       </div>
 
-      {/* Console Output */}
-      <div 
+
+      <div
         ref={scrollRef}
         className="h-[550px] w-full rounded-xl border border-slate-200 bg-white shadow-sm p-6 font-mono text-[11px] overflow-y-auto space-y-2 select-text scrollbar-thin scrollbar-thumb-slate-200"
       >
@@ -166,8 +166,8 @@ export default function LogsPage() {
             if (log.category === "LEADS") catColor = "bg-pink-100 text-[#FF007F] border border-pink-200";
 
             return (
-              <div 
-                key={index} 
+              <div
+                key={index}
                 className="flex items-start gap-4 hover:bg-slate-50 py-1.5 px-2 rounded transition-colors group animate-in slide-in-from-bottom-1 duration-300"
               >
                 <span className="text-slate-400 font-bold select-none">{log.timestamp}</span>
@@ -183,7 +183,7 @@ export default function LogsPage() {
         )}
       </div>
 
-      {/* Diagnostics summary footer */}
+
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div className="border border-slate-200 bg-white shadow-sm p-6 rounded-xl flex items-center gap-4">
           <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-fluxion-pink-neon">
@@ -194,7 +194,7 @@ export default function LogsPage() {
             <p className="text-lg font-heading font-black text-slate-900 mt-0.5">{logs.length}</p>
           </div>
         </div>
-        
+
         <div className="border border-slate-200 bg-white shadow-sm p-6 rounded-xl flex items-center gap-4">
           <div className="w-10 h-10 rounded-lg bg-slate-50 border border-slate-200 flex items-center justify-center text-[#343D91]">
             <Shield size={18} />

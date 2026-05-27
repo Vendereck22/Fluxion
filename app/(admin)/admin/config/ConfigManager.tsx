@@ -52,7 +52,7 @@ export default function ConfigManager({ initialFooter, initialSocial }: ConfigMa
     try {
       const resFooter = await updateContent("footer", footerData);
       const resSocial = await updateContent("social", socialData);
-      
+
       if (resFooter.success && resSocial.success) {
         setStatus("success");
       } else {
@@ -67,8 +67,8 @@ export default function ConfigManager({ initialFooter, initialSocial }: ConfigMa
 
   return (
     <div className="space-y-8 font-sans">
-      
-      {/* Action Header bar */}
+
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
         <div>
           <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-heading">
@@ -108,13 +108,13 @@ export default function ConfigManager({ initialFooter, initialSocial }: ConfigMa
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
-        {/* Contact Block */}
+
+
         <div className="border border-slate-200 rounded-xl bg-white p-6 space-y-4 shadow-sm">
           <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider font-heading border-b border-slate-100 pb-3">
             Coordonnées (Pied de page)
           </h3>
-          
+
           <div className="space-y-4 text-xs font-inter pt-2">
             <div className="space-y-1.5">
               <label className="text-slate-500 text-[10px] uppercase font-bold flex items-center gap-1">
@@ -140,12 +140,12 @@ export default function ConfigManager({ initialFooter, initialSocial }: ConfigMa
           </div>
         </div>
 
-        {/* Socials Block */}
+
         <div className="border border-slate-200 rounded-xl bg-white p-6 space-y-4 shadow-sm h-fit">
           <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider font-heading border-b border-slate-100 pb-3">
             Réseaux Sociaux
           </h3>
-          
+
           <div className="space-y-4 text-xs font-inter pt-2">
             <div className="space-y-1.5">
               <label className="text-slate-500 text-[10px] uppercase font-bold flex items-center gap-1">

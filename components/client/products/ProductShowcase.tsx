@@ -86,7 +86,7 @@ export default function ProductShowcase({
                 className="object-cover object-center"
                 sizes="100vw"
               />
-              {/* Base overlay + global gradient to avoid a visible seam between columns */}
+
               <div className="absolute inset-0 bg-black/35" />
               <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-black/10" />
 

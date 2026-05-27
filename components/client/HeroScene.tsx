@@ -9,7 +9,7 @@ export default function HeroScene() {
 
   useEffect(() => {
     const mountNode = mountRef.current;
-    // 1. Scene setup
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -22,7 +22,7 @@ export default function HeroScene() {
     renderer.setSize(window.innerWidth, window.innerHeight);
     if (mountNode) mountNode.appendChild(renderer.domElement);
 
-    // 2. Particules (même logique)
+
     const geometry = new THREE.BufferGeometry();
     const count = 3000;
     const pos = new Float32Array(count * 3);
@@ -34,7 +34,7 @@ export default function HeroScene() {
     scene.add(mesh);
     camera.position.z = 3;
 
-    // 3. Animation
+
     const animate = () => {
       requestAnimationFrame(animate);
       mesh.rotation.y += 0.001;
@@ -42,7 +42,7 @@ export default function HeroScene() {
     };
     animate();
 
-    // 4. GSAP Text Animation
+
     const tl = gsap.timeline();
     tl.to("#main-title", { opacity: 1, duration: 2, ease: "expo.out" }).to(
       "#sub-text",
@@ -50,7 +50,7 @@ export default function HeroScene() {
       "-=1",
     );
 
-    // Nettoyage (Crucial pour Next.js)
+
     return () => {
       renderer.dispose();
       if (mountNode) mountNode.removeChild(renderer.domElement);
@@ -61,7 +61,7 @@ export default function HeroScene() {
     <div className="relative w-full h-screen">
       <div ref={mountRef} className="absolute inset-0" />
 
-      {/* Contenu Texte */}
+
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center pointer-events-none">
         <h1
           id="main-title"

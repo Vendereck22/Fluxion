@@ -30,13 +30,13 @@ export default function HeroEditorPage() {
   const handleSave = async () => {
     setIsSaving(true);
     setSaveStatus("idle");
-    
+
     const result = await updateContent("hero", formData);
-    
+
     setIsSaving(false);
     if (result.success) {
       setSaveStatus("success");
-      // Reset status after 3 seconds
+
       setTimeout(() => setSaveStatus("idle"), 3000);
     } else {
       setSaveStatus("error");
@@ -45,7 +45,7 @@ export default function HeroEditorPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
-      {/* Header */}
+
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/admin/content">
@@ -66,10 +66,10 @@ export default function HeroEditorPage() {
             <RotateCcw size={16} />
             Réinitialiser
           </Button>
-          <Button 
+          <Button
             className={`gap-2 border-none shadow-lg transition-all duration-300 ${
-              saveStatus === "success" 
-                ? "bg-green-600 shadow-green-600/20" 
+              saveStatus === "success"
+                ? "bg-green-600 shadow-green-600/20"
                 : saveStatus === "error"
                 ? "bg-red-600 shadow-red-600/20"
                 : "bg-fluxion-gradient shadow-fluxion-cobalt/20"
@@ -98,7 +98,7 @@ export default function HeroEditorPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Form Column */}
+
         <div className="space-y-6">
           <Card className="border-slate-200 shadow-sm">
             <CardHeader>
@@ -108,30 +108,30 @@ export default function HeroEditorPage() {
             <CardContent className="space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="badge">Badge supérieur</Label>
-                <Input 
-                  id="badge" 
-                  name="badge" 
-                  value={formData.badge} 
+                <Input
+                  id="badge"
+                  name="badge"
+                  value={formData.badge}
                   onChange={handleChange}
                   className="border-slate-200 focus:border-fluxion-cobalt"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="title">Titre Principal</Label>
-                <Input 
-                  id="title" 
-                  name="title" 
-                  value={formData.title} 
+                <Input
+                  id="title"
+                  name="title"
+                  value={formData.title}
                   onChange={handleChange}
                   className="border-slate-200 focus:border-fluxion-cobalt text-lg font-bold"
                 />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="description">Accroche / Description</Label>
-                <Textarea 
-                  id="description" 
-                  name="description" 
-                  value={formData.description} 
+                <Textarea
+                  id="description"
+                  name="description"
+                  value={formData.description}
                   onChange={handleChange}
                   rows={4}
                   className="border-slate-200 focus:border-fluxion-cobalt resize-none"
@@ -139,10 +139,10 @@ export default function HeroEditorPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="cta">Texte du bouton (CTA)</Label>
-                <Input 
-                  id="cta" 
-                  name="cta" 
-                  value={formData.cta} 
+                <Input
+                  id="cta"
+                  name="cta"
+                  value={formData.cta}
                   onChange={handleChange}
                   className="border-slate-200 focus:border-fluxion-cobalt"
                 />
@@ -151,7 +151,7 @@ export default function HeroEditorPage() {
           </Card>
         </div>
 
-        {/* Preview Column */}
+
         <div className="space-y-6">
           <div className="sticky top-24">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 ml-1">Prévisualisation en direct</h3>

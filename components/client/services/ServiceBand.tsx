@@ -33,7 +33,7 @@ export default function ServiceBand(props: {
           variant === "band"
             ? "rounded-none border-0 ring-0 bg-transparent py-0 text-white overflow-visible"
             : [
-                // Real shadcn "card" feel (radius + shadow) while keeping the mockup identity.
+
                 "rounded-2xl border border-white/10 ring-0 text-white overflow-hidden",
                 "py-0 gap-0",
               ].join(" "),

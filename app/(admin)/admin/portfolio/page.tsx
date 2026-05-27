@@ -3,7 +3,7 @@ import path from "path";
 import PortfolioManager from "./PortfolioManager";
 import { FolderGit } from "lucide-react";
 
-export const revalidate = 0; // Disable cache
+export const revalidate = 0;
 
 export default async function PortfolioCMSPage() {
   const filePath = path.join(process.cwd(), "constants", "site-content.json");
@@ -22,7 +22,7 @@ export default async function PortfolioCMSPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-sans">
-      {/* Header */}
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8">
         <div>
           <div className="flex items-center gap-2">
@@ -37,7 +37,7 @@ export default async function PortfolioCMSPage() {
         </div>
       </div>
 
-      {/* Portfolio Manager Component */}
+
       <PortfolioManager initialData={partnersData} />
     </div>
   );

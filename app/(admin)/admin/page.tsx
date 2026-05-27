@@ -1,9 +1,9 @@
-import { 
-  Users, 
-  Activity, 
-  Layers, 
-  Inbox, 
-  Cpu, 
+import {
+  Users,
+  Activity,
+  Layers,
+  Inbox,
+  Cpu,
   ArrowUpRight
 } from "lucide-react";
 import Link from "next/link";
@@ -11,7 +11,7 @@ import { getLeads } from "@/app/actions/leads";
 import { siteContent } from "@/constants/site-content";
 import { Badge } from "@/components/ui/badge";
 
-export const revalidate = 0; // Dynamic server component
+export const revalidate = 0;
 
 export default async function AdminDashboard() {
   const leads = await getLeads();
@@ -22,8 +22,8 @@ export default async function AdminDashboard() {
 
   return (
     <div className="space-y-12 animate-in fade-in duration-500 font-sans">
-      
-      {/* Welcome / Header */}
+
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8">
         <div>
           <h1 className="text-3xl font-heading font-black text-slate-900 tracking-tight uppercase">
@@ -33,7 +33,7 @@ export default async function AdminDashboard() {
             Supervision globale des instances, du contenu et des flux de leads de l'agence.
           </p>
         </div>
-        
+
         <div className="flex items-center gap-3">
           <span className="flex h-2 w-2 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
@@ -45,10 +45,10 @@ export default async function AdminDashboard() {
         </div>
       </div>
 
-      {/* Modern Substrate KPIs Grid (Light) */}
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        {/* KPI: Leads */}
+
+
         <div className="relative group rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-fluxion-pink-neon/30">
           <div className="absolute top-0 right-0 h-[2px] w-0 bg-fluxion-pink-neon transition-all duration-500 group-hover:w-full" />
           <div className="flex items-center justify-between mb-4">
@@ -65,7 +65,7 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* KPI: Team */}
+
         <div className="relative group rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-[#343D91]/30">
           <div className="absolute top-0 right-0 h-[2px] w-0 bg-[#343D91] transition-all duration-500 group-hover:w-full" />
           <div className="flex items-center justify-between mb-4">
@@ -82,7 +82,7 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* KPI: Services */}
+
         <div className="relative group rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-fluxion-pink-neon/30">
           <div className="absolute top-0 right-0 h-[2px] w-0 bg-fluxion-pink-neon transition-all duration-500 group-hover:w-full" />
           <div className="flex items-center justify-between mb-4">
@@ -99,7 +99,7 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* KPI: System Vitals */}
+
         <div className="relative group rounded-xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:border-[#343D91]/30">
           <div className="absolute top-0 right-0 h-[2px] w-0 bg-[#343D91] transition-all duration-500 group-hover:w-full" />
           <div className="flex items-center justify-between mb-4">
@@ -118,10 +118,10 @@ export default async function AdminDashboard() {
 
       </div>
 
-      {/* Main Sections: Deployment Performance & Inbox overview */}
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Telemetry Chart Panel */}
+
+
         <div className="lg:col-span-8 border border-slate-200 rounded-xl bg-white p-8 space-y-6 shadow-sm">
           <div className="flex items-center justify-between">
             <div>
@@ -144,15 +144,15 @@ export default async function AdminDashboard() {
             </div>
           </div>
 
-          {/* Minimalist SVG Graph */}
+
           <div className="h-48 w-full relative pt-4">
             <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-              {/* Grid lines */}
+
               <line x1="0" y1="20" x2="100" y2="20" stroke="rgba(0,0,0,0.05)" strokeWidth="0.5" />
               <line x1="0" y1="50" x2="100" y2="50" stroke="rgba(0,0,0,0.05)" strokeWidth="0.5" />
               <line x1="0" y1="80" x2="100" y2="80" stroke="rgba(0,0,0,0.05)" strokeWidth="0.5" />
-              
-              {/* Telemetry Line 1: Cobalt Blue (LCP) */}
+
+
               <path
                 d="M 0 70 Q 15 50 30 65 T 60 40 T 90 75 T 100 70"
                 fill="none"
@@ -160,8 +160,8 @@ export default async function AdminDashboard() {
                 strokeWidth="1.5"
                 strokeLinecap="round"
               />
-              
-              {/* Telemetry Line 2: Pink Fluxion (Build) */}
+
+
               <path
                 d="M 0 30 Q 20 40 40 25 T 70 35 T 90 20 T 100 25"
                 fill="none"
@@ -182,7 +182,7 @@ export default async function AdminDashboard() {
             </div>
           </div>
 
-          {/* Subsystem latency info */}
+
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-slate-100 pt-6 text-center">
             <div>
               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-inter">Docker Nodes</p>
@@ -203,12 +203,12 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* Quick leads overview / Call to Action */}
+
         <div className="lg:col-span-4 border border-slate-200 rounded-xl bg-white p-8 flex flex-col justify-between relative overflow-hidden group shadow-sm">
           <div className="absolute top-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity pointer-events-none">
             <Activity size={150} className="text-slate-900" />
           </div>
-          
+
           <div className="space-y-4">
             <Badge className="bg-slate-100 border border-slate-200 text-slate-700 font-bold text-[9px] uppercase tracking-widest px-2.5 py-1 hover:bg-slate-200">
               PROMPT ACTION
@@ -240,7 +240,7 @@ export default async function AdminDashboard() {
 
       </div>
 
-      {/* Recent Activity / Logs */}
+
       <div className="border border-slate-200 rounded-xl bg-white p-8 space-y-6 shadow-sm">
         <div className="flex items-center justify-between border-b border-slate-100 pb-4">
           <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-heading">
@@ -254,7 +254,7 @@ export default async function AdminDashboard() {
         </div>
 
         <div className="divide-y divide-slate-100 font-inter text-xs">
-          
+
           {newLeads.length > 0 ? (
             <div className="py-3 flex items-center justify-between text-slate-600">
               <span className="flex items-center gap-2">

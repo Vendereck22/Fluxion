@@ -7,7 +7,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     <>
       <Navbar />
       <main className="flex-1">{children}</main>
-      <Footer />  
+      <Footer />
     </>
   );
 }

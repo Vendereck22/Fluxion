@@ -4,7 +4,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* 1. BRANDING FLUXION */
+
   --fluxion-deep-blue: #061049;
   --fluxion-cobalt: #343D91;
   --fluxion-mauve: #782F88;
@@ -13,69 +13,69 @@
   --fluxion-pink-light: #EEA5AE;
   --fluxion-dark: #040824;
 
-  /* 2. MAPPING SHADCN (Light Mode) */
+
   --background: #ffffff;
   --foreground: var(--fluxion-deep-blue);
-  
+
   --card: #ffffff;
   --card-foreground: var(--fluxion-deep-blue);
-  
+
   --popover: #ffffff;
   --popover-foreground: var(--fluxion-deep-blue);
-  
+
   --primary: var(--fluxion-cobalt);
   --primary-foreground: #ffffff;
-  
+
   --secondary: var(--fluxion-pink-light);
   --secondary-foreground: var(--fluxion-deep-blue);
-  
+
   --muted: #f4f4f5;
   --muted-foreground: #71717a;
-  
+
   --accent: var(--fluxion-pink-light);
   --accent-foreground: var(--fluxion-deep-blue);
-  
+
   --destructive: #ef4444;
   --destructive-foreground: #fafafa;
-  
+
   --border: #e4e4e7;
   --input: #e4e4e7;
   --ring: var(--fluxion-cobalt);
   --ring-offset: #ffffff;
-  
+
   --radius: 0.75rem;
 }
 
 .dark {
-  /* 3. MAPPING SHADCN (Dark Mode) */
+
   --background: var(--fluxion-dark);
   --foreground: #ffffff;
-  
+
   --card: var(--fluxion-deep-blue);
   --card-foreground: #ffffff;
-  
+
   --popover: var(--fluxion-deep-blue);
   --popover-foreground: #ffffff;
-  
+
   --primary: var(--fluxion-mauve);
   --primary-foreground: #ffffff;
-  
+
   --secondary: var(--fluxion-deep-blue);
   --secondary-foreground: #ffffff;
-  
+
   --muted: #1e293b;
   --muted-foreground: #94a3b8;
-  
+
   --accent: var(--fluxion-cobalt);
   --accent-foreground: #ffffff;
-  
+
   --border: #1e293b;
   --input: #1e293b;
   --ring: var(--fluxion-mauve);
 }
 
 @theme inline {
-  /* Fluxion Colors */
+
   --color-fluxion-blue: var(--fluxion-deep-blue);
   --color-fluxion-cobalt: var(--fluxion-cobalt);
   --color-fluxion-mauve: var(--fluxion-mauve);
@@ -83,7 +83,7 @@
   --color-fluxion-red: var(--fluxion-red);
   --color-fluxion-pink-neon: #FF007F;
 
-  /* Shadcn Semantic Colors */
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -104,12 +104,12 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* Fonts */
+
   --font-sans: var(--font-schibsted), ui-sans-serif, system-ui;
   --font-heading: var(--font-archivo), ui-sans-serif, system-ui;
   --font-inter: var(--font-inter), ui-sans-serif, system-ui;
 
-  /* Radius */
+
   --radius-xl: var(--radius);
   --radius-lg: calc(var(--radius) - 2px);
   --radius-md: calc(var(--radius) - 4px);
@@ -127,7 +127,7 @@
 }
 
 @layer components {
-  /* Utilitaire pour le dégradé signature Fluxion */
+
   .bg-fluxion-gradient {
     background: linear-gradient(135deg, var(--fluxion-cobalt) 0%, var(--fluxion-rose) 100%);
   }

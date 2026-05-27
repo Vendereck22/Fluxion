@@ -54,7 +54,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
     initialMembers.length > 0 ? initialMembers[0].id : null
   );
 
-  // Form states for adding or editing
+
   const [editForm, setEditForm] = useState<TeamMember>({
     id: 0,
     name: "",
@@ -147,7 +147,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
       img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800",
       socials: { linkedin: "#", twitter: "#", instagram: "#" }
     };
-    
+
     setMembers((prev) => [...prev, newMember]);
     setEditingId(newId);
     setEditForm(newMember);
@@ -177,7 +177,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
 
   return (
     <div className="space-y-8 font-sans">
-      {/* Save bar */}
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
         <div>
           <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-heading">
@@ -195,7 +195,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
             <Plus size={14} />
             Ajouter un profil
           </button>
-          
+
           <button
             onClick={handleSaveChangesToDisk}
             disabled={isSaving}
@@ -224,13 +224,13 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
         </div>
       </div>
 
-      {/* Main content split */}
+
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Members List */}
+
+
         <div className="lg:col-span-7 space-y-4">
           <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Membres Actuels ({members.length})</h3>
-          
+
           {members.length === 0 ? (
             <div className="border border-slate-200 rounded-xl bg-white p-12 text-center text-slate-500 text-xs shadow-sm">
               Aucun membre dans l'équipe. Cliquez sur "Ajouter un profil" pour commencer.
@@ -240,11 +240,11 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
               const isEditing = editingId === member.id;
 
               return (
-                <div 
+                <div
                   key={member.id}
                   className={`border rounded-xl p-5 bg-white shadow-sm transition-all duration-300 ${
-                    isEditing 
-                      ? "border-fluxion-pink-neon/50 bg-slate-50" 
+                    isEditing
+                      ? "border-fluxion-pink-neon/50 bg-slate-50"
                       : "border-slate-200 hover:border-slate-300"
                   }`}
                 >
@@ -272,7 +272,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="space-y-1.5">
                           <label className="text-slate-500 text-[10px] uppercase font-bold">Nom Complet</label>
-                          <input 
+                          <input
                             name="name"
                             value={editForm.name}
                             onChange={handleFormChange}
@@ -281,7 +281,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                         </div>
                         <div className="space-y-1.5">
                           <label className="text-slate-500 text-[10px] uppercase font-bold">Rôle / Poste</label>
-                          <input 
+                          <input
                             name="role"
                             value={editForm.role}
                             onChange={handleFormChange}
@@ -306,12 +306,12 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                               </div>
                             )}
                           </div>
-                          
+
                           <div className="flex-1 space-y-2 w-full">
                             <label className="inline-flex h-9 items-center justify-center px-4 rounded-lg bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-700 text-[10px] font-bold uppercase tracking-wider cursor-pointer transition-colors w-full sm:w-auto">
                               <Upload size={12} className="mr-1.5" />
                               Télécharger une photo
-                              <input 
+                              <input
                                 type="file"
                                 accept="image/*"
                                 className="hidden"
@@ -319,10 +319,10 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                                 disabled={isUploadingFile}
                               />
                             </label>
-                            
+
                             <div className="space-y-1">
                               <span className="text-[9px] text-slate-400 block font-inter">Ou coller un lien direct vers l'image :</span>
-                              <input 
+                              <input
                                 name="img"
                                 value={editForm.img}
                                 onChange={handleFormChange}
@@ -336,7 +336,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
 
                       <div className="space-y-1.5">
                         <label className="text-slate-500 text-[10px] uppercase font-bold">Biographie</label>
-                        <textarea 
+                        <textarea
                           name="bio"
                           value={editForm.bio}
                           onChange={handleFormChange}
@@ -345,7 +345,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                         />
                       </div>
 
-                      {/* Socials Fields */}
+
                       <div className="border-t border-slate-100 pt-4 mt-2">
                         <span className="text-slate-500 text-[10px] uppercase font-bold block mb-3">Réseaux Sociaux</span>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -353,7 +353,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                             <label className="text-slate-500 text-[9px] uppercase font-bold flex items-center gap-1">
                               <LinkedInIcon className="w-3.5 h-3.5" /> LinkedIn URL
                             </label>
-                            <input 
+                            <input
                               value={editForm.socials?.linkedin || ""}
                               onChange={(e) => setEditForm((prev) => ({
                                 ...prev,
@@ -367,7 +367,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                             <label className="text-slate-500 text-[9px] uppercase font-bold flex items-center gap-1">
                               <TwitterIcon className="w-3.5 h-3.5" /> Twitter / X URL
                             </label>
-                            <input 
+                            <input
                               value={editForm.socials?.twitter || ""}
                               onChange={(e) => setEditForm((prev) => ({
                                 ...prev,
@@ -381,7 +381,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                             <label className="text-slate-500 text-[9px] uppercase font-bold flex items-center gap-1">
                               <InstagramIcon className="w-3.5 h-3.5" /> Instagram URL
                             </label>
-                            <input 
+                            <input
                               value={editForm.socials?.instagram || ""}
                               onChange={(e) => setEditForm((prev) => ({
                                 ...prev,
@@ -395,12 +395,12 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                       </div>
                     </div>
                   ) : (
-                    /* Display view */
+
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                       <div className="flex items-center gap-4">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img 
-                          src={member.img} 
+
+                        <img
+                          src={member.img}
                           alt={member.name}
                           className="w-12 h-12 rounded-xl object-cover border border-slate-200 shadow-sm cursor-pointer hover:opacity-85"
                           onClick={() => setSelectedPreviewId(member.id)}
@@ -460,8 +460,8 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
             })
           )}
         </div>
- 
-        {/* Live Preview Column */}
+
+
         <div className="lg:col-span-5 space-y-6">
           <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Prévisualisation du Site</h3>
           <div className="sticky top-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
@@ -474,23 +474,23 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
               </h4>
             </div>
 
-            {/* List mini previews */}
+
             <div className="grid grid-cols-2 gap-4 max-h-[220px] overflow-y-auto pr-1">
               {members.map((m) => {
                 const isSelected = m.id === selectedPreviewId;
                 return (
-                  <div 
-                    key={m.id} 
+                  <div
+                    key={m.id}
                     onClick={() => setSelectedPreviewId(m.id)}
                     className={`border p-3 text-center space-y-2 rounded-xl cursor-pointer transition-all ${
-                      isSelected 
-                        ? "border-fluxion-pink-neon/60 ring-1 ring-fluxion-pink-neon/40 bg-pink-50/10" 
+                      isSelected
+                        ? "border-fluxion-pink-neon/60 ring-1 ring-fluxion-pink-neon/40 bg-pink-50/10"
                         : "bg-slate-50 border-slate-100 hover:border-slate-300"
                     }`}
                   >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img 
-                      src={m.img} 
+
+                    <img
+                      src={m.img}
                       alt={m.name}
                       className="w-12 h-12 rounded-full mx-auto object-cover border border-slate-200 hover:scale-105 transition-transform"
                     />
@@ -502,12 +502,12 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                 );
               })}
             </div>
-            
-            {/* Selected member details card */}
+
+
             {selectedMember ? (
               <div className="border border-slate-200 rounded-2xl bg-slate-50 overflow-hidden shadow-inner p-4 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div className="flex gap-4">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
+
                   <img
                     src={selectedMember.img}
                     alt={selectedMember.name}
@@ -548,7 +548,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                 Sélectionnez un membre ci-dessus pour prévisualiser son profil détaillé.
               </div>
             )}
-            
+
             <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 text-[10px] text-slate-500 leading-relaxed font-inter">
               💡 Les modifications effectuées ici seront instantanément appliquées à la page d'accueil de l'écosystème web une fois le bouton <strong>"Publier les modifications"</strong> cliqué.
             </div>

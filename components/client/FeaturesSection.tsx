@@ -32,8 +32,8 @@ export default function FeaturesSection() {
   return (
     <section className="w-full py-24 bg-white antialiased">
       <div className="container mx-auto px-6">
-        
-        
+
+
         <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">
           <h2 className="text-sm font-bold uppercase tracking-[0.4em] text-fluxion-rose">
             {siteContent.features.badge}
@@ -43,7 +43,7 @@ export default function FeaturesSection() {
           </p>
         </div>
 
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {features.map((feature) => (
             <Card
@@ -51,7 +51,7 @@ export default function FeaturesSection() {
               className="group p-4 border border-slate-100 bg-slate-50/50 hover:bg-white transition-all duration-500 overflow-visible ring-0"
             >
               <CardHeader className="pt-4 px-4 pb-2">
-             
+
                 <div className={`w-14 h-14 rounded-2xl ${feature.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-500`}>
                   <feature.icon className="w-7 h-7" />
                 </div>

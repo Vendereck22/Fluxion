@@ -10,7 +10,7 @@ export default function SystemMorphing() {
 
   useEffect(() => {
     const mountNode = mountRef.current;
-    // 1. Setup de base
+
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       75,
@@ -25,7 +25,7 @@ export default function SystemMorphing() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     if (mountNode) mountNode.appendChild(renderer.domElement);
 
-    // 2. Particules
+
     const count = 2000;
     const geometry = new THREE.BufferGeometry();
     const positions = new Float32Array(count * 3);
@@ -36,7 +36,7 @@ export default function SystemMorphing() {
 
     const material = new THREE.PointsMaterial({
       size: 0.02,
-      color: 0xffffff, // On peut utiliser 0xFF007F pour le Rose Fluxion
+      color: 0xffffff,
       transparent: true,
       opacity: 0.8,
     });
@@ -44,7 +44,7 @@ export default function SystemMorphing() {
     const points = new THREE.Points(geometry, material);
     scene.add(points);
 
-    // 3. Logique des Formes
+
     const getSpherePositions = () => {
       const arr = new Float32Array(count * 3);
       for (let i = 0; i < count; i++) {
@@ -88,7 +88,7 @@ export default function SystemMorphing() {
       return arr;
     };
 
-    // 4. Fonction de Morphing
+
     const morphTo = (newPositions: Float32Array) => {
       const currentPositions = geometry.attributes.position
         .array as Float32Array;
@@ -109,7 +109,7 @@ export default function SystemMorphing() {
       });
     };
 
-    // 5. Sequence Loop
+
     const shapes = [
       getSpherePositions,
       getChaosPositions,
@@ -120,7 +120,7 @@ export default function SystemMorphing() {
     let interval: NodeJS.Timeout;
 
     const nextShape = () => {
-      // Apparition du texte au moment du Chaos
+
       if (index === 1 && textRef.current) {
         gsap.to(textRef.current, {
           opacity: 1,
@@ -136,7 +136,7 @@ export default function SystemMorphing() {
 
     nextShape();
 
-    // Animation Loop
+
     const animate = () => {
       requestAnimationFrame(animate);
       points.rotation.y += 0.002;
@@ -144,7 +144,7 @@ export default function SystemMorphing() {
     };
     animate();
 
-    // Resize
+
     const handleResize = () => {
       camera.aspect = window.innerWidth / window.innerHeight;
       camera.updateProjectionMatrix();

@@ -58,8 +58,8 @@ export default function ServicesManager({ initialData }: ServicesManagerProps) {
 
   return (
     <div className="space-y-8 font-sans">
-      
-      {/* Action Header bar */}
+
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
         <div>
           <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-heading">
@@ -99,16 +99,16 @@ export default function ServicesManager({ initialData }: ServicesManagerProps) {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Editing form fields */}
+
+
         <div className="lg:col-span-7 space-y-6">
-          
-          {/* Main header block */}
+
+
           <div className="border border-slate-200 rounded-xl bg-white p-6 space-y-4 shadow-sm">
             <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider font-heading border-b border-slate-100 pb-3">
               En-tête de la section Services
             </h3>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs font-inter">
               <div className="space-y-1.5">
                 <label className="text-slate-500 text-[10px] uppercase font-bold">Badge supérieur</label>
@@ -119,7 +119,7 @@ export default function ServicesManager({ initialData }: ServicesManagerProps) {
                   className="w-full h-9 bg-white border border-slate-200 rounded px-3 text-slate-900 focus:border-fluxion-pink-neon focus:outline-none"
                 />
               </div>
-              
+
               <div className="space-y-1.5">
                 <label className="text-slate-500 text-[10px] uppercase font-bold">Lien d'action (CTA)</label>
                 <input
@@ -142,10 +142,10 @@ export default function ServicesManager({ initialData }: ServicesManagerProps) {
             </div>
           </div>
 
-          {/* List items */}
+
           <div className="space-y-4">
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Piliers d'offres individuels</h3>
-            
+
             {data.items.map((item, index) => (
               <div key={index} className="border border-slate-200 rounded-xl bg-white p-6 space-y-4 shadow-sm">
                 <div className="flex items-center justify-between border-b border-slate-100 pb-2">
@@ -153,7 +153,7 @@ export default function ServicesManager({ initialData }: ServicesManagerProps) {
                     Offre #{index + 1}
                   </span>
                 </div>
-                
+
                 <div className="space-y-3 text-xs font-inter">
                   <div className="space-y-1.5">
                     <label className="text-slate-500 text-[10px] uppercase font-bold">Nom du service</label>
@@ -163,7 +163,7 @@ export default function ServicesManager({ initialData }: ServicesManagerProps) {
                       className="w-full h-9 bg-white border border-slate-200 rounded px-3 text-slate-900 focus:border-fluxion-pink-neon focus:outline-none font-semibold"
                     />
                   </div>
-                  
+
                   <div className="space-y-1.5">
                     <label className="text-slate-500 text-[10px] uppercase font-bold">Description</label>
                     <textarea
@@ -180,7 +180,7 @@ export default function ServicesManager({ initialData }: ServicesManagerProps) {
 
         </div>
 
-        {/* Preview Column */}
+
         <div className="lg:col-span-5 space-y-4">
           <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Prévisualisation du Site</h3>
           <div className="sticky top-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
@@ -193,7 +193,7 @@ export default function ServicesManager({ initialData }: ServicesManagerProps) {
               </h4>
             </div>
 
-            {/* List preview items */}
+
             <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
               {data.items.map((item, idx) => (
                 <div key={idx} className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-1.5 text-left">
@@ -202,7 +202,7 @@ export default function ServicesManager({ initialData }: ServicesManagerProps) {
                 </div>
               ))}
             </div>
-            
+
             <button className="w-full h-11 bg-slate-100 border border-slate-200 rounded-xl text-slate-700 font-bold text-[10px] tracking-wider uppercase">
               {data.more || "En savoir plus"}
             </button>

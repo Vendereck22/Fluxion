@@ -2,7 +2,7 @@ import { getLeads } from "@/app/actions/leads";
 import ArchiveList from "./ArchiveList";
 import { Archive } from "lucide-react";
 
-export const revalidate = 0; // Disable cache
+export const revalidate = 0;
 
 export default async function ArchivesPage() {
   const leads = await getLeads();
@@ -10,7 +10,6 @@ export default async function ArchivesPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-sans">
-      {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8">
         <div>
           <div className="flex items-center gap-2">
@@ -25,7 +24,6 @@ export default async function ArchivesPage() {
         </div>
       </div>
 
-      {/* Archive List Render */}
       <ArchiveList initialLeads={archivedLeads} />
     </div>
   );

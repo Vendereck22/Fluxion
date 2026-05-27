@@ -43,7 +43,7 @@ export default function TeamInteractive() {
   };
 
   const animateTransition = (newIndex: number) => {
-    // Animation du texte
+
     gsap.fromTo(
       ".team-text-anim",
       { opacity: 0, y: 20 },
@@ -56,32 +56,32 @@ export default function TeamInteractive() {
       },
     );
 
-    // L'animation des images est maintenant gérée via CSS (transition-all)
+
   };
 
   const getMobilePositionStyle = (index: number, total: number) => {
-    // 0: Center
+
     if (index === 0)
       return { top: "50%", left: "50%", transform: "translate(-50%, -50%) scale(1.2)", zIndex: 30, opacity: 1 };
-    // 1: Right 1
+
     if (index === 1)
       return { top: "50%", left: "75%", transform: "translate(-50%, -50%) scale(0.85)", zIndex: 20, opacity: 1 };
-    // 2: Right 2
+
     if (index === 2)
       return { top: "50%", left: "95%", transform: "translate(-50%, -50%) scale(0.65)", zIndex: 10, opacity: 0.6 };
-    // N-1: Left 1
+
     if (index === total - 1)
       return { top: "50%", left: "25%", transform: "translate(-50%, -50%) scale(0.85)", zIndex: 20, opacity: 1 };
-    // N-2: Left 2
+
     if (index === total - 2)
       return { top: "50%", left: "5%", transform: "translate(-50%, -50%) scale(0.65)", zIndex: 10, opacity: 0.6 };
 
-    // Hidden behind center
+
     return { top: "50%", left: "50%", transform: "translate(-50%, -50%) scale(0)", zIndex: 0, opacity: 0 };
   };
 
   const getPositionStyle = (index: number, total: number) => {
-    // 0: Focus
+
     if (index === 0)
       return {
         top: "50%",
@@ -92,7 +92,7 @@ export default function TeamInteractive() {
         transform: "translateY(-50%)",
         opacity: 1,
       };
-    // 1: Bottom 1
+
     if (index === 1)
       return {
         top: "70%",
@@ -103,7 +103,7 @@ export default function TeamInteractive() {
         transform: "none",
         opacity: 1,
       };
-    // 2: Bottom 2
+
     if (index === 2)
       return {
         top: "90%",
@@ -115,7 +115,7 @@ export default function TeamInteractive() {
         opacity: 1,
       };
 
-    // N-1: Top 1
+
     if (index === total - 1)
       return {
         top: "5%",
@@ -126,7 +126,7 @@ export default function TeamInteractive() {
         transform: "none",
         opacity: 1,
       };
-    // N-2: Top 2
+
     if (index === total - 2)
       return {
         top: "-15%",
@@ -138,7 +138,7 @@ export default function TeamInteractive() {
         opacity: 1,
       };
 
-    // Tous les autres sont cachés derrière la courbe à droite
+
     return {
       top: "50%",
       left: "100%",
@@ -152,16 +152,16 @@ export default function TeamInteractive() {
 
   return (
     <section className="relative w-full min-h-screen bg-white flex flex-col justify-center overflow-hidden py-20 px-4 md:px-10">
-      
-      {/* --- MOBILE VIEW (Coverflow Horizontal Layout) --- */}
+
+
       <div className="w-full flex flex-col items-center md:hidden space-y-8">
-        
-        {/* Titre Mobile */}
+
+
         <h2 className="text-fluxion-rose text-5xl font-black uppercase tracking-tighter text-center">
           {siteContent.team.title}
         </h2>
 
-        {/* Horizontal Coverflow */}
+
         <div className="relative w-full h-[320px] overflow-visible mt-6">
           {teamData.map((member, i) => {
             let relativeIndex = (i - activeIndex) % teamData.length;
@@ -189,14 +189,14 @@ export default function TeamInteractive() {
           })}
         </div>
 
-        {/* Text and Bio Centered */}
+
         <div className="team-text-anim flex flex-col items-center text-center space-y-4 px-4">
           <h3 className="text-4xl font-bold text-black">{teamData[activeIndex].name}</h3>
           <p className="text-black text-base font-medium max-w-xs leading-tight">
             {teamData[activeIndex].bio}
           </p>
-          
-          {/* Réseaux sociaux */}
+
+
           <div className="flex flex-row gap-4 pt-2">
             <a href={teamData[activeIndex].socials.linkedin} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-black transition-colors">
               <LinkedInIcon className="w-6 h-6" />
@@ -210,7 +210,7 @@ export default function TeamInteractive() {
           </div>
         </div>
 
-        {/* Buttons */}
+
         <div className="flex flex-row gap-6 pt-4">
           <button onClick={handlePrev} className="w-12 h-12 flex items-center justify-center bg-gray-300 rounded-full text-black hover:bg-black hover:text-white transition-colors">
             <ChevronLeft size={24} />
@@ -221,9 +221,9 @@ export default function TeamInteractive() {
         </div>
       </div>
 
-      {/* --- DESKTOP VIEW (Current Split Layout) --- */}
+
       <div className="container mx-auto hidden md:grid md:grid-cols-2 gap-10 items-center">
-        {/* PARTIE GAUCHE : TEXTE ET NAVIGATION */}
+
         <div className="z-10 space-y-12">
           <h2 className="text-fluxion-rose text-5xl md:text-7xl font-black uppercase tracking-tighter">
             {siteContent.team.title}
@@ -237,7 +237,7 @@ export default function TeamInteractive() {
               {teamData[activeIndex].bio}
             </p>
 
-            {/* Réseaux sociaux */}
+
             <div className="flex flex-row gap-4 pt-2">
               <a
                 href={teamData[activeIndex].socials.linkedin}
@@ -266,7 +266,7 @@ export default function TeamInteractive() {
             </div>
           </div>
 
-          {/* Boutons de navigation */}
+
           <div className="flex flex-row gap-4 w-fit pt-4">
             <button
               onClick={handlePrev}
@@ -283,10 +283,10 @@ export default function TeamInteractive() {
           </div>
         </div>
 
-        {/* PARTIE DROITE : CAROUSEL D'IMAGES EN DEMI-CERCLE */}
+
         <div className="relative w-full h-[600px]">
           {teamData.map((member, i) => {
-            // Calcul de la position relative dans le cercle (0 = Focus, 1 = Bottom 1, etc.)
+
             let relativeIndex = (i - activeIndex) % teamData.length;
             if (relativeIndex < 0) relativeIndex += teamData.length;
 

@@ -50,18 +50,18 @@ export default function InboxList({ initialLeads }: InboxListProps) {
     }
   };
 
-  // Inbox only shows new or contacted (non-archived) leads
+
   const activeLeads = leads.filter(l => l.status !== "archived");
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 font-sans">
-      
-      {/* Leads List */}
+
+
       <div className="lg:col-span-5 space-y-4">
         <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
           Demandes Reçues ({activeLeads.length})
         </h3>
-        
+
         {activeLeads.length === 0 ? (
           <div className="border border-slate-200 rounded-xl bg-white shadow-sm p-12 text-center text-slate-500 text-xs">
             Aucun message actif dans la boîte de réception.
@@ -70,14 +70,14 @@ export default function InboxList({ initialLeads }: InboxListProps) {
           <div className="space-y-3 max-h-[600px] overflow-y-auto pr-1">
             {activeLeads.map((lead) => {
               const isSelected = selectedLead?.id === lead.id;
-              
+
               return (
                 <div
                   key={lead.id}
                   onClick={() => setSelectedLead(lead)}
                   className={`border rounded-xl p-5 bg-white cursor-pointer transition-all duration-300 text-left relative overflow-hidden shadow-sm ${
-                    isSelected 
-                      ? "border-fluxion-pink-neon/50 bg-slate-50 ring-1 ring-fluxion-pink-neon/20" 
+                    isSelected
+                      ? "border-fluxion-pink-neon/50 bg-slate-50 ring-1 ring-fluxion-pink-neon/20"
                       : "border-slate-200 hover:border-slate-300 hover:bg-slate-50"
                   }`}
                 >
@@ -101,7 +101,7 @@ export default function InboxList({ initialLeads }: InboxListProps) {
                       </span>
                     )}
                   </div>
-                  
+
                   <p className="text-[11px] text-slate-500 line-clamp-1 mt-3">
                     {lead.message}
                   </p>
@@ -120,16 +120,16 @@ export default function InboxList({ initialLeads }: InboxListProps) {
         )}
       </div>
 
-      {/* Lead Details Viewer */}
+
       <div className="lg:col-span-7 space-y-4">
         <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
           Détails de la demande
         </h3>
-        
+
         {selectedLead ? (
           <div className="border border-slate-200 rounded-xl bg-white shadow-sm p-8 space-y-6">
-            
-            {/* Header info */}
+
+
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-100 pb-6">
               <div>
                 <h2 className="text-xl font-heading font-black text-slate-900 uppercase tracking-tight">
@@ -147,7 +147,7 @@ export default function InboxList({ initialLeads }: InboxListProps) {
                 </div>
               </div>
 
-              {/* Quick Actions */}
+
               <div className="flex items-center gap-2">
                 {selectedLead.status === "new" && (
                   <button
@@ -179,20 +179,20 @@ export default function InboxList({ initialLeads }: InboxListProps) {
               </div>
             </div>
 
-            {/* Structured details cards */}
+
             <div className="grid grid-cols-2 gap-4">
               <div className="border border-slate-200 bg-slate-50 rounded-lg p-4">
                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-inter">Service demandé</p>
                 <p className="text-xs font-bold text-slate-900 mt-1 uppercase">{selectedLead.service}</p>
               </div>
-              
+
               <div className="border border-slate-200 bg-slate-50 rounded-lg p-4">
                 <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-inter">Budget estimé</p>
                 <p className="text-xs font-bold text-[#FF007F] mt-1 font-mono">{selectedLead.budget}</p>
               </div>
             </div>
 
-            {/* Message Body */}
+
             <div className="space-y-2">
               <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-inter">Message</p>
               <div className="border border-slate-200 bg-slate-50 rounded-lg p-5 font-inter text-xs text-slate-700 leading-relaxed whitespace-pre-wrap">
@@ -200,7 +200,7 @@ export default function InboxList({ initialLeads }: InboxListProps) {
               </div>
             </div>
 
-            {/* Email dispatch help banner */}
+
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-[10px] text-slate-500 leading-relaxed font-inter flex gap-3 items-start">
               <Mail size={16} className="text-slate-400 shrink-0 mt-0.5" />
               <div>

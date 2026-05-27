@@ -8,7 +8,7 @@ export default function APropos() {
       <AboutHero />
       <AboutPillars />
       <AboutVisual />
-      
+
     </div>
   );
 }

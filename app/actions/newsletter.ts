@@ -1,11 +1,18 @@
 "use server";
 
-import fs from "fs/promises";
 import path from "path";
 import { revalidatePath } from "next/cache";
+import { verifySession } from "@/app/actions/auth";
+import {
+  readJsonPreferFallback,
+  tmpDataPath,
+  writeJsonWithFallback,
+} from "@/lib/server/json-store";
 
 const SUBSCRIBERS_PATH = path.join(process.cwd(), "constants", "subscribers.json");
 const LOGS_PATH = path.join(process.cwd(), "constants", "newsletter-logs.json");
+const SUBSCRIBERS_FALLBACK_PATH = tmpDataPath("subscribers.json");
+const LOGS_FALLBACK_PATH = tmpDataPath("newsletter-logs.json");
 
 export interface Subscriber {
   id: string;
@@ -22,26 +29,38 @@ export interface NewsletterLog {
   sentAt: string;
 }
 
-// Read subscribers
-export async function getSubscribers(): Promise<Subscriber[]> {
-  try {
-    const content = await fs.readFile(SUBSCRIBERS_PATH, "utf-8");
-    return JSON.parse(content) as Subscriber[];
-  } catch (error) {
-    console.error("Failed to read subscribers, returning empty list:", error);
-    return [];
-  }
+async function readSubscribers(): Promise<Subscriber[]> {
+  return readJsonPreferFallback<Subscriber[]>(
+    SUBSCRIBERS_PATH,
+    SUBSCRIBERS_FALLBACK_PATH,
+    []
+  );
 }
 
-// Subscribe from client-side
+async function readLogs(): Promise<NewsletterLog[]> {
+  return readJsonPreferFallback<NewsletterLog[]>(LOGS_PATH, LOGS_FALLBACK_PATH, []);
+}
+
+
+export async function getSubscribers(): Promise<Subscriber[]> {
+  const isAdmin = await verifySession();
+  if (!isAdmin) return [];
+  return readSubscribers();
+}
+
+
 export async function subscribeNewsletter(email: string) {
   try {
     const cleanEmail = email.trim().toLowerCase();
-    if (!cleanEmail || !cleanEmail.includes("@")) {
+    if (
+      !cleanEmail ||
+      cleanEmail.length > 254 ||
+      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(cleanEmail)
+    ) {
       return { success: false, error: "Adresse email invalide." };
     }
 
-    const subscribers = await getSubscribers();
+    const subscribers = await readSubscribers();
     const existing = subscribers.find((s) => s.email === cleanEmail);
 
     if (existing) {
@@ -60,7 +79,11 @@ export async function subscribeNewsletter(email: string) {
       subscribers.push(newSub);
     }
 
-    await fs.writeFile(SUBSCRIBERS_PATH, JSON.stringify(subscribers, null, 2), "utf-8");
+    await writeJsonWithFallback(
+      SUBSCRIBERS_PATH,
+      SUBSCRIBERS_FALLBACK_PATH,
+      subscribers
+    );
     revalidatePath("/admin/newsletter");
     return { success: true };
   } catch (error) {
@@ -69,15 +92,22 @@ export async function subscribeNewsletter(email: string) {
   }
 }
 
-// Toggle subscriber status (active/unsubscribed)
+
 export async function toggleSubscriberStatus(id: string, status: "active" | "unsubscribed") {
   try {
-    const subscribers = await getSubscribers();
+    const isAdmin = await verifySession();
+    if (!isAdmin) return { success: false, error: "Non autorisé." };
+
+    const subscribers = await readSubscribers();
     const idx = subscribers.findIndex((s) => s.id === id);
     if (idx === -1) return { success: false, error: "Abonné introuvable." };
 
     subscribers[idx].status = status;
-    await fs.writeFile(SUBSCRIBERS_PATH, JSON.stringify(subscribers, null, 2), "utf-8");
+    await writeJsonWithFallback(
+      SUBSCRIBERS_PATH,
+      SUBSCRIBERS_FALLBACK_PATH,
+      subscribers
+    );
     revalidatePath("/admin/newsletter");
     return { success: true };
   } catch (error) {
@@ -86,12 +116,19 @@ export async function toggleSubscriberStatus(id: string, status: "active" | "uns
   }
 }
 
-// Delete subscriber
+
 export async function deleteSubscriber(id: string) {
   try {
-    let subscribers = await getSubscribers();
+    const isAdmin = await verifySession();
+    if (!isAdmin) return { success: false, error: "Non autorisé." };
+
+    let subscribers = await readSubscribers();
     subscribers = subscribers.filter((s) => s.id !== id);
-    await fs.writeFile(SUBSCRIBERS_PATH, JSON.stringify(subscribers, null, 2), "utf-8");
+    await writeJsonWithFallback(
+      SUBSCRIBERS_PATH,
+      SUBSCRIBERS_FALLBACK_PATH,
+      subscribers
+    );
     revalidatePath("/admin/newsletter");
     return { success: true };
   } catch (error) {
@@ -100,20 +137,19 @@ export async function deleteSubscriber(id: string) {
   }
 }
 
-// Read newsletter send logs
+
 export async function getNewsletterLogs(): Promise<NewsletterLog[]> {
-  try {
-    const content = await fs.readFile(LOGS_PATH, "utf-8");
-    return JSON.parse(content) as NewsletterLog[];
-  } catch (error) {
-    console.error("Failed to read newsletter logs, returning empty list:", error);
-    return [];
-  }
+  const isAdmin = await verifySession();
+  if (!isAdmin) return [];
+  return readLogs();
 }
 
-// Dispatch / Save campaign log
+
 export async function sendNewsletter(subject: string, message: string, recipientEmails: string[]) {
   try {
+    const isAdmin = await verifySession();
+    if (!isAdmin) return { success: false, error: "Non autorisé." };
+
     if (!subject.trim() || !message.trim()) {
       return { success: false, error: "Le sujet et le message ne peuvent pas être vides." };
     }
@@ -121,7 +157,7 @@ export async function sendNewsletter(subject: string, message: string, recipient
       return { success: false, error: "Aucun destinataire sélectionné." };
     }
 
-    const logs = await getNewsletterLogs();
+    const logs = await readLogs();
     const newCampaignLog: NewsletterLog = {
       id: "campaign-" + Math.random().toString(36).substring(2, 11),
       subject: subject.trim(),
@@ -131,10 +167,10 @@ export async function sendNewsletter(subject: string, message: string, recipient
     };
 
     logs.push(newCampaignLog);
-    // Keep logs sorted chronologically descending
+
     logs.sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime());
 
-    await fs.writeFile(LOGS_PATH, JSON.stringify(logs, null, 2), "utf-8");
+    await writeJsonWithFallback(LOGS_PATH, LOGS_FALLBACK_PATH, logs);
     revalidatePath("/admin/newsletter");
     return { success: true };
   } catch (error) {

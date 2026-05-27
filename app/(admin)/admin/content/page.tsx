@@ -1,13 +1,13 @@
-import { 
-  Type, 
-  Compass, 
-  Sparkles, 
-  Layers, 
-  BarChart3, 
-  MessageSquareQuote, 
-  HelpCircle, 
-  Mail, 
-  ArrowRight 
+import {
+  Type,
+  Compass,
+  Sparkles,
+  Layers,
+  BarChart3,
+  MessageSquareQuote,
+  HelpCircle,
+  Mail,
+  ArrowRight
 } from "lucide-react";
 import Link from "next/link";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";

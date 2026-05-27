@@ -1,8 +1,8 @@
 import { slugify } from "@/lib/slug";
 import ProjectDetail from "@/components/client/projects/ProjectDetail";
 import { notFound } from "next/navigation";
-import fs from "fs/promises";
 import path from "path";
+import { readJsonPreferFallback, tmpDataPath } from "@/lib/server/json-store";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -18,8 +18,11 @@ type ProjectItem = {
 
 async function readSiteContent(): Promise<{ projectsPage?: { items?: ProjectItem[] } }> {
   const filePath = path.join(process.cwd(), "constants", "site-content.json");
-  const raw = await fs.readFile(filePath, "utf-8");
-  return JSON.parse(raw) as { projectsPage?: { items?: ProjectItem[] } };
+  return readJsonPreferFallback<{ projectsPage?: { items?: ProjectItem[] } }>(
+    filePath,
+    tmpDataPath("site-content.json"),
+    {}
+  );
 }
 
 export default async function ProjectPage({

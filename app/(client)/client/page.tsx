@@ -14,7 +14,7 @@ export default function ClientPage() {
       </div>
       <Approach />
       <Partners />
-      {/*<FeaturesSection />*/}
+
       <WhyUs />
       <Testimonials />
       <TeamGrid />

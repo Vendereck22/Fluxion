@@ -3,12 +3,12 @@ import path from "path";
 import TeamManager from "./TeamManager";
 import { Users } from "lucide-react";
 
-export const revalidate = 0; // Ensure data is loaded dynamically
+export const revalidate = 0;
 
 export default async function TeamCMSPage() {
   const filePath = path.join(process.cwd(), "constants", "site-content.json");
   let teamMembers = [];
-  
+
   try {
     const fileContent = await fs.readFile(filePath, "utf-8");
     const data = JSON.parse(fileContent);
@@ -19,7 +19,7 @@ export default async function TeamCMSPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-sans">
-      {/* Header */}
+
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-slate-200 pb-8">
         <div>
           <div className="flex items-center gap-2">
@@ -34,7 +34,7 @@ export default async function TeamCMSPage() {
         </div>
       </div>
 
-      {/* Render the Client-Side Team Manager */}
+
       <TeamManager initialMembers={teamMembers} />
     </div>
   );

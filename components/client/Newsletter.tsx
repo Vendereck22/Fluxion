@@ -53,7 +53,7 @@ export default function Newsletter({
         <p className="text-sm text-blue-100/60 leading-relaxed max-w-xs mx-auto md:mx-0">
           {siteContent.newsletter.description.replace(/\*\*/g, "")}
         </p>
-        
+
         {status === "success" ? (
           <div className="flex items-center gap-2 p-3 bg-green-500/10 border border-green-500/20 rounded-xl animate-in fade-in zoom-in">
             <CheckCircle2 className="w-5 h-5 text-green-400 flex-shrink-0" />
@@ -72,7 +72,7 @@ export default function Newsletter({
                 className="bg-white/5 border-white/10 pl-10 h-11 rounded-xl text-xs focus-visible:ring-fluxion-rose text-white placeholder:text-white/20"
               />
             </div>
-            
+
             {status === "error" && (
               <div className="flex items-center gap-1.5 text-red-400 text-[10px] font-bold px-1 animate-in fade-in">
                 <AlertCircle size={12} className="flex-shrink-0" />
@@ -148,7 +148,7 @@ export default function Newsletter({
                       <Send className="ml-2 w-4 h-4 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
                     </Button>
                   </form>
-                  
+
                   {status === "error" && (
                     <div className="flex items-center gap-1.5 text-red-400 text-xs font-bold px-2 animate-in fade-in">
                       <AlertCircle size={14} className="flex-shrink-0" />

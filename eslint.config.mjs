@@ -7,13 +7,13 @@ const eslintConfig = defineConfig([
   ...nextTs,
   {
     rules: {
-      // French copy in JSX contains many apostrophes/quotes; keep text readable.
+
       "react/no-unescaped-entities": "off",
     },
   },
-  // Override default ignores of eslint-config-next.
+
   globalIgnores([
-    // Default ignores of eslint-config-next:
+
     ".next/**",
     "out/**",
     "build/**",

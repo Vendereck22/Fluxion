@@ -15,7 +15,7 @@ export default function NosProduit() {
     <div className="w-full min-h-screen bg-slate-50">
       <ProductsHero />
 
-      {/* Produit 1: Setly */}
+
       <ProductShowcase
         name="Setly"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel"
@@ -53,7 +53,7 @@ export default function NosProduit() {
         ]}
       />
 
-      {/* Produit 2: Trim */}
+
       <ProductShowcase
         name="Trim"
         description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel"

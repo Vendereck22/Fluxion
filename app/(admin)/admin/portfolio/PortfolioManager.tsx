@@ -40,7 +40,7 @@ export default function PortfolioManager({ initialData }: PortfolioManagerProps)
   const handleAddPartner = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newPartnerName.trim()) return;
-    
+
     setData((prev) => ({
       ...prev,
       names: [...prev.names, newPartnerName.trim()]
@@ -69,8 +69,8 @@ export default function PortfolioManager({ initialData }: PortfolioManagerProps)
 
   return (
     <div className="space-y-8 font-sans">
-      
-      {/* Action Header bar */}
+
+
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
         <div>
           <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-heading">
@@ -110,16 +110,16 @@ export default function PortfolioManager({ initialData }: PortfolioManagerProps)
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        
-        {/* Editing Column */}
+
+
         <div className="lg:col-span-7 space-y-6">
-          
-          {/* Badge block */}
+
+
           <div className="border border-slate-200 rounded-xl bg-white p-6 space-y-4 shadow-sm">
             <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider font-heading border-b border-slate-100 pb-3">
               Section Header
             </h3>
-            
+
             <div className="space-y-1.5 text-xs font-inter">
               <label className="text-slate-500 text-[10px] uppercase font-bold">Texte d'accroche / Badge</label>
               <input
@@ -130,12 +130,12 @@ export default function PortfolioManager({ initialData }: PortfolioManagerProps)
             </div>
           </div>
 
-          {/* Add Partner Form */}
+
           <div className="border border-slate-200 rounded-xl bg-white p-6 space-y-4 shadow-sm">
             <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider font-heading border-b border-slate-100 pb-3">
               Ajouter un partenaire
             </h3>
-            
+
             <form onSubmit={handleAddPartner} className="flex gap-3 text-xs font-inter">
               <input
                 placeholder="Ex: TECH_RDC ou GOOGLE"
@@ -153,10 +153,10 @@ export default function PortfolioManager({ initialData }: PortfolioManagerProps)
             </form>
           </div>
 
-          {/* Partners list */}
+
           <div className="space-y-4">
             <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Liste des entreprises ({data.names.length})</h3>
-            
+
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               {data.names.map((name, index) => (
                 <div key={index} className="border border-slate-200 rounded-xl bg-slate-50 p-4 flex items-center justify-between gap-4 shadow-sm">
@@ -178,7 +178,7 @@ export default function PortfolioManager({ initialData }: PortfolioManagerProps)
 
         </div>
 
-        {/* Live Preview Column */}
+
         <div className="lg:col-span-5 space-y-4">
           <h3 className="text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">Prévisualisation du Site</h3>
           <div className="sticky top-24 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm space-y-6">
@@ -188,18 +188,18 @@ export default function PortfolioManager({ initialData }: PortfolioManagerProps)
               </h4>
             </div>
 
-            {/* List logos */}
+
             <div className="flex flex-wrap items-center justify-center gap-6 p-4">
               {data.names.map((name, idx) => (
-                <span 
-                  key={idx} 
+                <span
+                  key={idx}
                   className="font-heading font-black text-sm tracking-[0.15em] text-slate-400 hover:text-slate-900 transition-colors duration-300"
                 >
                   {name}
                 </span>
               ))}
             </div>
-            
+
             <div className="bg-slate-50 border border-slate-100 rounded-xl p-4 text-[10px] text-slate-500 leading-relaxed font-inter">
               💡 Les partenaires s'affichent sous forme de logo textuel élégant dans la section "Partenaires" de votre site web. Le format tout en capitales est recommandé pour un rendu uniforme.
             </div>

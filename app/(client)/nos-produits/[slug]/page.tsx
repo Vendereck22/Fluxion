@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import { slugify } from "@/lib/slug";
 import ProductDetail from "@/components/client/products/ProductDetail";
-import fs from "fs/promises";
 import path from "path";
+import { readJsonPreferFallback, tmpDataPath } from "@/lib/server/json-store";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -21,8 +21,11 @@ type ProductItem = {
 
 async function readSiteContent(): Promise<{ productsPage?: { items?: ProductItem[] } }> {
   const filePath = path.join(process.cwd(), "constants", "site-content.json");
-  const raw = await fs.readFile(filePath, "utf-8");
-  return JSON.parse(raw) as { productsPage?: { items?: ProductItem[] } };
+  return readJsonPreferFallback<{ productsPage?: { items?: ProductItem[] } }>(
+    filePath,
+    tmpDataPath("site-content.json"),
+    {}
+  );
 }
 
 export default async function ProductPage({

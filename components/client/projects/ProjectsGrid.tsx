@@ -36,7 +36,7 @@ export default function ProjectsGrid() {
   return (
     <section className="w-full bg-slate-50 pb-16 md:pb-20">
       <div className="container mx-auto px-6 max-w-6xl">
-        {/* Filter chips */}
+
         <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 pb-10">
           {filters.map((f) => (
             <button
@@ -55,7 +55,7 @@ export default function ProjectsGrid() {
           ))}
         </div>
 
-        {/* Grid */}
+
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-8">
           {list.map((p) => (
             <ProjectCard

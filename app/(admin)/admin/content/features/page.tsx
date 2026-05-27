@@ -49,7 +49,7 @@ export default function FeaturesEditorPage() {
 
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
-      {/* Header */}
+
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-4">
           <Link href="/admin/content">
@@ -70,7 +70,7 @@ export default function FeaturesEditorPage() {
             <RotateCcw size={16} />
             Réinitialiser
           </Button>
-          <Button 
+          <Button
             className={`gap-2 border-none shadow-lg transition-all duration-300 ${
               saveStatus === "success" ? "bg-green-600" : saveStatus === "error" ? "bg-red-600" : "bg-fluxion-gradient"
             }`}
@@ -83,7 +83,7 @@ export default function FeaturesEditorPage() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Main Content Column */}
+
         <div className="lg:col-span-2 space-y-6">
           <Card className="border-slate-200 shadow-sm">
             <CardHeader>
@@ -119,17 +119,17 @@ export default function FeaturesEditorPage() {
                 <CardContent className="space-y-4 pt-4">
                   <div className="space-y-2">
                     <Label>Titre du pilier</Label>
-                    <Input 
-                      value={item.title} 
-                      onChange={(e) => handleItemChange(index, "title", e.target.value)} 
+                    <Input
+                      value={item.title}
+                      onChange={(e) => handleItemChange(index, "title", e.target.value)}
                       className="font-bold"
                     />
                   </div>
                   <div className="space-y-2">
                     <Label>Description</Label>
-                    <Textarea 
-                      value={item.description} 
-                      onChange={(e) => handleItemChange(index, "description", e.target.value)} 
+                    <Textarea
+                      value={item.description}
+                      onChange={(e) => handleItemChange(index, "description", e.target.value)}
                       rows={3}
                       className="resize-none"
                     />
@@ -140,7 +140,7 @@ export default function FeaturesEditorPage() {
           </div>
         </div>
 
-        {/* Preview Column */}
+
         <div className="space-y-6">
           <div className="sticky top-24">
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-widest mb-4 ml-1">Prévisualisation</h3>
@@ -153,7 +153,7 @@ export default function FeaturesEditorPage() {
                   {formData.title}
                 </h4>
               </div>
-              
+
               <div className="space-y-4">
                 {formData.items.map((item, i) => (
                   <div key={i} className="p-4 rounded-xl bg-white border border-slate-200 shadow-sm space-y-1">

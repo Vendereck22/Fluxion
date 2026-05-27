@@ -73,7 +73,7 @@ export default function ArchiveList({ initialLeads }: ArchiveListProps) {
                     Archivé
                   </span>
                 </div>
-                
+
                 <p className="text-[11px] text-slate-500 line-clamp-3 mt-4 leading-relaxed bg-slate-50 p-3 rounded-lg border border-slate-100">
                   {lead.message}
                 </p>
@@ -84,7 +84,7 @@ export default function ArchiveList({ initialLeads }: ArchiveListProps) {
                   <Calendar size={10} />
                   {new Date(lead.createdAt).toLocaleDateString()}
                 </span>
-                
+
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => handleRestore(lead.id)}

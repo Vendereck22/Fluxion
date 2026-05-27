@@ -22,10 +22,10 @@ export default function Topbar() {
   const [ping, setPing] = useState(14);
   const [status, setStatus] = useState<"connected" | "syncing">("connected");
 
-  // Simulate server connection heartbeat
+
   useEffect(() => {
     const interval = setInterval(() => {
-      setPing(Math.floor(Math.random() * 8) + 10); // 10ms - 18ms
+      setPing(Math.floor(Math.random() * 8) + 10);
       setStatus(prev => prev === "connected" ? "syncing" : "connected");
       setTimeout(() => setStatus("connected"), 800);
     }, 4000);
@@ -36,11 +36,11 @@ export default function Topbar() {
 
   return (
     <header className="h-16 border-b border-slate-200 bg-white/80 backdrop-blur-md flex items-center justify-between px-8 z-20 sticky top-0 select-none">
-      
-      {/* Dynamic Breadcrumbs */}
+
+
       <div className="flex items-center gap-2 text-xs font-medium text-slate-500">
-        <Link 
-          href="/admin/login" 
+        <Link
+          href="/admin/login"
           className="hover:text-slate-900 transition-colors duration-200"
         >
           FLUXION
@@ -56,8 +56,8 @@ export default function Topbar() {
               {isLast ? (
                 <span className="text-slate-900 font-semibold">{name}</span>
               ) : (
-                <Link 
-                  href={href} 
+                <Link
+                  href={href}
                   className="hover:text-slate-900 transition-colors duration-200"
                 >
                   {name}
@@ -68,7 +68,7 @@ export default function Topbar() {
         })}
       </div>
 
-      {/* Server Status */}
+
       <div className="flex items-center gap-6">
         <div className="flex items-center gap-3 px-3 py-1.5 rounded-lg bg-slate-50 border border-slate-200">
           <div className="relative flex h-2 w-2">
@@ -83,7 +83,7 @@ export default function Topbar() {
             {status === "syncing" ? "SYNC EN COURS" : `LATENCE : ${ping}ms`}
           </span>
         </div>
-        
+
         <div className="hidden sm:flex items-center gap-2 text-slate-500 text-xs">
           <Wifi size={14} className="text-slate-400" />
           <span className="font-semibold text-slate-500">Production v1.0.2</span>

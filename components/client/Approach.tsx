@@ -29,7 +29,7 @@ export default function Approach() {
   return (
     <section id="about" className="py-24 bg-white overflow-hidden">
       <div className="container mx-auto px-6">
-        {/* Header de section */}
+
         <div className="text-center max-w-3xl mx-auto mb-20">
           <Badge className="bg-fluxion-rose/10 text-fluxion-rose border-none mb-4 uppercase tracking-widest px-4 py-1">
             {siteContent.approach.badge}
@@ -40,7 +40,7 @@ export default function Approach() {
           </h2>
         </div>
 
-        {/* Liste des blocs (Alternance Image/Texte) */}
+
         <div className="space-y-32">
           {steps.map((step, index) => (
             <div
@@ -49,7 +49,7 @@ export default function Approach() {
                 step.isReverse ? "md:flex-row-reverse" : "md:flex-row"
               } items-center gap-12 md:gap-24`}
             >
-              {/* Côté Image avec effet de profondeur (Shadow + Glow) */}
+
               <div className="flex-1 relative group w-full">
                 <div className="absolute -inset-4 bg-fluxion-gradient opacity-10 blur-2xl group-hover:opacity-30 transition-opacity duration-500 rounded-[3rem]" />
                 <div className="relative aspect-video md:aspect-[4/3] lg:aspect-video rounded-2xl overflow-hidden border border-slate-100 transition-transform duration-500 group-hover:scale-[1.02]">
@@ -60,12 +60,12 @@ export default function Approach() {
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                     sizes="(max-width: 768px) 100vw, 50vw"
                   />
-                  {/* Overlay subtil pour le contraste */}
+
                   <div className="absolute inset-0 bg-fluxion-blue/10 group-hover:bg-transparent transition-colors duration-500" />
                 </div>
               </div>
 
-              {/* Côté Texte */}
+
               <div className="flex-1 space-y-6">
                 <div className="relative">
                   <span className="text-8xl font-black text-slate-50 font-heading absolute -top-12 -left-4 -z-10 select-none">

@@ -19,7 +19,7 @@ export default function ContactPage() {
     budget: "5k-15k$",
     service: "Next.js Development",
   });
-  
+
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -30,7 +30,7 @@ export default function ContactPage() {
     if (status !== "idle") setStatus("idle");
   };
 
-  
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.name || !formData.email || !formData.message) {
@@ -68,7 +68,7 @@ export default function ContactPage() {
 
   return (
     <div className="min-h-screen bg-slate-50 antialiased pt-28 pb-20 relative overflow-hidden font-sans">
-      {/* Decorative gradients */}
+
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-fluxion-cobalt/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-fluxion-rose/5 rounded-full blur-[100px] pointer-events-none" />
 
@@ -86,8 +86,8 @@ export default function ContactPage() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 bg-white/60 backdrop-blur-xl border border-slate-100 rounded-2xl p-6 md:p-10">
-          
-          {/* Contact Details Column */}
+
+
           <div className="lg:col-span-5 flex flex-col justify-between bg-fluxion-blue text-white rounded-2xl p-8 md:p-10 relative overflow-hidden group">
             <div className="absolute inset-0 bg-fluxion-gradient opacity-90 transition-opacity duration-500 group-hover:opacity-100" />
             <div className="absolute -right-10 -bottom-10 w-48 h-48 bg-white/5 rounded-full blur-2xl pointer-events-none" />
@@ -142,7 +142,7 @@ export default function ContactPage() {
             </div>
           </div>
 
-          {/* Form Column */}
+
           <div className="lg:col-span-7 py-4 px-2">
             {status === "success" ? (
               <div className="h-full flex flex-col items-center justify-center text-center space-y-4 py-10 animate-in fade-in duration-500">
@@ -153,8 +153,8 @@ export default function ContactPage() {
                 <p className="text-slate-500 max-w-sm text-sm">
                   Merci pour votre message. L'équipe FLUXION étudiera vos besoins et vous répondra très rapidement.
                 </p>
-                <Button 
-                  onClick={() => setStatus("idle")} 
+                <Button
+                  onClick={() => setStatus("idle")}
                   className="mt-4 bg-fluxion-blue text-white rounded-xl px-6 font-bold"
                 >
                   Envoyer un autre message
