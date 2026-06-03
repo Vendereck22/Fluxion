@@ -10,7 +10,12 @@ const ALLOWED_IMAGE_TYPES: Record<string, string> = {
   "image/webp": ".webp",
   "image/gif": ".gif",
   "image/avif": ".avif",
+  "image/svg+xml": ".svg",
 };
+
+function hasUnsafeSvgContent(svg: string) {
+  return /<script[\s>]/i.test(svg) || /\son\w+=/i.test(svg) || /javascript:/i.test(svg);
+}
 
 export async function uploadImage(formData: FormData) {
   try {
@@ -38,6 +43,13 @@ export async function uploadImage(formData: FormData) {
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+
+    if (mappedExt === ".svg") {
+      const svg = buffer.toString("utf-8");
+      if (!svg.trim().startsWith("<svg") || hasUnsafeSvgContent(svg)) {
+        return { success: false, error: "Le fichier SVG contient du code non autorisé." };
+      }
+    }
 
 
     const uploadDir = path.join(process.cwd(), "public", "uploads");

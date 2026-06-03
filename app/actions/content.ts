@@ -8,6 +8,7 @@ import {
   tmpDataPath,
   writeJsonWithFallback,
 } from "@/lib/server/json-store";
+import { logAuditEvent } from "@/app/actions/audit";
 
 const CONTENT_PATH = path.join(process.cwd(), "constants", "site-content.json");
 const CONTENT_FALLBACK_PATH = tmpDataPath("site-content.json");
@@ -19,6 +20,8 @@ const ALLOWED_SECTIONS = new Set([
   "footer",
   "social",
   "team",
+  "productsPage",
+  "projectsPage",
 ]);
 
 export async function updateContent(section: string, data: unknown) {
@@ -59,6 +62,8 @@ export async function updateContent(section: string, data: unknown) {
     revalidatePath("/");
     revalidatePath("/admin");
     revalidatePath("/admin/content");
+
+    await logAuditEvent("CMS_UPDATE", `Mise à jour de la section CMS : ${section}`, `Clé de section: ${section}`);
 
     return { success: true, storage: used };
   } catch (error) {

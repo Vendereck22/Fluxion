@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { Lock, Mail, Eye, EyeOff, ShieldAlert, ArrowRight } from "lucide-react";
 import Logo from "@/components/client/Logo";
 import { login } from "@/app/actions/auth";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 export default function LoginClient({ nextUrl }: { nextUrl?: string }) {
   const router = useRouter();
@@ -63,18 +67,19 @@ export default function LoginClient({ nextUrl }: { nextUrl?: string }) {
               </p>
             </div>
 
-            <div className="bg-white border border-slate-200 rounded-2xl p-8 space-y-6">
+            <Card className="border-slate-200 bg-white py-0">
+              <CardContent className="p-8">
               <form
                 onSubmit={handleSubmit}
                 className="space-y-4 text-xs font-inter"
               >
                 <div className="space-y-1.5">
-                  <label className="text-slate-500 text-[10px] uppercase font-bold tracking-wider">
+                  <Label className="text-slate-500 text-[10px] uppercase font-bold tracking-wider">
                     Adresse Email
-                  </label>
+                  </Label>
                   <div className="relative">
                     <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4.5 h-4.5" />
-                    <input
+                    <Input
                       type="email"
                       name="email"
                       placeholder="admin@fluxion.cd"
@@ -85,22 +90,24 @@ export default function LoginClient({ nextUrl }: { nextUrl?: string }) {
                 </div>
 
                 <div className="space-y-1.5">
-                  <label className="text-slate-500 text-[10px] uppercase font-bold tracking-wider">
+                  <Label className="text-slate-500 text-[10px] uppercase font-bold tracking-wider">
                     Mot de passe
-                  </label>
+                  </Label>
                   <div className="relative">
                     <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 w-4.5 h-4.5" />
-                    <input
+                    <Input
                       type={showPassword ? "text" : "password"}
                       name="password"
-                      placeholder="••••••••••••"
+                      placeholder="Mot de passe"
                       required
                       className="w-full h-11 bg-slate-50 border border-slate-200 rounded-xl pl-11 pr-11 text-slate-800 text-xs placeholder:text-slate-400 focus:border-fluxion-rose focus:bg-white focus:outline-none transition-all focus:ring-1 focus:ring-fluxion-rose/20"
                     />
-                    <button
+                    <Button
                       type="button"
+                      variant="ghost"
+                      size="icon-sm"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                      className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
                       aria-label={
                         showPassword
                           ? "Masquer le mot de passe"
@@ -108,7 +115,7 @@ export default function LoginClient({ nextUrl }: { nextUrl?: string }) {
                       }
                     >
                       {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-                    </button>
+                    </Button>
                   </div>
                 </div>
 
@@ -126,7 +133,7 @@ export default function LoginClient({ nextUrl }: { nextUrl?: string }) {
                   </div>
                 )}
 
-                <button
+                <Button
                   type="submit"
                   disabled={isPending}
                   className="w-full h-11 bg-fluxion-rose hover:bg-slate-900 text-white font-bold text-xs uppercase tracking-widest rounded-xl transition-all flex items-center justify-center gap-2 group cursor-pointer border border-transparent"
@@ -145,9 +152,10 @@ export default function LoginClient({ nextUrl }: { nextUrl?: string }) {
                       />
                     </>
                   )}
-                </button>
+                </Button>
               </form>
-            </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </div>

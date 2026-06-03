@@ -131,4 +131,19 @@
   .bg-fluxion-gradient {
     background: linear-gradient(135deg, var(--fluxion-cobalt) 0%, var(--fluxion-rose) 100%);
   }
+
+  @keyframes partners-marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .motion-safe\:animate-\[partners-marquee_28s_linear_infinite\] {
+      animation: none;
+    }
+  }
 }

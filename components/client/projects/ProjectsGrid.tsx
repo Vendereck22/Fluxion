@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { siteContent } from "@/constants/site-content";
 import ProjectCard from "./ProjectCard";
 import { cn } from "@/lib/utils";
 import { slugify } from "@/lib/slug";
@@ -16,10 +15,16 @@ type Project = {
   href?: string;
 };
 
-export default function ProjectsGrid() {
-  const projects: Project[] = siteContent.projectsPage?.items ?? [];
+export default function ProjectsGrid({
+  initialProjects,
+  initialFilters,
+}: {
+  initialProjects?: Project[];
+  initialFilters?: string[];
+}) {
+  const projects: Project[] = initialProjects ?? [];
   const filters: string[] =
-    siteContent.projectsPage?.filters ?? [
+    initialFilters ?? [
       "Tous",
       "Identite visuelle",
       "UI/UX",

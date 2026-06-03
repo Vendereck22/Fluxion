@@ -83,11 +83,44 @@
   "partners": {
     "badge": "Ils propulsent leur vision avec nous",
     "names": [
-      "TECH_RDC",
-      "LUMINA",
-      "Z.L.J.",
-      "NEXTGEN",
-      "SILICON_K"
+      "Apple",
+      "Samsung",
+      "Microsoft",
+      "Google",
+      "AWS",
+      "Meta"
+    ],
+    "logos": [
+      {
+        "name": "Apple",
+        "logoSrc": "/images/partners/apple.svg",
+        "website": "https://www.apple.com"
+      },
+      {
+        "name": "Samsung",
+        "logoSrc": "/images/partners/samsung.svg",
+        "website": "https://www.samsung.com"
+      },
+      {
+        "name": "Microsoft",
+        "logoSrc": "/images/partners/microsoft.svg",
+        "website": "https://www.microsoft.com"
+      },
+      {
+        "name": "Google",
+        "logoSrc": "/images/partners/google.svg",
+        "website": "https://www.google.com"
+      },
+      {
+        "name": "AWS",
+        "logoSrc": "/images/partners/aws.svg",
+        "website": "https://aws.amazon.com"
+      },
+      {
+        "name": "Meta",
+        "logoSrc": "/images/partners/meta.svg",
+        "website": "https://about.meta.com"
+      }
     ]
   },
   "whyUs": {

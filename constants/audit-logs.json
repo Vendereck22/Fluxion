@@ -1,0 +1,43 @@
+[
+  {
+    "id": "c0foddlmpy0u81r",
+    "timestamp": "2026-06-03T12:07:08.607Z",
+    "userEmail": "admin@fluxion.cd",
+    "actionType": "LOGIN",
+    "message": "Connexion réussie de l'administrateur",
+    "ipAddress": "::1"
+  },
+  {
+    "id": "kec7m3tmpy1m2z4",
+    "timestamp": "2026-06-03T12:28:48.400Z",
+    "userEmail": "admin@fluxion.cd",
+    "actionType": "LOGIN",
+    "message": "Connexion réussie de l'administrateur",
+    "ipAddress": "::1"
+  },
+  {
+    "id": "e5y9a0fmpy20x54",
+    "timestamp": "2026-06-03T12:40:20.680Z",
+    "userEmail": "admin@fluxion.cd",
+    "actionType": "LOGIN",
+    "message": "Connexion réussie de l'administrateur",
+    "ipAddress": "::1"
+  },
+  {
+    "id": "otoih0tmpy28c5g",
+    "timestamp": "2026-06-03T12:46:06.724Z",
+    "userEmail": "admin@fluxion.cd",
+    "actionType": "CMS_UPDATE",
+    "message": "Mise à jour du profil de: admin@fluxion.cd",
+    "details": "Nom: Super Admin Principal",
+    "ipAddress": "::1"
+  },
+  {
+    "id": "6bin95kmpy57quo",
+    "timestamp": "2026-06-03T14:09:37.968Z",
+    "userEmail": "admin@fluxion.cd",
+    "actionType": "LOGIN",
+    "message": "Connexion réussie de l'administrateur",
+    "ipAddress": "::1"
+  }
+]

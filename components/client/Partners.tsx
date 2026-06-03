@@ -1,26 +1,75 @@
 "use client";
 
+import Image from "next/image";
 import { siteContent } from "@/constants/site-content";
 
+type PartnerLogo = {
+  name: string;
+  logoSrc: string;
+  website?: string;
+};
+
 export default function Partners() {
+  const partnerLogos =
+    (siteContent.partners.logos as PartnerLogo[] | undefined) ??
+    siteContent.partners.names.map<PartnerLogo>((name) => ({
+      name,
+      logoSrc: "",
+      website: "",
+    }));
+  const animatedLogos = [...partnerLogos, ...partnerLogos];
+
   return (
-    <section className="py-16 bg-fluxion-blue relative overflow-hidden">
+    <section className="py-16 bg-fluxion-blue relative overflow-hidden" aria-labelledby="partners-title">
       <div className="absolute inset-0 opacity-5 bg-[url('/noise.png')] pointer-events-none" />
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center">
-          <p className="text-fluxion-rose font-bold text-[10px] uppercase tracking-[0.4em] mb-12 text-center opacity-80">
+          <p id="partners-title" className="text-fluxion-rose font-bold text-[10px] uppercase tracking-[0.4em] mb-12 text-center opacity-80">
             {siteContent.partners.badge}
           </p>
 
-          <div className="w-full flex flex-wrap justify-center items-center gap-12 md:gap-24">
-            {siteContent.partners.names.map((name, index) => (
-              <div key={index} className="h-8 md:h-10 opacity-60 hover:opacity-100 transition-opacity duration-300">
+          <div className="relative w-full overflow-hidden">
+            <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-fluxion-blue to-transparent" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-fluxion-blue to-transparent" />
+
+            <div className="flex w-max items-center gap-14 motion-safe:animate-[partners-marquee_28s_linear_infinite] hover:[animation-play-state:paused] md:gap-20">
+            {animatedLogos.map((partner, index) => {
+              const content = partner.logoSrc ? (
+                <Image
+                  src={partner.logoSrc}
+                  alt={`Logo ${partner.name}`}
+                  width={260}
+                  height={80}
+                  className="h-10 w-auto max-w-[160px] object-contain opacity-60 brightness-0 invert transition-all duration-500 group-hover:-translate-y-1 group-hover:scale-105 group-hover:opacity-100 md:h-12"
+                />
+              ) : (
                 <span className={`text-white font-black text-2xl tracking-tighter ${index % 2 === 0 ? "italic" : ""}`}>
-                  {name}
+                  {partner.name}
                 </span>
-              </div>
-            ))}
+              );
+
+              return partner.website ? (
+                <a
+                  key={`${partner.name}-${index}`}
+                  href={partner.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex h-16 min-w-[160px] items-center justify-center px-2 transition-transform duration-500"
+                  aria-label={`Visiter ${partner.name}`}
+                >
+                  {content}
+                </a>
+              ) : (
+                <div
+                  key={`${partner.name}-${index}`}
+                  className="group flex h-16 min-w-[160px] items-center justify-center px-2 transition-transform duration-500"
+                >
+                  {content}
+                </div>
+              );
+            })}
+            </div>
           </div>
         </div>
       </div>
