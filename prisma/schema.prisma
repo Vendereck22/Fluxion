@@ -1,0 +1,104 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String   // Mot de passe hashé
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model TeamMember {
+  id        Int      @id @default(autoincrement())
+  name      String
+  role      String
+  bio       String
+  img       String
+  linkedin  String?
+  twitter   String?
+  instagram String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  company   String?
+  message   String
+  budget    String?
+  service   String?
+  status    String   @default("new") // "new" | "contacted" | "archived"
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Subscriber {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  status       String   @default("active") // "active" | "unsubscribed"
+  subscribedAt DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model NewsletterCampaign {
+  id         String   @id @default(cuid())
+  subject    String
+  message    String
+  recipients String[] // Liste des adresses emails cibles
+  sentAt     DateTime @default(now())
+}
+
+model Partner {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Project {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  description String
+  category    String
+  imageSrc    String
+  tags        String[]
+  href        String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Product {
+  id               String   @id @default(cuid())
+  slug             String   @unique
+  name             String
+  onlineUrl        String?
+  shortDescription String
+  description      String
+  theme            String   @default("blue")
+  imageSrc         String
+  rightImageSrc    String?
+  gallery          Json?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model SiteContent {
+  id        String   @id @default(cuid())
+  key       String   @unique // ex: "hero", "features-header", "aboutPage"
+  value     Json     // Contenu JSON structuré
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
