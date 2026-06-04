@@ -1,6 +1,5 @@
 import NextAuth from "next-auth";
 import Credentials from "next-auth/providers/credentials";
-import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/server/password";
 
 const ADMIN_EMAIL = process.env.FLUXION_ADMIN_EMAIL ?? "admin@fluxion.cd";
@@ -32,6 +31,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         if (!email || !password) return null;
 
         try {
+          const { prisma } = await import("@/lib/prisma");
           const dbUser = await prisma.adminUser.findUnique({
             where: { email },
           });
