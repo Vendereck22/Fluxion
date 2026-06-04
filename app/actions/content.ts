@@ -16,15 +16,50 @@ const CONTENT_PATH = path.join(process.cwd(), "constants", "site-content.json");
 const CONTENT_FALLBACK_PATH = tmpDataPath("site-content.json");
 
 const ALLOWED_SECTIONS = new Set([
+  "brand",
+  "navigation",
   "hero",
   "features",
+  "approach",
   "partners",
+  "whyUs",
+  "process",
+  "testimonials",
+  "faq",
+  "newsletter",
+  "finalCta",
+  "video",
+  "pages",
+  "products",
+  "aboutPage",
   "footer",
   "social",
   "team",
   "productsPage",
   "projectsPage",
 ]);
+
+export async function getContentSection(section: string) {
+  const isAdmin = await verifySession();
+  if (!isAdmin) {
+    return { success: false, error: "Non autorisé.", data: null };
+  }
+
+  if (!ALLOWED_SECTIONS.has(section)) {
+    return { success: false, error: "Section invalide.", data: null };
+  }
+
+  const content = await readJsonPreferFallback<Record<string, unknown>>(
+    CONTENT_PATH,
+    CONTENT_FALLBACK_PATH,
+    {}
+  );
+
+  return {
+    success: true,
+    data: (content[section] as Record<string, unknown> | undefined) ?? {},
+  };
+}
 
 type PartnerLogoInput = {
   name?: string;
