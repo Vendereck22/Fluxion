@@ -1,11 +1,12 @@
 "use client";
 
 import { Quote } from "lucide-react";
-import { siteContent } from "@/constants/site-content";
-
-const reviews = siteContent.testimonials.reviews;
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function Testimonials() {
+  const siteContent = useSiteContent();
+  const reviews = siteContent.testimonials.reviews;
+
   return (
     <section className="py-24 bg-slate-50 dark:bg-fluxion-blue/5">
       <div className="container mx-auto px-6">

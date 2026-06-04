@@ -1,10 +1,11 @@
 "use client";
 
-import { siteContent } from "@/constants/site-content";
-
-const steps = siteContent.process.steps;
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function Process() {
+  const siteContent = useSiteContent();
+  const steps = siteContent.process.steps;
+
   return (
     <section id="process" className="py-24 bg-fluxion-blue text-white">
       <div className="container mx-auto px-6">

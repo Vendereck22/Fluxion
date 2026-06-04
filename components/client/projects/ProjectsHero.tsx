@@ -1,9 +1,10 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { siteContent } from "@/constants/site-content";
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function ProjectsHero() {
+  const siteContent = useSiteContent();
   const title = siteContent.projectsPage?.title ?? siteContent.pages.projects.title;
   const desc =
     siteContent.projectsPage?.description ?? siteContent.pages.projects.description;

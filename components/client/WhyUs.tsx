@@ -3,28 +3,21 @@
 import { ShieldCheck, Zap, Globe, Users } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import { siteContent } from "@/constants/site-content";
-
-const stats = [
-  {
-    ...siteContent.whyUs.stats[0],
-    icon: <Zap className="w-6 h-6 text-fluxion-rose" />,
-  },
-  {
-    ...siteContent.whyUs.stats[1],
-    icon: <ShieldCheck className="w-6 h-6 text-fluxion-rose" />,
-  },
-  {
-    ...siteContent.whyUs.stats[2],
-    icon: <Users className="w-6 h-6 text-fluxion-rose" />,
-  },
-  {
-    ...siteContent.whyUs.stats[3],
-    icon: <Globe className="w-6 h-6 text-fluxion-rose" />,
-  },
-];
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function WhyUs() {
+  const siteContent = useSiteContent();
+  const icons = [
+    <Zap key="zap" className="w-6 h-6 text-fluxion-rose" />,
+    <ShieldCheck key="shield" className="w-6 h-6 text-fluxion-rose" />,
+    <Users key="users" className="w-6 h-6 text-fluxion-rose" />,
+    <Globe key="globe" className="w-6 h-6 text-fluxion-rose" />,
+  ];
+  const stats = siteContent.whyUs.stats.map((stat, index) => ({
+    ...stat,
+    icon: icons[index] ?? icons[0],
+  }));
+
   return (
     <section
       id="why-us"

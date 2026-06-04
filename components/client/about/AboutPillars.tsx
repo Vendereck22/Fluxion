@@ -1,9 +1,10 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { siteContent } from "@/constants/site-content";
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function AboutPillars() {
+  const siteContent = useSiteContent();
   const who = siteContent.aboutPage?.whoWeAre;
   const mission = siteContent.aboutPage?.mission;
   const vision = siteContent.aboutPage?.vision;

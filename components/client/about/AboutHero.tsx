@@ -1,9 +1,10 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
-import { siteContent } from "@/constants/site-content";
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function AboutHero() {
+  const siteContent = useSiteContent();
   return (
     <section className="w-full bg-slate-50 pt-28 pb-10">
       <div className="container mx-auto px-6 max-w-6xl">

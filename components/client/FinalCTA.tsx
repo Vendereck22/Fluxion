@@ -1,8 +1,11 @@
+"use client";
+
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { siteContent } from "@/constants/site-content";
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function FinalCTA() {
+  const siteContent = useSiteContent();
   return (
     <section className="py-24 px-6 bg-white">
       <div className="container mx-auto">

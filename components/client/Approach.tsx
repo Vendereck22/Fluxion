@@ -2,27 +2,28 @@
 
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { siteContent } from "@/constants/site-content";
-
-const steps = [
-  {
-    ...siteContent.approach.steps[0],
-    image: "/images/projects/meeting.jpg",
-    isReverse: false,
-  },
-  {
-    ...siteContent.approach.steps[1],
-    image: "/images/projects/team-collab.jpg",
-    isReverse: true,
-  },
-  {
-    ...siteContent.approach.steps[2],
-    image: "/images/projects/code-screen.jpg",
-    isReverse: false,
-  },
-];
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function Approach() {
+  const siteContent = useSiteContent();
+  const steps = [
+    {
+      ...siteContent.approach.steps[0],
+      image: "/images/projects/meeting.jpg",
+      isReverse: false,
+    },
+    {
+      ...siteContent.approach.steps[1],
+      image: "/images/projects/team-collab.jpg",
+      isReverse: true,
+    },
+    {
+      ...siteContent.approach.steps[2],
+      image: "/images/projects/code-screen.jpg",
+      isReverse: false,
+    },
+  ];
+
   return (
     <section id="about" className="py-24 bg-white overflow-hidden">
       <div className="container mx-auto px-6">

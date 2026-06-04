@@ -3,11 +3,12 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Link from "next/link";
-import { siteContent } from "@/constants/site-content";
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 import Logo from "./Logo";
 import HeroBackground from "./HeroBackground";
 
 export default function HeroSection() {
+  const siteContent = useSiteContent();
   return (
     <section className="relative w-full min-h-screen flex flex-col justify-center py-20 px-6 overflow-hidden bg-[#050505] antialiased">
 

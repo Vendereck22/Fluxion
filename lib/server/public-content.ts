@@ -1,6 +1,7 @@
 import { unstable_cache } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import siteContent from "@/constants/site-content.json";
+import type { SiteContent } from "@/constants/site-content";
 
 export type PublicProduct = {
   slug: string;
@@ -57,6 +58,45 @@ function asRecord(value: unknown) {
 
 function stringValue(value: unknown, fallback = "") {
   return typeof value === "string" ? value : fallback;
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function mergeContentValue(fallback: unknown, override: unknown): unknown {
+  if (Array.isArray(fallback) || Array.isArray(override)) {
+    return override ?? fallback;
+  }
+
+  if (isPlainObject(fallback) && isPlainObject(override)) {
+    const merged: Record<string, unknown> = { ...fallback };
+
+    for (const [key, value] of Object.entries(override)) {
+      merged[key] = mergeContentValue(fallback[key], value);
+    }
+
+    return merged;
+  }
+
+  return override ?? fallback;
+}
+
+async function loadPublicSiteContent(): Promise<SiteContent> {
+  try {
+    const sections = await prisma.cmsSection.findMany();
+    const merged = sections.reduce<Record<string, unknown>>(
+      (content, section) => {
+        content[section.key] = mergeContentValue(content[section.key], section.data);
+        return content;
+      },
+      { ...(siteContent as Record<string, unknown>) }
+    );
+
+    return merged as SiteContent;
+  } catch {
+    return siteContent as SiteContent;
+  }
 }
 
 function fallbackPublicProducts(): PublicProduct[] {
@@ -304,4 +344,10 @@ export const getPublicServiceFeatures = unstable_cache(
   loadPublicServiceFeatures,
   ["public-services"],
   { revalidate: 300, tags: ["public-services"] }
+);
+
+export const getPublicSiteContent = unstable_cache(
+  loadPublicSiteContent,
+  ["public-site-content"],
+  { revalidate: 300, tags: ["public-site-content"] }
 );

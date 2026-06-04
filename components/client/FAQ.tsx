@@ -1,12 +1,15 @@
+"use client";
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { siteContent } from "@/constants/site-content";
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function FAQ() {
+  const siteContent = useSiteContent();
   return (
     <section className="py-24 bg-white dark:bg-fluxion-dark">
       <div className="container mx-auto px-6 max-w-3xl">

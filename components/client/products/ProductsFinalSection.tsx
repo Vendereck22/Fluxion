@@ -1,9 +1,10 @@
 "use client";
 
-import { siteContent } from "@/constants/site-content";
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function ProductsFinalSection() {
+  const siteContent = useSiteContent();
   return (
     <section className="w-full bg-slate-50 pb-16 md:pb-24">
       <div className="container mx-auto px-6 max-w-6xl">

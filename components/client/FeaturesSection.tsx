@@ -8,27 +8,22 @@ import {
   CardContent,
   CardDescription,
 } from "@/components/ui/card";
-import { siteContent } from "@/constants/site-content";
-
-const features = [
-  {
-    ...siteContent.features.items[0],
-    icon: Shield,
-    color: "bg-blue-500/10 text-blue-600",
-  },
-  {
-    ...siteContent.features.items[1],
-    icon: Zap,
-    color: "bg-amber-500/10 text-amber-600",
-  },
-  {
-    ...siteContent.features.items[2],
-    icon: Sparkles,
-    color: "bg-purple-500/10 text-purple-600",
-  },
-];
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function FeaturesSection() {
+  const siteContent = useSiteContent();
+  const icons = [Shield, Zap, Sparkles];
+  const colors = [
+    "bg-blue-500/10 text-blue-600",
+    "bg-amber-500/10 text-amber-600",
+    "bg-purple-500/10 text-purple-600",
+  ];
+  const features = siteContent.features.items.map((feature, index) => ({
+    ...feature,
+    icon: icons[index] ?? Sparkles,
+    color: colors[index] ?? "bg-purple-500/10 text-purple-600",
+  }));
+
   return (
     <section className="w-full py-24 bg-white antialiased">
       <div className="container mx-auto px-6">

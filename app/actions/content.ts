@@ -310,14 +310,19 @@ export async function updateContent(section: string, data: unknown) {
     revalidatePath("/admin/team");
     revalidatePath("/admin/services");
     revalidatePath("/client");
+    revalidatePath("/a-propos");
+    revalidatePath("/contact");
     revalidatePath("/nos-produits");
     revalidatePath("/nos-projets");
+    revalidatePath("/privacy");
     revalidatePath("/services");
+    revalidatePath("/terms");
     revalidateTag("public-products", "max");
     revalidateTag("public-projects", "max");
     revalidateTag("public-partners", "max");
     revalidateTag("public-team", "max");
     revalidateTag("public-services", "max");
+    revalidateTag("public-site-content", "max");
 
     await logAuditEvent("CMS_UPDATE", `Mise à jour de la section CMS : ${section}`, `Clé de section: ${section}`);
 

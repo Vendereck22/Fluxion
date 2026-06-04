@@ -2,11 +2,12 @@
 
 import SocialMedia from "./SocialMedia";
 import Link from "next/link";
-import { siteContent } from "@/constants/site-content";
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 import Newsletter from "./Newsletter";
 import Logo from "./Logo";
 
 export default function Footer() {
+  const siteContent = useSiteContent();
   const NavLinks = siteContent.navigation.links;
 
   return (

@@ -5,9 +5,10 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Play, Pause } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { siteContent } from "@/constants/site-content";
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function VideoSection() {
+  const siteContent = useSiteContent();
   const [isPlaying, setIsPlaying] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const videoId = "XC_VytVqLXI";

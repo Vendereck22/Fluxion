@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { submitLead } from "@/app/actions/leads";
-import { siteContent } from "@/constants/site-content";
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 import SocialMedia from "@/components/client/SocialMedia";
 
 export default function ContactPage() {
+  const siteContent = useSiteContent();
   const [formData, setFormData] = useState({
     lastName: "",
     middleName: "",

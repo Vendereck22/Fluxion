@@ -5,7 +5,7 @@ import { Mail, Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { siteContent } from "@/constants/site-content";
+import { useSiteContent } from "@/components/client/SiteContentProvider";
 import { subscribeNewsletter } from "@/app/actions/newsletter";
 
 interface NewsletterProps {
@@ -17,6 +17,7 @@ export default function Newsletter({
   className,
   variant = "full",
 }: NewsletterProps) {
+  const siteContent = useSiteContent();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
