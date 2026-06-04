@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Play, Pause } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -66,8 +67,10 @@ export default function VideoSection() {
           {siteContent.video.description}
         </p>
         <div className="flex flex-wrap justify-center gap-4 pt-6">
-          <Button className="h-14 px-10 rounded-2xl bg-fluxion-rose text-white font-bold text-lg shadow-xl shadow-fluxion-rose/20 hover:scale-105 transition-all border-none">
-            {siteContent.video.ctaProject}
+          <Button asChild className="h-14 px-10 rounded-2xl bg-fluxion-rose text-white font-bold text-lg shadow-xl shadow-fluxion-rose/20 hover:scale-105 transition-all border-none">
+            <Link href="/contact" onClick={(event) => event.stopPropagation()}>
+              {siteContent.video.ctaProject}
+            </Link>
           </Button>
 
           <Button

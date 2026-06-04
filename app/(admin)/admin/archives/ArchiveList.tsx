@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Inbox, Trash2, Calendar, Building } from "lucide-react";
+import { Inbox, Trash2, Calendar, Phone } from "lucide-react";
 import { updateLeadStatus, deleteLead, Lead } from "@/app/actions/leads";
+import ConfirmDeleteDialog from "@/components/admin/ConfirmDeleteDialog";
 
 interface ArchiveListProps {
   initialLeads: Lead[];
@@ -11,6 +12,7 @@ interface ArchiveListProps {
 export default function ArchiveList({ initialLeads }: ArchiveListProps) {
   const [leads, setLeads] = useState<Lead[]>(initialLeads);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
 
   const handleRestore = async (id: string) => {
     setIsUpdating(true);
@@ -28,13 +30,14 @@ export default function ArchiveList({ initialLeads }: ArchiveListProps) {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Voulez-vous supprimer définitivement ce lead ? Cette action est irréversible.")) return;
+  const handleDelete = async () => {
+    if (!leadToDelete) return;
     setIsUpdating(true);
     try {
-      const res = await deleteLead(id);
+      const res = await deleteLead(leadToDelete.id);
       if (res.success) {
-        setLeads((prev) => prev.filter((l) => l.id !== id));
+        setLeads((prev) => prev.filter((l) => l.id !== leadToDelete.id));
+        setLeadToDelete(null);
       } else {
         alert(res.error || "Une erreur s'est produite.");
       }
@@ -65,8 +68,8 @@ export default function ArchiveList({ initialLeads }: ArchiveListProps) {
                       {lead.name}
                     </h4>
                     <p className="text-[10px] text-slate-500 font-inter mt-0.5 flex items-center gap-1">
-                      <Building size={10} />
-                      {lead.company || "Particulier"}
+                      <Phone size={10} />
+                      {lead.phone || "Téléphone non renseigné"}
                     </p>
                   </div>
                   <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-600 font-inter font-bold text-[8px] uppercase tracking-wider border border-slate-200">
@@ -96,7 +99,7 @@ export default function ArchiveList({ initialLeads }: ArchiveListProps) {
                     Restaurer
                   </button>
                   <button
-                    onClick={() => handleDelete(lead.id)}
+                    onClick={() => setLeadToDelete(lead)}
                     disabled={isUpdating}
                     className="h-7 w-7 rounded bg-red-50 hover:bg-red-100 border border-red-100 hover:border-red-200 text-red-500 flex items-center justify-center transition-colors"
                     title="Supprimer définitivement"
@@ -109,6 +112,17 @@ export default function ArchiveList({ initialLeads }: ArchiveListProps) {
           ))}
         </div>
       )}
+
+      <ConfirmDeleteDialog
+        open={Boolean(leadToDelete)}
+        isLoading={isUpdating}
+        title="Supprimer cette archive ?"
+        description={`La demande archivée de ${leadToDelete?.name ?? "ce visiteur"} sera supprimée définitivement. Cette action est irréversible.`}
+        onOpenChange={(open) => {
+          if (!open) setLeadToDelete(null);
+        }}
+        onConfirm={handleDelete}
+      />
     </div>
   );
 }

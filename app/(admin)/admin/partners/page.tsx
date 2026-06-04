@@ -1,7 +1,6 @@
-import path from "path";
 import PartnersManager from "./PartnersManager";
 import { LuHandshake } from "react-icons/lu";
-import { readJsonPreferFallback, tmpDataPath } from "@/lib/server/json-store";
+import { prisma } from "@/lib/prisma";
 
 export const revalidate = 0;
 
@@ -20,23 +19,28 @@ type SiteContent = {
 };
 
 export default async function PartnersCMSPage() {
-  const filePath = path.join(process.cwd(), "constants", "site-content.json");
-  let partnersData: NonNullable<SiteContent["partners"]> = {
-    badge: "Ils propulsent leur vision avec nous",
-    names: [],
-    logos: [],
-  };
+  const badgeSection = await prisma.cmsSection.findUnique({
+    where: { key: "partners" },
+  });
+  const partners = await prisma.partner.findMany({
+    where: { isActive: true },
+    orderBy: { position: "asc" },
+  });
 
-  try {
-    const data = await readJsonPreferFallback<SiteContent>(
-      filePath,
-      tmpDataPath("site-content.json"),
-      {}
-    );
-    partnersData = data.partners || partnersData;
-  } catch (error) {
-    console.error("Failed to read site-content.json for partners CMS:", error);
-  }
+  const sectionData =
+    badgeSection?.data && typeof badgeSection.data === "object"
+      ? (badgeSection.data as { badge?: string })
+      : {};
+
+  const partnersData: NonNullable<SiteContent["partners"]> = {
+    badge: sectionData.badge ?? "Ils propulsent leur vision avec nous",
+    names: partners.map((partner) => partner.name),
+    logos: partners.map((partner) => ({
+      name: partner.name,
+      logoSrc: partner.logoSrc,
+      website: partner.website ?? "",
+    })),
+  };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-sans">

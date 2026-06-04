@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Check, Archive, Trash2, Calendar, Building } from "lucide-react";
-import { updateLeadStatus, deleteLead, Lead } from "@/app/actions/leads";
+import { Mail, Check, Archive, Trash2, Calendar, User, StickyNote, Plus } from "lucide-react";
+import { updateLeadStatus, deleteLead, addLeadNote, Lead } from "@/app/actions/leads";
+import ConfirmDeleteDialog from "@/components/admin/ConfirmDeleteDialog";
 
 interface InboxListProps {
   initialLeads: Lead[];
@@ -12,6 +13,8 @@ export default function InboxList({ initialLeads }: InboxListProps) {
   const [leads, setLeads] = useState<Lead[]>(initialLeads);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [noteContent, setNoteContent] = useState("");
+  const [leadToDelete, setLeadToDelete] = useState<Lead | null>(null);
 
   const handleUpdateStatus = async (id: string, newStatus: "contacted" | "archived") => {
     setIsUpdating(true);
@@ -32,14 +35,41 @@ export default function InboxList({ initialLeads }: InboxListProps) {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Voulez-vous supprimer définitivement ce lead ?")) return;
+  const handleDelete = async () => {
+    if (!leadToDelete) return;
     setIsUpdating(true);
     try {
-      const res = await deleteLead(id);
+      const res = await deleteLead(leadToDelete.id);
       if (res.success) {
-        setLeads((prev) => prev.filter((l) => l.id !== id));
-        if (selectedLead?.id === id) setSelectedLead(null);
+        setLeads((prev) => prev.filter((l) => l.id !== leadToDelete.id));
+        if (selectedLead?.id === leadToDelete.id) setSelectedLead(null);
+        setLeadToDelete(null);
+      } else {
+        alert(res.error || "Une erreur s'est produite.");
+      }
+    } catch {
+      alert("Erreur de communication.");
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleAddNote = async () => {
+    if (!selectedLead || !noteContent.trim()) return;
+
+    setIsUpdating(true);
+    try {
+      const res = await addLeadNote(selectedLead.id, noteContent);
+      if (res.success && res.note) {
+        const updatedLead = {
+          ...selectedLead,
+          notes: [res.note, ...selectedLead.notes],
+        };
+        setSelectedLead(updatedLead);
+        setLeads((prev) =>
+          prev.map((lead) => (lead.id === selectedLead.id ? updatedLead : lead))
+        );
+        setNoteContent("");
       } else {
         alert(res.error || "Une erreur s'est produite.");
       }
@@ -87,7 +117,7 @@ export default function InboxList({ initialLeads }: InboxListProps) {
                         {lead.name}
                       </h4>
                       <p className="text-[10px] text-slate-500 font-inter mt-0.5">
-                        {lead.company || "Particulier"}
+                        {lead.phone || "Téléphone non renseigné"}
                       </p>
                     </div>
 
@@ -111,7 +141,7 @@ export default function InboxList({ initialLeads }: InboxListProps) {
                       <Calendar size={10} />
                       {new Date(lead.createdAt).toLocaleDateString()}
                     </span>
-                    <span className="text-[#343D91] font-bold">{lead.budget}</span>
+                    <span className="text-[#343D91] font-bold">{lead.email}</span>
                   </div>
                 </div>
               );
@@ -137,9 +167,13 @@ export default function InboxList({ initialLeads }: InboxListProps) {
                 </h2>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-slate-500 font-inter mt-1">
                   <span className="flex items-center gap-1">
-                    <Building size={12} className="text-slate-400" />
-                    {selectedLead.company || "Particulier"}
+                    <User size={12} className="text-slate-400" />
+                    {selectedLead.lastName || "Nom"} {selectedLead.middleName || ""} {selectedLead.firstName || ""}
                   </span>
+                  <span className="text-slate-300">•</span>
+                  <a href={`tel:${selectedLead.phone}`} className="text-slate-600 hover:text-fluxion-pink-neon transition-colors hover:underline">
+                    {selectedLead.phone || "Téléphone non renseigné"}
+                  </a>
                   <span className="text-slate-300">•</span>
                   <a href={`mailto:${selectedLead.email}`} className="text-slate-600 hover:text-fluxion-pink-neon transition-colors hover:underline">
                     {selectedLead.email}
@@ -169,7 +203,7 @@ export default function InboxList({ initialLeads }: InboxListProps) {
                   Archiver
                 </button>
                 <button
-                  onClick={() => handleDelete(selectedLead.id)}
+                  onClick={() => setLeadToDelete(selectedLead)}
                   disabled={isUpdating}
                   className="h-8 w-8 rounded bg-red-50 hover:bg-red-100 border border-red-100 hover:border-red-200 text-red-500 flex items-center justify-center transition-colors"
                   title="Supprimer définitivement"
@@ -182,13 +216,17 @@ export default function InboxList({ initialLeads }: InboxListProps) {
 
             <div className="grid grid-cols-2 gap-4">
               <div className="border border-slate-200 bg-slate-50 rounded-lg p-4">
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-inter">Service demandé</p>
-                <p className="text-xs font-bold text-slate-900 mt-1 uppercase">{selectedLead.service}</p>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-inter">Téléphone</p>
+                <a href={`tel:${selectedLead.phone}`} className="text-xs font-bold text-slate-900 mt-1 uppercase hover:text-fluxion-pink-neon">
+                  {selectedLead.phone || "Non renseigné"}
+                </a>
               </div>
 
               <div className="border border-slate-200 bg-slate-50 rounded-lg p-4">
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-inter">Budget estimé</p>
-                <p className="text-xs font-bold text-[#FF007F] mt-1 font-mono">{selectedLead.budget}</p>
+                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-inter">Adresse email</p>
+                <a href={`mailto:${selectedLead.email}`} className="text-xs font-bold text-[#FF007F] mt-1 font-mono hover:underline">
+                  {selectedLead.email}
+                </a>
               </div>
             </div>
 
@@ -204,8 +242,66 @@ export default function InboxList({ initialLeads }: InboxListProps) {
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 text-[10px] text-slate-500 leading-relaxed font-inter flex gap-3 items-start">
               <Mail size={16} className="text-slate-400 shrink-0 mt-0.5" />
               <div>
-                Vous pouvez répondre directement en écrivant à l'adresse <a href={`mailto:${selectedLead.email}`} className="text-slate-900 font-semibold hover:underline">{selectedLead.email}</a>.
+                Vous pouvez répondre directement par email à <a href={`mailto:${selectedLead.email}`} className="text-slate-900 font-semibold hover:underline">{selectedLead.email}</a>
+                {selectedLead.phone ? <> ou appeler le visiteur au <a href={`tel:${selectedLead.phone}`} className="text-slate-900 font-semibold hover:underline">{selectedLead.phone}</a>.</> : "."}
               </div>
+            </div>
+
+            <div className="space-y-4 border-t border-slate-100 pt-6">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2">
+                  <StickyNote size={15} className="text-fluxion-pink-neon" />
+                  <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider font-inter">
+                    Notes internes ({selectedLead.notes.length})
+                  </p>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <textarea
+                  value={noteContent}
+                  onChange={(event) => setNoteContent(event.target.value)}
+                  rows={3}
+                  maxLength={2000}
+                  placeholder="Ajouter une note interne pour le suivi de cette demande..."
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 p-3 text-xs text-slate-700 outline-none transition-colors focus:border-fluxion-pink-neon focus:bg-white"
+                />
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-[9px] text-slate-400 font-inter">
+                    Visible uniquement dans l'admin.
+                  </span>
+                  <button
+                    onClick={handleAddNote}
+                    disabled={isUpdating || !noteContent.trim()}
+                    className="h-8 px-3 rounded bg-slate-900 hover:bg-slate-800 disabled:bg-slate-100 disabled:text-slate-400 text-white font-bold font-inter text-[10px] uppercase tracking-wider flex items-center gap-1 transition-colors"
+                  >
+                    <Plus size={12} />
+                    Ajouter la note
+                  </button>
+                </div>
+              </div>
+
+              {selectedLead.notes.length === 0 ? (
+                <div className="rounded-xl border border-dashed border-slate-200 bg-white p-4 text-center text-[10px] text-slate-400">
+                  Aucune note interne pour cette demande.
+                </div>
+              ) : (
+                <div className="space-y-3">
+                  {selectedLead.notes.map((note) => (
+                    <div key={note.id} className="rounded-xl border border-slate-200 bg-white p-4">
+                      <div className="flex items-center justify-between gap-3 text-[9px] text-slate-400 font-inter">
+                        <span className="font-bold uppercase tracking-wider text-slate-500">
+                          {note.authorName}
+                        </span>
+                        <span>{new Date(note.createdAt).toLocaleString("fr-FR")}</span>
+                      </div>
+                      <p className="mt-2 whitespace-pre-wrap text-xs leading-relaxed text-slate-700">
+                        {note.content}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
           </div>
@@ -216,6 +312,17 @@ export default function InboxList({ initialLeads }: InboxListProps) {
           </div>
         )}
       </div>
+
+      <ConfirmDeleteDialog
+        open={Boolean(leadToDelete)}
+        isLoading={isUpdating}
+        title="Supprimer cette demande ?"
+        description={`La demande de ${leadToDelete?.name ?? "ce visiteur"} sera supprimée définitivement de la boîte de réception.`}
+        onOpenChange={(open) => {
+          if (!open) setLeadToDelete(null);
+        }}
+        onConfirm={handleDelete}
+      />
 
     </div>
   );

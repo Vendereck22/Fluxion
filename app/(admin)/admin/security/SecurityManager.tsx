@@ -13,6 +13,7 @@ import {
   LuCalendar
 } from "react-icons/lu";
 import { createUserAction, deleteUserAction, type UserAccount } from "@/app/actions/auth";
+import ConfirmDeleteDialog from "@/components/admin/ConfirmDeleteDialog";
 
 interface SecurityManagerProps {
   initialUsers: UserAccount[];
@@ -22,6 +23,7 @@ export default function SecurityManager({ initialUsers }: SecurityManagerProps) 
   const [users, setUsers] = useState<UserAccount[]>(initialUsers);
   const [isCreating, setIsCreating] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [userToDelete, setUserToDelete] = useState<UserAccount | null>(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -60,17 +62,9 @@ export default function SecurityManager({ initialUsers }: SecurityManagerProps) 
       if (res.success) {
         setStatus("success");
         setMessage("Compte administrateur créé avec succès.");
-        // Reload list client-side
-        const newUser: UserAccount = {
-          id: Date.now().toString(),
-          name: formData.name,
-          email: formData.email.toLowerCase(),
-          role: formData.role,
-          salt: "",
-          passwordHash: "",
-          createdAt: new Date().toISOString(),
-        };
-        setUsers((prev) => [...prev, newUser]);
+        if (res.user) {
+          setUsers((prev) => [...prev, res.user as UserAccount]);
+        }
         setFormData({ name: "", email: "", password: "", role: "admin" });
         setIsCreating(false);
       } else {
@@ -85,25 +79,25 @@ export default function SecurityManager({ initialUsers }: SecurityManagerProps) 
     }
   };
 
-  const handleDeleteAccount = async (id: string, email: string) => {
-    if (confirm(`Voulez-vous vraiment supprimer le compte de ${email} ?`)) {
-      setLoading(true);
-      try {
-        const res = await deleteUserAction(id);
-        if (res.success) {
-          setUsers((prev) => prev.filter((u) => u.id !== id));
-          setStatus("success");
-          setMessage("Utilisateur supprimé avec succès.");
-        } else {
-          setStatus("error");
-          setMessage(res.error || "Une erreur est survenue lors de la suppression.");
-        }
-      } catch {
+  const handleDeleteAccount = async () => {
+    if (!userToDelete) return;
+    setLoading(true);
+    try {
+      const res = await deleteUserAction(userToDelete.id);
+      if (res.success) {
+        setUsers((prev) => prev.filter((u) => u.id !== userToDelete.id));
+        setStatus("success");
+        setMessage("Utilisateur supprimé avec succès.");
+        setUserToDelete(null);
+      } else {
         setStatus("error");
-        setMessage("Une erreur de communication est survenue.");
-      } finally {
-        setLoading(false);
+        setMessage(res.error || "Une erreur est survenue lors de la suppression.");
       }
+    } catch {
+      setStatus("error");
+      setMessage("Une erreur de communication est survenue.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -223,28 +217,9 @@ export default function SecurityManager({ initialUsers }: SecurityManagerProps) 
 
             {/* List of accounts */}
             <div className="space-y-3 font-inter text-xs">
-              {/* Hardcoded Super Admin display */}
-              <div className="flex items-center justify-between p-4 border border-slate-200 rounded-xl bg-slate-50/50">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-slate-100 border flex items-center justify-center text-slate-500 flex-shrink-0">
-                    <LuUser size={16} />
-                  </div>
-                  <div>
-                    <h5 className="font-bold text-slate-900">Super Administrateur</h5>
-                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">admin@fluxion.cd</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="px-2 py-0.5 rounded bg-pink-50 border border-pink-100 text-fluxion-pink-neon font-bold text-[8px] uppercase tracking-wider">
-                    Système
-                  </span>
-                </div>
-              </div>
-
-              {/* Dynamic list */}
               {users.length === 0 ? (
                 <div className="text-center py-6 border border-dashed border-slate-200 rounded-xl text-slate-400 font-inter text-[11px]">
-                  Aucun autre administrateur configuré.
+                  Aucun administrateur configuré.
                 </div>
               ) : (
                 users.map((user) => (
@@ -270,7 +245,7 @@ export default function SecurityManager({ initialUsers }: SecurityManagerProps) 
                       </div>
 
                       <button
-                        onClick={() => handleDeleteAccount(user.id, user.email)}
+                        onClick={() => setUserToDelete(user)}
                         disabled={loading}
                         className="p-2 rounded bg-red-50 border border-red-100 hover:bg-red-100 text-red-500 transition-colors"
                         title="Supprimer le compte"
@@ -328,7 +303,7 @@ export default function SecurityManager({ initialUsers }: SecurityManagerProps) 
             <div className="space-y-4 font-inter text-xs">
               <div className="flex items-center justify-between p-3 border border-slate-100 rounded bg-slate-50">
                 <span className="flex items-center gap-2 text-slate-600 font-medium">
-                  <LuShieldCheck size={14} className="text-emerald-500" /> Authentification PBKDF2
+                  <LuShieldCheck size={14} className="text-emerald-500" /> Authentification bcrypt
                 </span>
                 <span className="text-[10px] text-emerald-600 font-bold bg-emerald-100 px-2 py-0.5 rounded border border-emerald-200">ACTIVE</span>
               </div>
@@ -349,12 +324,23 @@ export default function SecurityManager({ initialUsers }: SecurityManagerProps) 
             </div>
 
             <p className="text-[10px] text-slate-500 leading-relaxed pt-2">
-              💡 Les mots de passe des comptes créés sont salés individuellement et hachés de manière asymétrique via l'algorithme sécurisé **PBKDF2-SHA512** à 1000 itérations.
+              💡 Les mots de passe des comptes admin sont hachés avec **bcrypt** et stockés dans PostgreSQL via Prisma.
             </p>
           </div>
         </div>
 
       </div>
+
+      <ConfirmDeleteDialog
+        open={Boolean(userToDelete)}
+        isLoading={loading}
+        title="Supprimer ce compte admin ?"
+        description={`Le compte ${userToDelete?.email ?? "sélectionné"} sera désactivé et ne pourra plus accéder à l'administration.`}
+        onOpenChange={(open) => {
+          if (!open) setUserToDelete(null);
+        }}
+        onConfirm={handleDeleteAccount}
+      />
     </div>
   );
 }

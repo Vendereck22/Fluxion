@@ -226,7 +226,7 @@
   "finalCta": {
     "title": "Rejoignez le mouvement. Propulsez votre vision.",
     "description": "Prêt à transformer votre présence digitale avec l'expertise Fluxion ?",
-    "buttonLink": "#contact",
+    "buttonLink": "/contact",
     "buttonText": "Démarrer un projet"
   },
   "video": {
@@ -267,7 +267,7 @@
   },
   "products": {
     "title": "Nos produits",
-    "description": "Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur Lorem ipsum dolor sit amet, consectetur",
+    "description": "Des solutions numériques pensées pour répondre à des besoins métiers précis: fluidifier les opérations, améliorer l'expérience utilisateur et soutenir la croissance des entreprises.",
     "finalStatement": "Ici on crée<br />le futur"
   },
   "aboutPage": {
@@ -289,7 +289,13 @@
   "projectsPage": {
     "title": "Nos Projets",
     "description": "Quelques realisations qui illustrent notre exigence en design, developpement et storytelling. Chaque projet est pense pour etre utile, performant et coherent avec l'identite de la marque.",
-    "filters": ["Tous", "Identite visuelle", "UI/UX", "Developpement", "Video"],
+    "filters": [
+      "Tous",
+      "Identite visuelle",
+      "UI/UX",
+      "Developpement",
+      "Video"
+    ],
     "items": [
       {
         "slug": "identite-fluxion",
@@ -297,7 +303,11 @@
         "description": "Refonte de l'identite visuelle: systeme typographique, palette, grid et declinaisons pour web et supports.",
         "category": "Identite visuelle",
         "imageSrc": "/images/projects/brand-board.jpg",
-        "tags": ["Branding", "Guidelines", "Print"],
+        "tags": [
+          "Branding",
+          "Guidelines",
+          "Print"
+        ],
         "href": "/nos-projets/identite-fluxion"
       },
       {
@@ -306,7 +316,11 @@
         "description": "Design UI/UX d'une app mobile: parcours utilisateur, ecrans cles, composants et design system.",
         "category": "UI/UX",
         "imageSrc": "/images/projects/team-collab.jpg",
-        "tags": ["UX", "UI", "Design system"],
+        "tags": [
+          "UX",
+          "UI",
+          "Design system"
+        ],
         "href": "/nos-projets/application-mobile"
       },
       {
@@ -315,7 +329,11 @@
         "description": "Developpement d'une plateforme web moderne avec une architecture scalable et des performances optimisees.",
         "category": "Developpement",
         "imageSrc": "/images/projects/code-screen.jpg",
-        "tags": ["Next.js", "Performance", "SEO"],
+        "tags": [
+          "Next.js",
+          "Performance",
+          "SEO"
+        ],
         "href": "/nos-projets/plateforme-web"
       },
       {
@@ -324,7 +342,11 @@
         "description": "Atelier de cadrage: objectifs, roadmap, risques, et priorites. On aligne vision, business et execution.",
         "category": "UI/UX",
         "imageSrc": "/images/projects/meeting.jpg",
-        "tags": ["Strategy", "Roadmap", "Discovery"],
+        "tags": [
+          "Strategy",
+          "Roadmap",
+          "Discovery"
+        ],
         "href": "/nos-projets/workshop-produit"
       },
       {
@@ -333,7 +355,11 @@
         "description": "Contenus pour valoriser l'equipe et la culture: visuels, mise en page et storytelling.",
         "category": "Identite visuelle",
         "imageSrc": "/images/projects/workspace.jpg",
-        "tags": ["Story", "Content", "Art direction"],
+        "tags": [
+          "Story",
+          "Content",
+          "Art direction"
+        ],
         "href": "/nos-projets/equipe-culture"
       },
       {
@@ -342,7 +368,11 @@
         "description": "Production et montage: teaser, video produit et declinaisons reseaux sociaux avec une DA coherente.",
         "category": "Video",
         "imageSrc": "/images/projects/video-production.jpg",
-        "tags": ["Video", "Motion", "Social"],
+        "tags": [
+          "Video",
+          "Motion",
+          "Social"
+        ],
         "href": "/nos-projets/production-video"
       }
     ]
@@ -354,13 +384,25 @@
         "name": "Setly",
         "onlineUrl": "https://www.behance.net/",
         "gallery": [
-          { "src": "/images/products/setly-restaurant-1.jpg", "alt": "Setly - Restaurant (apercu 1)" },
-          { "src": "/images/products/setly-restaurant-2.jpg", "alt": "Setly - Restaurant (apercu 2)" },
-          { "src": "/images/products/setly-restaurant-3.jpg", "alt": "Setly - Restaurant (apercu 3)" },
-          { "src": "/images/products/setly.jpg", "alt": "Setly - Apercu produit" }
+          {
+            "src": "/images/products/setly-restaurant-1.jpg",
+            "alt": "Setly - Restaurant (apercu 1)"
+          },
+          {
+            "src": "/images/products/setly-restaurant-2.jpg",
+            "alt": "Setly - Restaurant (apercu 2)"
+          },
+          {
+            "src": "/images/products/setly-restaurant-3.jpg",
+            "alt": "Setly - Restaurant (apercu 3)"
+          },
+          {
+            "src": "/images/products/setly.jpg",
+            "alt": "Setly - Apercu produit"
+          }
         ],
-        "shortDescription": "Plateforme restaurant: commandes, menu et experience client.",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel",
+        "shortDescription": "Plateforme restaurant: menu, commandes et expérience client optimisée.",
+        "description": "Setly accompagne les restaurants dans la gestion de leur présence digitale: présentation du menu, expérience de commande plus fluide, visibilité renforcée et parcours client plus clair du premier contact jusqu'à la fidélisation.",
         "theme": "red",
         "imageSrc": "/images/products/setly-restaurant-1.jpg",
         "rightImageSrc": "/images/products/setly-restaurant-2.jpg"
@@ -370,13 +412,25 @@
         "name": "Trim",
         "onlineUrl": "https://dribbble.com/",
         "gallery": [
-          { "src": "/images/products/trim.jpg", "alt": "Trim - Apercu produit" },
-          { "src": "/images/products/trim-gallery-1.jpg", "alt": "Trim - Interface (apercu 1)" },
-          { "src": "/images/products/trim-gallery-2.jpg", "alt": "Trim - Interface (apercu 2)" },
-          { "src": "/images/products/trim-gallery-3.jpg", "alt": "Trim - Interface (apercu 3)" }
+          {
+            "src": "/images/products/trim.jpg",
+            "alt": "Trim - Apercu produit"
+          },
+          {
+            "src": "/images/products/trim-gallery-1.jpg",
+            "alt": "Trim - Interface (apercu 1)"
+          },
+          {
+            "src": "/images/products/trim-gallery-2.jpg",
+            "alt": "Trim - Interface (apercu 2)"
+          },
+          {
+            "src": "/images/products/trim-gallery-3.jpg",
+            "alt": "Trim - Interface (apercu 3)"
+          }
         ],
-        "shortDescription": "Produit digital: interface claire et experience premium.",
-        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip ex ea commodo consequat. Duis autem vel",
+        "shortDescription": "Produit digital premium: interface claire, responsive et orientée conversion.",
+        "description": "Trim propose une expérience premium autour de la présentation, de la sélection et du suivi d'offres ou de produits. L'interface met l'accent sur la clarté, la confiance et une navigation fluide sur tous les écrans.",
         "theme": "purple",
         "imageSrc": "/images/products/trim.jpg"
       }
@@ -389,12 +443,12 @@
         "id": 1,
         "name": "Doxel Kanda",
         "role": "Design & Dev",
-        "bio": "Lorem ipsum dolor sit amet, consecte- tuer adipiscing elit,",
-        "img": "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&q=80&w=800",
+        "bio": "Conception d'identités digitales, interfaces web et expériences produit avec une attention forte portée aux détails.",
+        "img": "/images/about/team.jpg",
         "socials": {
-          "linkedin": "#",
-          "twitter": "#",
-          "instagram": "#"
+          "linkedin": "",
+          "twitter": "",
+          "instagram": ""
         }
       },
       {
@@ -402,11 +456,11 @@
         "name": "Precieux Mwanza",
         "role": "Expert UI/UX",
         "bio": "Création d'interfaces intuitives et esthétiques centrées sur l'utilisateur.",
-        "img": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800",
+        "img": "/images/about/team.jpg",
         "socials": {
-          "linkedin": "#",
-          "twitter": "#",
-          "instagram": "#"
+          "linkedin": "",
+          "twitter": "",
+          "instagram": ""
         }
       },
       {
@@ -414,11 +468,11 @@
         "name": "Ciel Wembi",
         "role": "Tech Lead",
         "bio": "Architecture robuste et expertise technique avancée pour Fluxion.",
-        "img": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800",
+        "img": "/images/about/team.jpg",
         "socials": {
-          "linkedin": "#",
-          "twitter": "#",
-          "instagram": "#"
+          "linkedin": "",
+          "twitter": "",
+          "instagram": ""
         }
       },
       {
@@ -426,11 +480,11 @@
         "name": "Emmanuel Tansia",
         "role": "Marketing",
         "bio": "Stratégies de communication et marketing digital innovantes.",
-        "img": "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=800",
+        "img": "/images/about/team.jpg",
         "socials": {
-          "linkedin": "#",
-          "twitter": "#",
-          "instagram": "#"
+          "linkedin": "",
+          "twitter": "",
+          "instagram": ""
         }
       },
       {
@@ -438,11 +492,11 @@
         "name": "Junior Smoda",
         "role": "Product Manager",
         "bio": "Gestion de produit et vision stratégique à long terme.",
-        "img": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=800",
+        "img": "/images/about/team.jpg",
         "socials": {
-          "linkedin": "#",
-          "twitter": "#",
-          "instagram": "#"
+          "linkedin": "",
+          "twitter": "",
+          "instagram": ""
         }
       },
       {
@@ -450,47 +504,11 @@
         "name": "Vendereck Nguala",
         "role": "Développeur Fullstack",
         "bio": "Développement d'applications modernes et d'architectures scalables.",
-        "img": "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&q=80&w=800",
+        "img": "/images/about/team.jpg",
         "socials": {
-          "linkedin": "#",
-          "twitter": "#",
-          "instagram": "#"
-        }
-      },
-      {
-        "id": 7,
-        "name": "Nouveau Membre",
-        "role": "Développeur",
-        "bio": "Nouvelle biographie du membre de l'équipe.",
-        "img": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800",
-        "socials": {
-          "linkedin": "#",
-          "twitter": "#",
-          "instagram": "#"
-        }
-      },
-      {
-        "id": 8,
-        "name": "Nouveau Membre",
-        "role": "Développeur",
-        "bio": "Nouvelle biographie du membre de l'équipe.",
-        "img": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800",
-        "socials": {
-          "linkedin": "#",
-          "twitter": "#",
-          "instagram": "#"
-        }
-      },
-      {
-        "id": 9,
-        "name": "Nouveau Membre",
-        "role": "Développeur",
-        "bio": "Nouvelle biographie du membre de l'équipe.",
-        "img": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800",
-        "socials": {
-          "linkedin": "#",
-          "twitter": "#",
-          "instagram": "#"
+          "linkedin": "",
+          "twitter": "",
+          "instagram": ""
         }
       }
     ]
@@ -499,7 +517,7 @@
     "socialBadge": "Suivez l'agence",
     "location": "Kinshasa, RD Congo",
     "email": "contact@fluxion.cd",
-    "privacy": "Privacy",
-    "terms": "Terms"
+    "privacy": "Confidentialité",
+    "terms": "Conditions"
   }
 }

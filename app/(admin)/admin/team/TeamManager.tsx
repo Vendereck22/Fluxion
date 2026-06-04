@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Plus, Trash2, Edit2, Save, Upload } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 import { uploadImage } from "@/app/actions/upload";
+import ConfirmDeleteDialog from "@/components/admin/ConfirmDeleteDialog";
 
 const LinkedInIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -50,6 +52,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [editingId, setEditingId] = useState<number | null>(null);
   const [isUploadingFile, setIsUploadingFile] = useState(false);
+  const [memberToDelete, setMemberToDelete] = useState<TeamMember | null>(null);
   const [selectedPreviewId, setSelectedPreviewId] = useState<number | null>(
     initialMembers.length > 0 ? initialMembers[0].id : null
   );
@@ -126,26 +129,26 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
     setStatus("idle");
   };
 
-  const handleDeleteMember = (id: number) => {
-    if (confirm("Voulez-vous vraiment supprimer ce profil ?")) {
-      const updated = members.filter((m) => m.id !== id);
-      setMembers(updated);
-      setStatus("idle");
-      if (selectedPreviewId === id) {
-        setSelectedPreviewId(updated.length > 0 ? updated[0].id : null);
-      }
+  const handleDeleteMember = () => {
+    if (!memberToDelete) return;
+    const updated = members.filter((m) => m.id !== memberToDelete.id);
+    setMembers(updated);
+    setStatus("idle");
+    if (selectedPreviewId === memberToDelete.id) {
+      setSelectedPreviewId(updated.length > 0 ? updated[0].id : null);
     }
+    setMemberToDelete(null);
   };
 
   const handleAddMember = () => {
     const newId = members.length > 0 ? Math.max(...members.map((m) => m.id)) + 1 : 1;
     const newMember: TeamMember = {
       id: newId,
-      name: "Nouveau Membre",
-      role: "Développeur",
-      bio: "Nouvelle biographie du membre de l'équipe.",
-      img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=800",
-      socials: { linkedin: "#", twitter: "#", instagram: "#" }
+      name: "",
+      role: "",
+      bio: "",
+      img: "",
+      socials: { linkedin: "", twitter: "", instagram: "" }
     };
 
     setMembers((prev) => [...prev, newMember]);
@@ -295,8 +298,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                         <div className="flex flex-col sm:flex-row items-center gap-4 p-4 border border-dashed border-slate-200 rounded-lg bg-white shadow-inner">
                           <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-slate-50 border border-slate-200 flex-shrink-0 flex items-center justify-center shadow-sm">
                             {editForm.img ? (
-                              // eslint-disable-next-line @next/next/no-img-element
-                              <img src={editForm.img} alt="Preview" className="w-full h-full object-cover" />
+                              <Image src={editForm.img} alt="Preview" fill sizes="64px" className="object-cover" />
                             ) : (
                               <Upload className="text-slate-300" size={20} />
                             )}
@@ -326,7 +328,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                                 name="img"
                                 value={editForm.img}
                                 onChange={handleFormChange}
-                                placeholder="https://images.unsplash.com/..."
+                                placeholder="/images/team/membre.jpg"
                                 className="w-full h-8 bg-white border border-slate-200 rounded px-2.5 text-[10px] font-mono text-slate-800 focus:border-fluxion-pink-neon focus:outline-none"
                               />
                             </div>
@@ -399,12 +401,13 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                       <div className="flex items-center gap-4">
 
-                        <img
-                          src={member.img}
-                          alt={member.name}
-                          className="w-12 h-12 rounded-xl object-cover border border-slate-200 shadow-sm cursor-pointer hover:opacity-85"
+                        <button
+                          type="button"
+                          className="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-200 shadow-sm cursor-pointer hover:opacity-85"
                           onClick={() => setSelectedPreviewId(member.id)}
-                        />
+                        >
+                          <Image src={member.img} alt={member.name} fill sizes="48px" className="object-cover" />
+                        </button>
                         <div>
                           <div className="flex items-center gap-2">
                             <h4 className="font-heading font-black text-sm text-slate-900 tracking-tight uppercase">
@@ -446,7 +449,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                           <Edit2 size={13} />
                         </button>
                         <button
-                          onClick={() => handleDeleteMember(member.id)}
+                          onClick={() => setMemberToDelete(member)}
                           className="p-2 rounded bg-red-50 border border-red-100 hover:bg-red-100 text-red-500 transition-colors"
                           title="Supprimer"
                         >
@@ -489,11 +492,9 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                     }`}
                   >
 
-                    <img
-                      src={m.img}
-                      alt={m.name}
-                      className="w-12 h-12 rounded-full mx-auto object-cover border border-slate-200 hover:scale-105 transition-transform"
-                    />
+                    <div className="relative w-12 h-12 rounded-full mx-auto overflow-hidden border border-slate-200 transition-transform hover:scale-105">
+                      <Image src={m.img} alt={m.name} fill sizes="48px" className="object-cover" />
+                    </div>
                     <div>
                       <h5 className="text-[10px] font-bold text-slate-900 uppercase tracking-tight truncate">{m.name}</h5>
                       <p className="text-[8px] text-slate-500 font-medium truncate mt-0.5">{m.role}</p>
@@ -508,11 +509,9 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
               <div className="border border-slate-200 rounded-2xl bg-slate-50 overflow-hidden shadow-inner p-4 space-y-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
                 <div className="flex gap-4">
 
-                  <img
-                    src={selectedMember.img}
-                    alt={selectedMember.name}
-                    className="w-16 h-16 rounded-xl object-cover border border-slate-200 shadow"
-                  />
+                  <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-slate-200 shadow flex-shrink-0">
+                    <Image src={selectedMember.img} alt={selectedMember.name} fill sizes="64px" className="object-cover" />
+                  </div>
                   <div className="space-y-1 flex-1 min-w-0">
                     <h4 className="font-heading font-black text-xs text-slate-900 uppercase tracking-tight truncate">
                       {selectedMember.name}
@@ -556,6 +555,16 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
         </div>
 
       </div>
+
+      <ConfirmDeleteDialog
+        open={Boolean(memberToDelete)}
+        title="Supprimer ce profil ?"
+        description={`Le profil de ${memberToDelete?.name ?? "ce membre"} sera retiré de l'équipe. Pensez à publier les modifications pour l'appliquer au site.`}
+        onOpenChange={(open) => {
+          if (!open) setMemberToDelete(null);
+        }}
+        onConfirm={handleDeleteMember}
+      />
 
     </div>
   );

@@ -9,6 +9,7 @@ import {
   toggleSubscriberStatus, deleteSubscriber, sendNewsletter,
   Subscriber, NewsletterLog
 } from "@/app/actions/newsletter";
+import ConfirmDeleteDialog from "@/components/admin/ConfirmDeleteDialog";
 
 interface NewsletterManagerProps {
   initialSubscribers: Subscriber[];
@@ -25,6 +26,7 @@ export default function NewsletterManager({
   const [selectedIds, setSelectedIds] = useState<string[]>(
     initialSubscribers.filter(s => s.status === "active").map(s => s.id)
   );
+  const [subscriberToDelete, setSubscriberToDelete] = useState<Subscriber | null>(null);
 
 
   const [subject, setSubject] = useState("");
@@ -78,14 +80,14 @@ export default function NewsletterManager({
     }
   };
 
-  const handleDeleteSubscriber = async (id: string) => {
-    if (!confirm("Voulez-vous vraiment supprimer cet abonné ?")) return;
-
+  const handleDeleteSubscriber = async () => {
+    if (!subscriberToDelete) return;
     try {
-      const res = await deleteSubscriber(id);
+      const res = await deleteSubscriber(subscriberToDelete.id);
       if (res.success) {
-        setSubscribers(prev => prev.filter(s => s.id !== id));
-        setSelectedIds(prev => prev.filter(item => item !== id));
+        setSubscribers(prev => prev.filter(s => s.id !== subscriberToDelete.id));
+        setSelectedIds(prev => prev.filter(item => item !== subscriberToDelete.id));
+        setSubscriberToDelete(null);
       } else {
         alert(res.error || "Une erreur s'est produite.");
       }
@@ -120,14 +122,9 @@ export default function NewsletterManager({
         setSubject("");
         setMessage("");
 
-        const newLog: NewsletterLog = {
-          id: "campaign-" + Math.random().toString(36).substring(2, 11),
-          subject: subject.trim(),
-          message: message.trim(),
-          recipients: recipientEmails,
-          sentAt: new Date().toISOString()
-        };
-        setLogs(prev => [newLog, ...prev]);
+        if (res.log) {
+          setLogs(prev => [res.log as NewsletterLog, ...prev]);
+        }
         setTimeout(() => setStatus("idle"), 5000);
       } else {
         setStatus("error");
@@ -253,7 +250,7 @@ export default function NewsletterManager({
 
 
                         <button
-                          onClick={() => handleDeleteSubscriber(sub.id)}
+                          onClick={() => setSubscriberToDelete(sub)}
                           className="p-1.5 rounded hover:bg-red-50 text-slate-400 hover:text-red-500 transition-colors"
                           title="Supprimer"
                         >
@@ -443,6 +440,16 @@ export default function NewsletterManager({
           </form>
         </div>
       </div>
+
+      <ConfirmDeleteDialog
+        open={Boolean(subscriberToDelete)}
+        title="Supprimer cet abonné ?"
+        description={`L'adresse ${subscriberToDelete?.email ?? "sélectionnée"} sera supprimée définitivement de la liste newsletter.`}
+        onOpenChange={(open) => {
+          if (!open) setSubscriberToDelete(null);
+        }}
+        onConfirm={handleDeleteSubscriber}
+      />
 
     </div>
   );

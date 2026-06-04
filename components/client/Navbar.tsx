@@ -70,8 +70,8 @@ export default function Navbar() {
             </li>
           </ul>
 
-          <Button className="rounded-full bg-fluxion-blue hover:bg-fluxion-rose text-white px-6 font-bold transition-all shadow-lg shadow-fluxion-blue/10">
-            {siteContent.navigation.cta}{" "}
+          <Button asChild className="rounded-full bg-fluxion-blue hover:bg-fluxion-rose text-white px-6 font-bold transition-all shadow-lg shadow-fluxion-blue/10">
+            <Link href="/contact">{siteContent.navigation.cta}</Link>
           </Button>
         </div>
         <button
@@ -103,8 +103,10 @@ export default function Navbar() {
             </li>
           ))}
           <li className="pt-6 w-full">
-            <Button className="w-full h-14 rounded-2xl bg-fluxion-blue text-white font-bold text-lg">
-              Nous contacter
+            <Button asChild className="w-full h-14 rounded-2xl bg-fluxion-blue text-white font-bold text-lg">
+              <Link href="/contact" onClick={() => setIsOpen(false)}>
+                Nous contacter
+              </Link>
             </Button>
           </li>
         </ul>

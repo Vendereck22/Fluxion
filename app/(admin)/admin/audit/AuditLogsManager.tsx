@@ -106,6 +106,24 @@ export default function AuditLogsManager({ initialLogs }: AuditLogsManagerProps)
           classes: "bg-rose-50 text-rose-700 border-rose-200",
           icon: LuUserMinus,
         };
+      case "MEDIA_UPLOAD":
+        return {
+          label: "UPLOAD",
+          classes: "bg-cyan-50 text-cyan-700 border-cyan-200",
+          icon: LuGlobe,
+        };
+      case "LEAD_UPDATE":
+        return {
+          label: "LEAD",
+          classes: "bg-amber-50 text-amber-700 border-amber-200",
+          icon: LuActivity,
+        };
+      case "NEWSLETTER_SEND":
+        return {
+          label: "NEWSLETTER",
+          classes: "bg-emerald-50 text-emerald-700 border-emerald-200",
+          icon: LuActivity,
+        };
       default:
         return {
           label: type,
@@ -179,7 +197,17 @@ export default function AuditLogsManager({ initialLogs }: AuditLogsManagerProps)
       {/* Filter and Search Bar */}
       <div className="flex flex-col md:flex-row gap-4 items-center justify-between bg-slate-50 border border-slate-200/60 p-4 rounded-xl">
         <div className="flex flex-wrap gap-1.5 w-full md:w-auto">
-          {(["ALL", "LOGIN", "LOGOUT", "CMS_UPDATE", "USER_CREATE", "USER_DELETE"] as const).map((tab) => (
+          {([
+            "ALL",
+            "LOGIN",
+            "LOGOUT",
+            "CMS_UPDATE",
+            "USER_CREATE",
+            "USER_DELETE",
+            "MEDIA_UPLOAD",
+            "LEAD_UPDATE",
+            "NEWSLETTER_SEND",
+          ] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => {

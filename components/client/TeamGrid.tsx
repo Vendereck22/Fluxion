@@ -4,7 +4,19 @@ import { useState } from "react";
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import gsap from "gsap";
-import { siteContent } from "@/constants/site-content";
+
+type TeamMember = {
+  id: number;
+  name: string;
+  role: string;
+  bio: string;
+  img: string;
+  socials: {
+    linkedin: string;
+    twitter: string;
+    instagram: string;
+  };
+};
 
 const LinkedInIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -28,9 +40,26 @@ const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-export default function TeamInteractive() {
-  const teamData = siteContent.team.members;
+export default function TeamInteractive({
+  title,
+  members,
+}: {
+  title: string;
+  members: TeamMember[];
+}) {
+  const teamData = members;
   const [activeIndex, setActiveIndex] = useState(0);
+  const activeMember = teamData[activeIndex];
+
+  if (teamData.length === 0 || !activeMember) {
+    return null;
+  }
+
+  const socialLinks = [
+    { href: activeMember.socials.linkedin, icon: <LinkedInIcon className="w-6 h-6" /> },
+    { href: activeMember.socials.twitter, icon: <TwitterIcon className="w-6 h-6" /> },
+    { href: activeMember.socials.instagram, icon: <InstagramIcon className="w-6 h-6" /> },
+  ].filter((item) => item.href && item.href !== "#");
 
   const handleNext = () => {
     const next = (activeIndex + 1) % teamData.length;
@@ -158,7 +187,7 @@ export default function TeamInteractive() {
 
 
         <h2 className="text-fluxion-rose text-5xl font-black uppercase tracking-tighter text-center">
-          {siteContent.team.title}
+          {title}
         </h2>
 
 
@@ -191,23 +220,21 @@ export default function TeamInteractive() {
 
 
         <div className="team-text-anim flex flex-col items-center text-center space-y-4 px-4">
-          <h3 className="text-4xl font-bold text-black">{teamData[activeIndex].name}</h3>
+          <h3 className="text-4xl font-bold text-black">{activeMember.name}</h3>
           <p className="text-black text-base font-medium max-w-xs leading-tight">
-            {teamData[activeIndex].bio}
+            {activeMember.bio}
           </p>
 
 
-          <div className="flex flex-row gap-4 pt-2">
-            <a href={teamData[activeIndex].socials.linkedin} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-black transition-colors">
-              <LinkedInIcon className="w-6 h-6" />
-            </a>
-            <a href={teamData[activeIndex].socials.twitter} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-black transition-colors">
-              <TwitterIcon className="w-6 h-6" />
-            </a>
-            <a href={teamData[activeIndex].socials.instagram} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-black transition-colors">
-              <InstagramIcon className="w-6 h-6" />
-            </a>
-          </div>
+          {socialLinks.length > 0 && (
+            <div className="flex flex-row gap-4 pt-2">
+              {socialLinks.map((item) => (
+                <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" className="text-zinc-500 hover:text-black transition-colors">
+                  {item.icon}
+                </a>
+              ))}
+            </div>
+          )}
         </div>
 
 
@@ -226,44 +253,33 @@ export default function TeamInteractive() {
 
         <div className="z-10 space-y-12">
           <h2 className="text-fluxion-rose text-5xl md:text-7xl font-black uppercase tracking-tighter">
-            {siteContent.team.title}
+            {title}
           </h2>
 
           <div className="team-text-anim space-y-4">
             <h3 className="text-4xl md:text-6xl font-bold text-black">
-              {teamData[activeIndex].name}
+              {activeMember.name}
             </h3>
             <p className="text-black text-lg font-medium max-w-sm leading-tight">
-              {teamData[activeIndex].bio}
+              {activeMember.bio}
             </p>
 
 
-            <div className="flex flex-row gap-4 pt-2">
-              <a
-                href={teamData[activeIndex].socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-zinc-500 hover:text-black transition-colors"
-              >
-                <LinkedInIcon className="w-6 h-6" />
-              </a>
-              <a
-                href={teamData[activeIndex].socials.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-zinc-500 hover:text-black transition-colors"
-              >
-                <TwitterIcon className="w-6 h-6" />
-              </a>
-              <a
-                href={teamData[activeIndex].socials.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-zinc-500 hover:text-black transition-colors"
-              >
-                <InstagramIcon className="w-6 h-6" />
-              </a>
-            </div>
+            {socialLinks.length > 0 && (
+              <div className="flex flex-row gap-4 pt-2">
+                {socialLinks.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-zinc-500 hover:text-black transition-colors"
+                  >
+                    {item.icon}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
 
 

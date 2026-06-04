@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import ConfirmDeleteDialog from "@/components/admin/ConfirmDeleteDialog";
 
 interface PartnerLogo {
   name: string;
@@ -63,6 +64,7 @@ export default function PartnersManager({ initialData }: PartnersManagerProps) {
   });
   const [isSaving, setIsSaving] = useState(false);
   const [uploadingIndex, setUploadingIndex] = useState<number | "draft" | null>(null);
+  const [partnerIndexToDelete, setPartnerIndexToDelete] = useState<number | null>(null);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const fileInputRefs = useRef<Record<string, HTMLInputElement | null>>({});
 
@@ -97,9 +99,10 @@ export default function PartnersManager({ initialData }: PartnersManagerProps) {
     setStatus("idle");
   };
 
-  const handleRemovePartner = (index: number) => {
+  const handleRemovePartner = () => {
+    if (partnerIndexToDelete === null) return;
     setData((prev) => {
-      const logos = prev.logos.filter((_, i) => i !== index);
+      const logos = prev.logos.filter((_, i) => i !== partnerIndexToDelete);
       return {
         ...prev,
         names: logos.map((partner) => partner.name),
@@ -107,6 +110,7 @@ export default function PartnersManager({ initialData }: PartnersManagerProps) {
       };
     });
     setStatus("idle");
+    setPartnerIndexToDelete(null);
   };
 
   const handleAddPartner = (e: React.FormEvent) => {
@@ -391,7 +395,7 @@ export default function PartnersManager({ initialData }: PartnersManagerProps) {
                         type="button"
                         variant="destructive"
                         size="icon-lg"
-                        onClick={() => handleRemovePartner(index)}
+                        onClick={() => setPartnerIndexToDelete(index)}
                         aria-label={`Supprimer ${partner.name}`}
                       >
                         <LuTrash2 />
@@ -447,6 +451,16 @@ export default function PartnersManager({ initialData }: PartnersManagerProps) {
           </Card>
         </div>
       </div>
+
+      <ConfirmDeleteDialog
+        open={partnerIndexToDelete !== null}
+        title="Supprimer ce partenaire ?"
+        description={`Le logo ${partnerIndexToDelete !== null ? data.logos[partnerIndexToDelete]?.name : "sélectionné"} sera retiré de la section partenaires. Pensez à publier les modifications pour l'appliquer au site.`}
+        onOpenChange={(open) => {
+          if (!open) setPartnerIndexToDelete(null);
+        }}
+        onConfirm={handleRemovePartner}
+      />
     </div>
   );
 }

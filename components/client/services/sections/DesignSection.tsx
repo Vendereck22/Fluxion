@@ -2,11 +2,7 @@ import ServiceBand from "../ServiceBand";
 import Image from "next/image";
 
 const COPY =
-  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed " +
-  "diam nonummy nibh euismod tincidunt ut laoreet dolore magna " +
-  "aliquam erat volutpat. Ut wisi enim ad minim veniam, quis " +
-  "nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip " +
-  "ex ea commodo consequat. Duis autem vel";
+  "Nous concevons des identites visuelles, flyers, affiches et supports digitaux qui donnent une direction claire a votre marque. Chaque creation respecte votre positionnement, votre audience et les usages reels de vos canaux de communication.";
 
 export default function DesignSection() {
   return (

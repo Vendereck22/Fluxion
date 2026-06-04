@@ -246,7 +246,7 @@ export default async function AdminDashboard() {
           <h4 className="text-sm font-bold text-slate-900 uppercase tracking-wider font-heading">
             Dernières Activités du Flux
           </h4>
-          <Link href="/admin/logs">
+          <Link href="/admin/audit">
             <span className="text-[10px] font-bold text-fluxion-pink-neon hover:underline cursor-pointer tracking-wider font-inter uppercase">
               Consulter les logs →
             </span>
@@ -259,7 +259,7 @@ export default async function AdminDashboard() {
             <div className="py-3 flex items-center justify-between text-slate-600">
               <span className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-fluxion-pink-neon" />
-                <span>Nouveau lead soumis par <strong className="text-slate-900">{newLeads[0].name}</strong> ({newLeads[0].company || "Particulier"})</span>
+                <span>Nouveau message soumis par <strong className="text-slate-900">{newLeads[0].name}</strong> ({newLeads[0].phone || newLeads[0].email})</span>
               </span>
               <span className="text-[10px] text-slate-400 font-mono">1 minute ago</span>
             </div>

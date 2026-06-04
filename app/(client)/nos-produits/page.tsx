@@ -3,43 +3,19 @@ import ProductShowcase from "@/components/client/products/ProductShowcase";
 import ProductValueCards from "@/components/client/products/ProductValueCards";
 import ProductsFinalSection from "@/components/client/products/ProductsFinalSection";
 import { UtensilsCrossed, Type } from "lucide-react";
-import path from "path";
-import { readJsonPreferFallback, tmpDataPath } from "@/lib/server/json-store";
+import { getPublicProducts } from "@/lib/server/public-content";
 
-export const dynamic = "force-dynamic";
-export const revalidate = 0;
-
-type ProductItem = {
-  slug?: string;
-  name: string;
-  onlineUrl?: string;
-  shortDescription?: string;
-  description: string;
-  theme: "red" | "purple";
-  imageSrc: string;
-  rightImageSrc?: string;
-  gallery?: { src: string; alt: string }[];
-};
-
-async function readSiteContent(): Promise<{ productsPage?: { items?: ProductItem[] } }> {
-  const filePath = path.join(process.cwd(), "constants", "site-content.json");
-  return readJsonPreferFallback<{ productsPage?: { items?: ProductItem[] } }>(
-    filePath,
-    tmpDataPath("site-content.json"),
-    {}
-  );
-}
+export const revalidate = 300;
 
 export default async function NosProduit() {
-  const content = await readSiteContent();
-  const items = content.productsPage?.items ?? [];
+  const items = await getPublicProducts();
 
   return (
     <div className="w-full min-h-screen bg-slate-50">
       <ProductsHero />
 
       {items.map((product, idx) => {
-        const slug = product.slug || product.name.toLowerCase().replace(/\s+/g, "-");
+        const slug = product.slug;
         const isRed = product.theme === "red";
         
         return (
@@ -72,12 +48,12 @@ export default async function NosProduit() {
                 {
                   title: "Croissance",
                   description:
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh",
+                    "Des outils pensés pour structurer l'activité, gagner du temps et soutenir une croissance durable.",
                 },
                 {
                   title: "Évolution",
                   description:
-                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed diam nonummy nibh",
+                    "Une base digitale évolutive, capable de s'adapter aux nouveaux usages et aux ambitions du projet.",
                 },
               ]}
             />

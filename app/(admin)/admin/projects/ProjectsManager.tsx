@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Plus, Trash2, Edit2, Save, Upload, Link as LinkIcon } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 import { uploadImage } from "@/app/actions/upload";
+import ConfirmDeleteDialog from "@/components/admin/ConfirmDeleteDialog";
 
 interface ProjectItem {
   slug: string;
@@ -26,6 +28,7 @@ export default function ProjectsManager({ initialProjects, filters }: ProjectsMa
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<ProjectItem | null>(null);
   const [selectedPreviewSlug, setSelectedPreviewSlug] = useState<string | null>(
     initialProjects.length > 0 ? initialProjects[0].slug : null
   );
@@ -142,31 +145,31 @@ export default function ProjectsManager({ initialProjects, filters }: ProjectsMa
     setStatus("idle");
   };
 
-  const handleDeleteProject = (slug: string) => {
-    if (confirm("Voulez-vous vraiment supprimer ce projet ?")) {
-      const updated = projects.filter((p) => p.slug !== slug);
-      setProjects(updated);
-      setStatus("idle");
-      if (selectedPreviewSlug === slug) {
-        setSelectedPreviewSlug(updated.length > 0 ? updated[0].slug : null);
-      }
+  const handleDeleteProject = () => {
+    if (!projectToDelete) return;
+    const updated = projects.filter((p) => p.slug !== projectToDelete.slug);
+    setProjects(updated);
+    setStatus("idle");
+    if (selectedPreviewSlug === projectToDelete.slug) {
+      setSelectedPreviewSlug(updated.length > 0 ? updated[0].slug : null);
     }
+    setProjectToDelete(null);
   };
 
   const handleAddProject = () => {
     const newProject: ProjectItem = {
       slug: "",
-      title: "Nouveau Projet",
-      description: "Description de la réalisation de l'agence.",
+      title: "",
+      description: "",
       category: filters[0] || "UI/UX",
-      imageSrc: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=800",
-      tags: ["Conception", "Tech"],
+      imageSrc: "",
+      tags: [],
       href: "",
     };
 
     setEditingSlug("NEW_PROJECT");
     setEditForm(newProject);
-    setTagsInput("Conception, Tech");
+    setTagsInput("");
     setSelectedPreviewSlug("NEW_PROJECT");
     setStatus("idle");
   };
@@ -335,7 +338,7 @@ export default function ProjectsManager({ initialProjects, filters }: ProjectsMa
                   <div className="flex flex-col sm:flex-row items-center gap-4 p-4 border border-dashed border-slate-200 rounded-lg bg-white">
                     <div className="relative w-20 h-16 rounded-xl overflow-hidden bg-slate-50 border border-slate-200 flex-shrink-0 flex items-center justify-center shadow-sm">
                       {editForm.imageSrc ? (
-                        <img src={editForm.imageSrc} alt="Preview" className="w-full h-full object-cover" />
+                        <Image src={editForm.imageSrc} alt="Preview" fill sizes="80px" className="object-cover" />
                       ) : (
                         <Upload className="text-slate-300" size={20} />
                       )}
@@ -471,7 +474,7 @@ export default function ProjectsManager({ initialProjects, filters }: ProjectsMa
                       <div className="flex flex-col sm:flex-row items-center gap-4 p-4 border border-dashed border-slate-200 rounded-lg bg-white">
                         <div className="relative w-20 h-16 rounded-xl overflow-hidden bg-slate-50 border border-slate-200 flex-shrink-0 flex items-center justify-center shadow-sm">
                           {editForm.imageSrc ? (
-                            <img src={editForm.imageSrc} alt="Preview" className="w-full h-full object-cover" />
+                            <Image src={editForm.imageSrc} alt="Preview" fill sizes="80px" className="object-cover" />
                           ) : (
                             <Upload className="text-slate-300" size={20} />
                           )}
@@ -509,12 +512,13 @@ export default function ProjectsManager({ initialProjects, filters }: ProjectsMa
                   /* Standard display */
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <img
-                        src={project.imageSrc}
-                        alt={project.title}
-                        className="w-16 h-12 rounded-lg object-cover border border-slate-200 shadow-sm cursor-pointer hover:opacity-85"
+                      <button
+                        type="button"
+                        className="relative w-16 h-12 rounded-lg overflow-hidden border border-slate-200 shadow-sm cursor-pointer hover:opacity-85"
                         onClick={() => setSelectedPreviewSlug(project.slug)}
-                      />
+                      >
+                        <Image src={project.imageSrc} alt={project.title} fill sizes="64px" className="object-cover" />
+                      </button>
                       <div>
                         <div className="flex items-center gap-2">
                           <h4 className="font-heading font-black text-sm text-slate-900 tracking-tight uppercase">
@@ -549,7 +553,7 @@ export default function ProjectsManager({ initialProjects, filters }: ProjectsMa
                         <Edit2 size={13} />
                       </button>
                       <button
-                        onClick={() => handleDeleteProject(project.slug)}
+                        onClick={() => setProjectToDelete(project)}
                         className="p-2 rounded bg-red-50 border border-red-100 hover:bg-red-100 text-red-500 transition-colors"
                         title="Supprimer"
                       >
@@ -581,11 +585,9 @@ export default function ProjectsManager({ initialProjects, filters }: ProjectsMa
               </div>
 
               <div className="space-y-4">
-                <img
-                  src={selectedProject.imageSrc}
-                  alt={selectedProject.title}
-                  className="w-full h-44 rounded-xl object-cover border border-slate-200 shadow"
-                />
+                <div className="relative w-full h-44 rounded-xl overflow-hidden border border-slate-200 shadow">
+                  <Image src={selectedProject.imageSrc} alt={selectedProject.title} fill sizes="(max-width: 1024px) 100vw, 420px" className="object-cover" />
+                </div>
 
                 <div className="space-y-1">
                   <span className="text-[8px] text-slate-400 uppercase font-bold block">Catégorie</span>
@@ -636,6 +638,16 @@ export default function ProjectsManager({ initialProjects, filters }: ProjectsMa
           )}
         </div>
       </div>
+
+      <ConfirmDeleteDialog
+        open={Boolean(projectToDelete)}
+        title="Supprimer ce projet ?"
+        description={`Le projet ${projectToDelete?.title ?? "sélectionné"} sera retiré de la liste. Pensez à publier les modifications pour l'appliquer au site.`}
+        onOpenChange={(open) => {
+          if (!open) setProjectToDelete(null);
+        }}
+        onConfirm={handleDeleteProject}
+      />
     </div>
   );
 }

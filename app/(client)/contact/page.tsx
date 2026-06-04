@@ -12,12 +12,12 @@ import SocialMedia from "@/components/client/SocialMedia";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
-    name: "",
+    lastName: "",
+    middleName: "",
+    firstName: "",
+    phone: "",
     email: "",
-    company: "",
     message: "",
-    budget: "5k-15k$",
-    service: "Next.js Development",
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -33,7 +33,7 @@ export default function ContactPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) {
+    if (!formData.lastName || !formData.firstName || !formData.phone || !formData.email || !formData.message) {
       setStatus("error");
       setErrorMessage("Veuillez remplir les champs obligatoires (*).");
       return;
@@ -47,12 +47,12 @@ export default function ContactPage() {
       if (res.success) {
         setStatus("success");
         setFormData({
-          name: "",
+          lastName: "",
+          middleName: "",
+          firstName: "",
+          phone: "",
           email: "",
-          company: "",
           message: "",
-          budget: "5k-15k$",
-          service: "Next.js Development",
         });
       } else {
         setStatus("error");
@@ -162,26 +162,65 @@ export default function ContactPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div className="space-y-2">
-                    <Label htmlFor="name" className="text-xs font-bold text-slate-700">Nom Complet *</Label>
+                    <Label htmlFor="lastName" className="text-xs font-bold text-slate-700">Nom *</Label>
                     <Input
-                      id="name"
-                      name="name"
-                      placeholder="Ex: Doxel Kanda"
-                      value={formData.name}
+                      id="lastName"
+                      name="lastName"
+                      placeholder="Ex: Kanda"
+                      value={formData.lastName}
                       onChange={handleChange}
                       required
                       className="border-slate-200 focus:border-fluxion-cobalt rounded-xl h-11 bg-slate-50/50"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="email" className="text-xs font-bold text-slate-700">Adresse Email *</Label>
+                    <Label htmlFor="middleName" className="text-xs font-bold text-slate-700">Post-nom</Label>
+                    <Input
+                      id="middleName"
+                      name="middleName"
+                      placeholder="Ex: Ngandu"
+                      value={formData.middleName}
+                      onChange={handleChange}
+                      className="border-slate-200 focus:border-fluxion-cobalt rounded-xl h-11 bg-slate-50/50"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName" className="text-xs font-bold text-slate-700">Prénom *</Label>
+                    <Input
+                      id="firstName"
+                      name="firstName"
+                      placeholder="Ex: Doxel"
+                      value={formData.firstName}
+                      onChange={handleChange}
+                      required
+                      className="border-slate-200 focus:border-fluxion-cobalt rounded-xl h-11 bg-slate-50/50"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-2">
+                    <Label htmlFor="phone" className="text-xs font-bold text-slate-700">Numéro de téléphone *</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      placeholder="Ex: +243 899 999 999"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      required
+                      className="border-slate-200 focus:border-fluxion-cobalt rounded-xl h-11 bg-slate-50/50"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email" className="text-xs font-bold text-slate-700">Adresse email *</Label>
                     <Input
                       id="email"
                       name="email"
                       type="email"
-                      placeholder="Ex: doxel@fluxion.cd"
+                      placeholder="Ex: contact@exemple.com"
                       value={formData.email}
                       onChange={handleChange}
                       required
@@ -191,23 +230,12 @@ export default function ContactPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label htmlFor="company" className="text-xs font-bold text-slate-700">Nom de l'Entreprise</Label>
-                  <Input
-                    id="company"
-                    name="company"
-                    placeholder="Ex: Fluxion SARL"
-                    value={formData.company}
-                    onChange={handleChange}
-                    className="border-slate-200 focus:border-fluxion-cobalt rounded-xl h-11 bg-slate-50/50"
-                  />
-                </div>
-                <div className="space-y-2">
                   <Label htmlFor="message" className="text-xs font-bold text-slate-700">Votre Message *</Label>
                   <Textarea
                     id="message"
                     name="message"
                     rows={4}
-                    placeholder="Décrivez brièvement les détails et la portée de votre projet..."
+                    placeholder="Expliquez-nous votre besoin, votre projet ou la raison de votre prise de contact..."
                     value={formData.message}
                     onChange={handleChange}
                     required

@@ -7,20 +7,17 @@ import { siteContent } from "@/constants/site-content";
 const steps = [
   {
     ...siteContent.approach.steps[0],
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop",
+    image: "/images/projects/meeting.jpg",
     isReverse: false,
   },
   {
     ...siteContent.approach.steps[1],
-    image:
-      "https://images.unsplash.com/photo-1586717791821-3f44a563dc4c?q=80&w=2070&auto=format&fit=crop",
+    image: "/images/projects/team-collab.jpg",
     isReverse: true,
   },
   {
     ...siteContent.approach.steps[2],
-    image:
-      "https://images.unsplash.com/photo-1555066931-4365d14bab8c?q=80&w=2070&auto=format&fit=crop",
+    image: "/images/projects/code-screen.jpg",
     isReverse: false,
   },
 ];

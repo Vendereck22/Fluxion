@@ -1,9 +1,11 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { Plus, Trash2, Edit2, Save, Upload, Link as LinkIcon } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 import { uploadImage } from "@/app/actions/upload";
+import ConfirmDeleteDialog from "@/components/admin/ConfirmDeleteDialog";
 
 interface GalleryImage {
   src: string;
@@ -32,6 +34,7 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [editingSlug, setEditingSlug] = useState<string | null>(null);
   const [isUploadingImage, setIsUploadingImage] = useState<"imageSrc" | "rightImageSrc" | "gallery" | null>(null);
+  const [productToDelete, setProductToDelete] = useState<ProductItem | null>(null);
   const [selectedPreviewSlug, setSelectedPreviewSlug] = useState<string | null>(
     initialProducts.length > 0 ? initialProducts[0].slug : null
   );
@@ -145,26 +148,26 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
     setStatus("idle");
   };
 
-  const handleDeleteProduct = (slug: string) => {
-    if (confirm("Voulez-vous vraiment supprimer ce produit ?")) {
-      const updated = products.filter((p) => p.slug !== slug);
-      setProducts(updated);
-      setStatus("idle");
-      if (selectedPreviewSlug === slug) {
-        setSelectedPreviewSlug(updated.length > 0 ? updated[0].slug : null);
-      }
+  const handleDeleteProduct = () => {
+    if (!productToDelete) return;
+    const updated = products.filter((p) => p.slug !== productToDelete.slug);
+    setProducts(updated);
+    setStatus("idle");
+    if (selectedPreviewSlug === productToDelete.slug) {
+      setSelectedPreviewSlug(updated.length > 0 ? updated[0].slug : null);
     }
+    setProductToDelete(null);
   };
 
   const handleAddProduct = () => {
     const newProduct: ProductItem = {
       slug: "",
-      name: "Nouveau produit",
+      name: "",
       onlineUrl: "",
-      shortDescription: "Description courte du produit.",
-      description: "Description complète du produit.",
+      shortDescription: "",
+      description: "",
       theme: "red",
-      imageSrc: "https://images.unsplash.com/photo-1551434678-e076c223a692?auto=format&fit=crop&q=80&w=800",
+      imageSrc: "",
       rightImageSrc: "",
       gallery: [],
     };
@@ -365,7 +368,7 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
                         {isUploadingImage === "imageSrc" ? (
                           <span className="h-4 w-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
                         ) : editForm.imageSrc ? (
-                          <img src={editForm.imageSrc} alt="Preview" className="w-full h-full object-cover" />
+                          <Image src={editForm.imageSrc} alt="Preview" fill sizes="40px" className="object-cover" />
                         ) : (
                           <Upload size={14} className="text-slate-300" />
                         )}
@@ -398,7 +401,7 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
                         {isUploadingImage === "rightImageSrc" ? (
                           <span className="h-4 w-4 border-2 border-slate-950 border-t-transparent rounded-full animate-spin" />
                         ) : editForm.rightImageSrc ? (
-                          <img src={editForm.rightImageSrc} alt="Preview" className="w-full h-full object-cover" />
+                          <Image src={editForm.rightImageSrc} alt="Preview" fill sizes="40px" className="object-cover" />
                         ) : (
                           <Upload size={14} className="text-slate-300" />
                         )}
@@ -448,7 +451,9 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
                   <div className="grid grid-cols-2 gap-3">
                     {editForm.gallery?.map((img, idx) => (
                       <div key={idx} className="flex gap-2 p-2 border border-slate-200 rounded-lg bg-white">
-                        <img src={img.src} alt={img.alt} className="w-12 h-12 rounded object-cover border flex-shrink-0" />
+                        <div className="relative w-12 h-12 rounded overflow-hidden border flex-shrink-0">
+                          <Image src={img.src} alt={img.alt} fill sizes="48px" className="object-cover" />
+                        </div>
                         <div className="flex-1 min-w-0 space-y-1.5">
                           <input
                             value={img.alt}
@@ -579,7 +584,7 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
                         <div className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg bg-white">
                           <div className="w-10 h-10 rounded bg-slate-50 flex items-center justify-center border overflow-hidden flex-shrink-0">
                             {editForm.imageSrc ? (
-                              <img src={editForm.imageSrc} alt="Preview" className="w-full h-full object-cover" />
+                              <Image src={editForm.imageSrc} alt="Preview" fill sizes="40px" className="object-cover" />
                             ) : (
                               <Upload size={14} className="text-slate-300" />
                             )}
@@ -610,7 +615,7 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
                         <div className="flex items-center gap-3 p-3 border border-slate-200 rounded-lg bg-white">
                           <div className="w-10 h-10 rounded bg-slate-50 flex items-center justify-center border overflow-hidden flex-shrink-0">
                             {editForm.rightImageSrc ? (
-                              <img src={editForm.rightImageSrc} alt="Preview" className="w-full h-full object-cover" />
+                              <Image src={editForm.rightImageSrc} alt="Preview" fill sizes="40px" className="object-cover" />
                             ) : (
                               <Upload size={14} className="text-slate-300" />
                             )}
@@ -656,7 +661,9 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
                       <div className="grid grid-cols-2 gap-3">
                         {editForm.gallery?.map((img, idx) => (
                           <div key={idx} className="flex gap-2 p-2 border border-slate-200 rounded-lg bg-white">
-                            <img src={img.src} alt={img.alt} className="w-12 h-12 rounded object-cover border flex-shrink-0" />
+                            <div className="relative w-12 h-12 rounded overflow-hidden border flex-shrink-0">
+                              <Image src={img.src} alt={img.alt} fill sizes="48px" className="object-cover" />
+                            </div>
                             <div className="flex-1 min-w-0 space-y-1.5">
                               <input
                                 value={img.alt}
@@ -680,12 +687,13 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
                   /* Standard Card */
                   <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                     <div className="flex items-center gap-4">
-                      <img
-                        src={product.imageSrc}
-                        alt={product.name}
-                        className="w-16 h-12 rounded-lg object-cover border border-slate-200 shadow-sm cursor-pointer hover:opacity-85"
+                      <button
+                        type="button"
+                        className="relative w-16 h-12 rounded-lg overflow-hidden border border-slate-200 shadow-sm cursor-pointer hover:opacity-85"
                         onClick={() => setSelectedPreviewSlug(product.slug)}
-                      />
+                      >
+                        <Image src={product.imageSrc} alt={product.name} fill sizes="64px" className="object-cover" />
+                      </button>
                       <div>
                         <div className="flex items-center gap-2">
                           <h4 className="font-heading font-black text-sm text-slate-900 tracking-tight uppercase">
@@ -722,7 +730,7 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
                         <Edit2 size={13} />
                       </button>
                       <button
-                        onClick={() => handleDeleteProduct(product.slug)}
+                        onClick={() => setProductToDelete(product)}
                         className="p-2 rounded bg-red-50 border border-red-100 hover:bg-red-100 text-red-500 transition-colors"
                         title="Supprimer"
                       >
@@ -759,20 +767,16 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <span className="text-[8px] text-slate-400 uppercase font-bold block mb-1">Image Principale</span>
-                    <img
-                      src={selectedProduct.imageSrc}
-                      alt={selectedProduct.name}
-                      className="w-full h-24 rounded-lg object-cover border border-slate-200 shadow-sm"
-                    />
+                    <div className="relative w-full h-24 rounded-lg overflow-hidden border border-slate-200 shadow-sm">
+                      <Image src={selectedProduct.imageSrc} alt={selectedProduct.name} fill sizes="(max-width: 1024px) 50vw, 180px" className="object-cover" />
+                    </div>
                   </div>
                   {selectedProduct.rightImageSrc && (
                     <div>
                       <span className="text-[8px] text-slate-400 uppercase font-bold block mb-1">Image Complémentaire</span>
-                      <img
-                        src={selectedProduct.rightImageSrc}
-                        alt="Complementary"
-                        className="w-full h-24 rounded-lg object-cover border border-slate-200 shadow-sm"
-                      />
+                      <div className="relative w-full h-24 rounded-lg overflow-hidden border border-slate-200 shadow-sm">
+                        <Image src={selectedProduct.rightImageSrc} alt="Complementary" fill sizes="(max-width: 1024px) 50vw, 180px" className="object-cover" />
+                      </div>
                     </div>
                   )}
                 </div>
@@ -796,11 +800,9 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
                     <div className="flex gap-2 overflow-x-auto pb-1">
                       {selectedProduct.gallery.map((img, idx) => (
                         <div key={idx} className="relative group flex-shrink-0">
-                          <img
-                            src={img.src}
-                            alt={img.alt}
-                            className="w-12 h-12 rounded object-cover border border-slate-200"
-                          />
+                          <div className="relative w-12 h-12 rounded overflow-hidden border border-slate-200">
+                            <Image src={img.src} alt={img.alt} fill sizes="48px" className="object-cover" />
+                          </div>
                         </div>
                       ))}
                     </div>
@@ -830,6 +832,16 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
           )}
         </div>
       </div>
+
+      <ConfirmDeleteDialog
+        open={Boolean(productToDelete)}
+        title="Supprimer ce produit ?"
+        description={`Le produit ${productToDelete?.name ?? "sélectionné"} sera retiré de la liste. Pensez à publier les modifications pour l'appliquer au site.`}
+        onOpenChange={(open) => {
+          if (!open) setProductToDelete(null);
+        }}
+        onConfirm={handleDeleteProduct}
+      />
     </div>
   );
 }

@@ -5,19 +5,27 @@ import Partners from "@/components/client/Partners";
 import FinalCTA from "@/components/client/FinalCTA";
 import WhyUs from "@/components/client/WhyUs";
 import TeamGrid from "@/components/client/TeamGrid";
+import { getPublicPartners, getPublicTeam } from "@/lib/server/public-content";
 
-export default function ClientPage() {
+export const revalidate = 300;
+
+export default async function ClientPage() {
+  const [partners, team] = await Promise.all([
+    getPublicPartners(),
+    getPublicTeam(),
+  ]);
+
   return (
     <div className="relative">
       <div className="relative">
         <VideoSection />
       </div>
       <Approach />
-      <Partners />
+      <Partners badge={partners.badge} logos={partners.logos} />
 
       <WhyUs />
       <Testimonials />
-      <TeamGrid />
+      <TeamGrid title={team.title} members={team.members} />
       <FinalCTA />
     </div>
   );

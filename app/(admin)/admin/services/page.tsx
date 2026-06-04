@@ -1,26 +1,31 @@
-import fs from "fs/promises";
-import path from "path";
 import ServicesManager from "./ServicesManager";
 import { Briefcase } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
 export const revalidate = 0;
 
 export default async function ServicesCMSPage() {
-  const filePath = path.join(process.cwd(), "constants", "site-content.json");
-  let featuresData = {
-    badge: "Nos Piliers",
-    title: "L'excellence gravée dans chaque pixel.",
-    more: "En savoir plus",
-    items: []
-  };
+  const featuresSection = await prisma.cmsSection.findUnique({
+    where: { key: "features" },
+  });
+  const serviceFeatures = await prisma.serviceFeature.findMany({
+    where: { isActive: true },
+    orderBy: { position: "asc" },
+  });
+  const sectionData =
+    featuresSection?.data && typeof featuresSection.data === "object"
+      ? (featuresSection.data as { badge?: string; title?: string; more?: string })
+      : {};
 
-  try {
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    const data = JSON.parse(fileContent);
-    featuresData = data.features || featuresData;
-  } catch (error) {
-    console.error("Failed to read site-content.json for services CMS:", error);
-  }
+  const featuresData = {
+    badge: sectionData.badge ?? "Nos Piliers",
+    title: sectionData.title ?? "L'excellence gravée dans chaque pixel.",
+    more: sectionData.more ?? "En savoir plus",
+    items: serviceFeatures.map((item) => ({
+      title: item.title,
+      description: item.description,
+    })),
+  };
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-sans">

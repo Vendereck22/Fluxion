@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
 import {
   LuLayoutDashboard,
   LuTerminal,
@@ -47,8 +48,11 @@ const NAV_ITEMS: NavItem[] = [
 export function Sidebar() {
   const pathname = usePathname();
   const router = useRouter();
+  const [loadingHref, setLoadingHref] = useState<string | null>(null);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
+    setIsLoggingOut(true);
     await logout();
     router.push("/admin/login");
   };
@@ -64,25 +68,35 @@ export function Sidebar() {
           const isActive =
             pathname === item.href ||
             (item.href !== "/admin" && pathname?.startsWith(item.href));
+          const isLoading = loadingHref === item.href && !isActive;
 
           return (
             <Link
               key={item.name}
               href={item.href}
+              aria-busy={isLoading}
+              onClick={() => {
+                if (!isActive) setLoadingHref(item.href);
+              }}
               className={cn(
                 "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm border border-transparent",
                 isActive
                   ? "bg-slate-50 text-fluxion-pink-neon border-slate-200/60 shadow-sm"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-50/50",
+                isLoading && "pointer-events-none bg-slate-50 text-slate-900 border-slate-200",
               )}
             >
-              <item.icon
-                size={20}
-                className={cn(
-                  "flex-shrink-0 transition-colors",
-                  isActive ? "text-fluxion-pink-neon" : "text-slate-400",
-                )}
-              />
+              {isLoading ? (
+                <span className="h-5 w-5 flex-shrink-0 rounded-full border-2 border-slate-300 border-t-fluxion-pink-neon animate-spin" />
+              ) : (
+                <item.icon
+                  size={20}
+                  className={cn(
+                    "flex-shrink-0 transition-colors",
+                    isActive ? "text-fluxion-pink-neon" : "text-slate-400",
+                  )}
+                />
+              )}
               <span>{item.name}</span>
             </Link>
           );
@@ -94,13 +108,18 @@ export function Sidebar() {
           type="button"
           variant="ghost"
           onClick={handleLogout}
+          disabled={isLoggingOut}
           className="group h-auto w-full justify-start gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-500 hover:bg-red-50 hover:text-red-600"
         >
-          <LuLogOut
-            size={20}
-            className="flex-shrink-0 text-slate-400 group-hover:text-red-600 transition-colors"
-          />
-          <span>Quitter l'admin</span>
+          {isLoggingOut ? (
+            <span className="h-5 w-5 flex-shrink-0 rounded-full border-2 border-red-200 border-t-red-600 animate-spin" />
+          ) : (
+            <LuLogOut
+              size={20}
+              className="flex-shrink-0 text-slate-400 group-hover:text-red-600 transition-colors"
+            />
+          )}
+          <span>{isLoggingOut ? "Déconnexion..." : "Quitter l'admin"}</span>
         </Button>
       </div>
     </div>

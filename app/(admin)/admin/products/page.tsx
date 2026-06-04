@@ -1,21 +1,34 @@
-import fs from "fs/promises";
-import path from "path";
 import ProductsManager from "./ProductsManager";
 import { LuPackage } from "react-icons/lu";
+import { prisma } from "@/lib/prisma";
 
 export const revalidate = 0;
 
 export default async function ProductsCMSPage() {
-  const filePath = path.join(process.cwd(), "constants", "site-content.json");
-  let products = [];
-
-  try {
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    const data = JSON.parse(fileContent);
-    products = data.productsPage?.items || [];
-  } catch (error) {
-    console.error("Failed to read site-content.json for products CMS:", error);
-  }
+  const products = (
+    await prisma.product.findMany({
+      where: { isPublished: true },
+      include: {
+        gallery: {
+          orderBy: { position: "asc" },
+        },
+      },
+      orderBy: { position: "asc" },
+    })
+  ).map((product) => ({
+    slug: product.slug,
+    name: product.name,
+    onlineUrl: product.onlineUrl ?? "",
+    shortDescription: product.shortDescription ?? "",
+    description: product.description,
+    theme: (product.theme === "PURPLE" ? "purple" : "red") as "red" | "purple",
+    imageSrc: product.imageSrc,
+    rightImageSrc: product.rightImageSrc ?? "",
+    gallery: product.gallery.map((image) => ({
+      src: image.src,
+      alt: image.alt,
+    })),
+  }));
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-sans">

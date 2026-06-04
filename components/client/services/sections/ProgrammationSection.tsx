@@ -1,11 +1,7 @@
 import ServiceBand from "../ServiceBand";
 
 const COPY =
-  "Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed " +
-  "diam nonummy nibh euismod tincidunt ut laoreet dolore magna " +
-  "aliquam erat volutpat. Ut wisi enim ad minim veniam, quis " +
-  "nostrud exerci tation ullamcorper suscipit lobortis nisl ut aliquip " +
-  "ex ea commodo consequat. Duis autem vel";
+  "Nous developpons des sites web, interfaces admin et produits numeriques rapides, responsives et faciles a faire evoluer. L'objectif est simple: une experience fluide pour vos utilisateurs et une base technique fiable pour votre activite.";
 
 export default function ProgrammationSection() {
   return (

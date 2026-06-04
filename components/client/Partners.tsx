@@ -1,7 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import { siteContent } from "@/constants/site-content";
 
 type PartnerLogo = {
   name: string;
@@ -9,14 +8,14 @@ type PartnerLogo = {
   website?: string;
 };
 
-export default function Partners() {
-  const partnerLogos =
-    (siteContent.partners.logos as PartnerLogo[] | undefined) ??
-    siteContent.partners.names.map<PartnerLogo>((name) => ({
-      name,
-      logoSrc: "",
-      website: "",
-    }));
+export default function Partners({
+  badge,
+  logos,
+}: {
+  badge: string;
+  logos: PartnerLogo[];
+}) {
+  const partnerLogos = logos;
   const animatedLogos = [...partnerLogos, ...partnerLogos];
 
   return (
@@ -26,7 +25,7 @@ export default function Partners() {
       <div className="container mx-auto px-6 relative z-10">
         <div className="flex flex-col items-center">
           <p id="partners-title" className="text-fluxion-rose font-bold text-[10px] uppercase tracking-[0.4em] mb-12 text-center opacity-80">
-            {siteContent.partners.badge}
+            {badge}
           </p>
 
           <div className="relative w-full overflow-hidden">

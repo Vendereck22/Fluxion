@@ -2,7 +2,13 @@
 
 import fs from "fs/promises";
 import path from "path";
-import { verifySession } from "@/app/actions/auth";
+import { getCurrentUser, verifySession } from "@/app/actions/auth";
+import { logAuditEvent } from "@/app/actions/audit";
+import { prisma } from "@/lib/prisma";
+import {
+  isCloudinaryConfigured,
+  uploadBufferToCloudinary,
+} from "@/lib/server/cloudinary";
 
 const ALLOWED_IMAGE_TYPES: Record<string, string> = {
   "image/jpeg": ".jpg",
@@ -15,6 +21,48 @@ const ALLOWED_IMAGE_TYPES: Record<string, string> = {
 
 function hasUnsafeSvgContent(svg: string) {
   return /<script[\s>]/i.test(svg) || /\son\w+=/i.test(svg) || /javascript:/i.test(svg);
+}
+
+async function recordMediaAsset(input: {
+  url: string;
+  filename: string;
+  mimeType: string;
+  sizeBytes: number;
+  width?: number;
+  height?: number;
+}) {
+  const currentUser = await getCurrentUser();
+  const uploadedById =
+    currentUser?.id && currentUser.id !== "env-super-admin"
+      ? currentUser.id
+      : undefined;
+
+  await prisma.mediaAsset.upsert({
+    where: { url: input.url },
+    create: {
+      url: input.url,
+      filename: input.filename,
+      mimeType: input.mimeType,
+      sizeBytes: input.sizeBytes,
+      width: input.width,
+      height: input.height,
+      uploadedById,
+    },
+    update: {
+      filename: input.filename,
+      mimeType: input.mimeType,
+      sizeBytes: input.sizeBytes,
+      width: input.width,
+      height: input.height,
+      uploadedById,
+    },
+  });
+
+  await logAuditEvent(
+    "MEDIA_UPLOAD",
+    `Upload média: ${input.filename}`,
+    `URL: ${input.url}, Type: ${input.mimeType}, Taille: ${input.sizeBytes} octets`
+  );
 }
 
 export async function uploadImage(formData: FormData) {
@@ -51,6 +99,34 @@ export async function uploadImage(formData: FormData) {
       }
     }
 
+    const fileExt = mappedExt;
+    const baseName = path.basename(file.name, fileExt)
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "_")
+      .slice(0, 50);
+
+    if (isCloudinaryConfigured()) {
+      const result = await uploadBufferToCloudinary(buffer, {
+        folder: "fluxion/admin",
+        publicId: `${Date.now()}-${baseName}`,
+        resourceType: "image",
+      });
+
+      await recordMediaAsset({
+        url: result.secure_url,
+        filename: `${result.public_id}.${result.format ?? fileExt.replace(".", "")}`,
+        mimeType: file.type,
+        sizeBytes: file.size,
+        width: result.width,
+        height: result.height,
+      });
+
+      return {
+        success: true,
+        url: result.secure_url,
+      };
+    }
+
 
     const uploadDir = path.join(process.cwd(), "public", "uploads");
 
@@ -58,22 +134,24 @@ export async function uploadImage(formData: FormData) {
     await fs.mkdir(uploadDir, { recursive: true });
 
 
-    const fileExt = mappedExt;
-    const baseName = path.basename(file.name, fileExt)
-      .toLowerCase()
-      .replace(/[^a-z0-9]/g, "_")
-      .slice(0, 50);
-
     const filename = `${Date.now()}-${baseName}${fileExt}`;
     const filePath = path.join(uploadDir, filename);
 
 
     await fs.writeFile(filePath, buffer);
 
+    const publicUrl = `/uploads/${filename}`;
+
+    await recordMediaAsset({
+      url: publicUrl,
+      filename,
+      mimeType: file.type,
+      sizeBytes: file.size,
+    });
 
     return {
       success: true,
-      url: `/uploads/${filename}`
+      url: publicUrl
     };
   } catch (error) {
     console.error("Failed to upload image:", error);

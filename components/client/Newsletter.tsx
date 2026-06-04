@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Mail, Send, CheckCircle2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,10 +20,23 @@ export default function Newsletter({
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const resetTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (resetTimerRef.current) {
+        clearTimeout(resetTimerRef.current);
+      }
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!email.trim()) return;
+
+    if (resetTimerRef.current) {
+      clearTimeout(resetTimerRef.current);
+    }
 
     setStatus("loading");
     setErrorMessage("");
@@ -33,6 +46,11 @@ export default function Newsletter({
       if (res.success) {
         setStatus("success");
         setEmail("");
+        resetTimerRef.current = setTimeout(() => {
+          setStatus("idle");
+          setErrorMessage("");
+          resetTimerRef.current = null;
+        }, 4000);
       } else {
         setStatus("error");
         setErrorMessage(res.error || "Une erreur s'est produite.");

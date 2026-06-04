@@ -1,21 +1,27 @@
-import fs from "fs/promises";
-import path from "path";
 import TeamManager from "./TeamManager";
 import { Users } from "lucide-react";
+import { prisma } from "@/lib/prisma";
 
 export const revalidate = 0;
 
 export default async function TeamCMSPage() {
-  const filePath = path.join(process.cwd(), "constants", "site-content.json");
-  let teamMembers = [];
-
-  try {
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    const data = JSON.parse(fileContent);
-    teamMembers = data.team?.members || [];
-  } catch (error) {
-    console.error("Failed to read site-content.json for team CMS:", error);
-  }
+  const teamMembers = (
+    await prisma.teamMember.findMany({
+      where: { isActive: true },
+      orderBy: { position: "asc" },
+    })
+  ).map((member, index) => ({
+    id: index + 1,
+    name: member.name,
+    role: member.role,
+    bio: member.bio ?? "",
+    img: member.imageSrc ?? "",
+    socials: {
+      linkedin: member.linkedin ?? "",
+      twitter: member.twitter ?? "",
+      instagram: member.instagram ?? "",
+    },
+  }));
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-sans">

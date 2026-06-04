@@ -1,18 +1,10 @@
 "use server";
 
-import path from "path";
 import { revalidatePath } from "next/cache";
 import { verifySession } from "@/app/actions/auth";
-import {
-  readJsonPreferFallback,
-  tmpDataPath,
-  writeJsonWithFallback,
-} from "@/lib/server/json-store";
-
-const SUBSCRIBERS_PATH = path.join(process.cwd(), "constants", "subscribers.json");
-const LOGS_PATH = path.join(process.cwd(), "constants", "newsletter-logs.json");
-const SUBSCRIBERS_FALLBACK_PATH = tmpDataPath("subscribers.json");
-const LOGS_FALLBACK_PATH = tmpDataPath("newsletter-logs.json");
+import { prisma } from "@/lib/prisma";
+import { NewsletterRecipientStatus, SubscriberStatus } from "@/lib/generated/prisma/client";
+import { logAuditEvent } from "@/app/actions/audit";
 
 export interface Subscriber {
   id: string;
@@ -29,25 +21,44 @@ export interface NewsletterLog {
   sentAt: string;
 }
 
-async function readSubscribers(): Promise<Subscriber[]> {
-  return readJsonPreferFallback<Subscriber[]>(
-    SUBSCRIBERS_PATH,
-    SUBSCRIBERS_FALLBACK_PATH,
-    []
-  );
+function statusToUi(status: SubscriberStatus): Subscriber["status"] {
+  return status === SubscriberStatus.UNSUBSCRIBED ? "unsubscribed" : "active";
 }
 
-async function readLogs(): Promise<NewsletterLog[]> {
-  return readJsonPreferFallback<NewsletterLog[]>(LOGS_PATH, LOGS_FALLBACK_PATH, []);
+function statusFromUi(status: Subscriber["status"]): SubscriberStatus {
+  return status === "unsubscribed" ? SubscriberStatus.UNSUBSCRIBED : SubscriberStatus.ACTIVE;
 }
 
+function mapSubscriber(subscriber: {
+  id: string;
+  email: string;
+  status: SubscriberStatus;
+  subscribedAt: Date;
+}): Subscriber {
+  return {
+    id: subscriber.id,
+    email: subscriber.email,
+    status: statusToUi(subscriber.status),
+    subscribedAt: subscriber.subscribedAt.toISOString(),
+  };
+}
+
+function revalidateNewsletterPaths() {
+  revalidatePath("/admin");
+  revalidatePath("/admin/newsletter");
+  revalidatePath("/client");
+}
 
 export async function getSubscribers(): Promise<Subscriber[]> {
   const isAdmin = await verifySession();
   if (!isAdmin) return [];
-  return readSubscribers();
-}
 
+  const subscribers = await prisma.subscriber.findMany({
+    orderBy: { subscribedAt: "desc" },
+  });
+
+  return subscribers.map(mapSubscriber);
+}
 
 export async function subscribeNewsletter(email: string) {
   try {
@@ -60,31 +71,33 @@ export async function subscribeNewsletter(email: string) {
       return { success: false, error: "Adresse email invalide." };
     }
 
-    const subscribers = await readSubscribers();
-    const existing = subscribers.find((s) => s.email === cleanEmail);
+    const existing = await prisma.subscriber.findUnique({
+      where: { email: cleanEmail },
+    });
 
-    if (existing) {
-      if (existing.status === "active") {
-        return { success: true, alreadySubscribed: true };
-      }
-      existing.status = "active";
-      existing.subscribedAt = new Date().toISOString();
-    } else {
-      const newSub: Subscriber = {
-        id: "sub-" + Math.random().toString(36).substring(2, 11),
-        email: cleanEmail,
-        status: "active",
-        subscribedAt: new Date().toISOString(),
-      };
-      subscribers.push(newSub);
+    if (existing?.status === SubscriberStatus.ACTIVE) {
+      return { success: true, alreadySubscribed: true };
     }
 
-    await writeJsonWithFallback(
-      SUBSCRIBERS_PATH,
-      SUBSCRIBERS_FALLBACK_PATH,
-      subscribers
-    );
-    revalidatePath("/admin/newsletter");
+    if (existing) {
+      await prisma.subscriber.update({
+        where: { id: existing.id },
+        data: {
+          status: SubscriberStatus.ACTIVE,
+          subscribedAt: new Date(),
+          unsubscribedAt: null,
+        },
+      });
+    } else {
+      await prisma.subscriber.create({
+        data: {
+          email: cleanEmail,
+          status: SubscriberStatus.ACTIVE,
+        },
+      });
+    }
+
+    revalidateNewsletterPaths();
     return { success: true };
   } catch (error) {
     console.error("Failed to subscribe email:", error);
@@ -92,23 +105,24 @@ export async function subscribeNewsletter(email: string) {
   }
 }
 
-
-export async function toggleSubscriberStatus(id: string, status: "active" | "unsubscribed") {
+export async function toggleSubscriberStatus(id: string, status: Subscriber["status"]) {
   try {
     const isAdmin = await verifySession();
     if (!isAdmin) return { success: false, error: "Non autorisé." };
 
-    const subscribers = await readSubscribers();
-    const idx = subscribers.findIndex((s) => s.id === id);
-    if (idx === -1) return { success: false, error: "Abonné introuvable." };
+    const subscriber = await prisma.subscriber.findUnique({ where: { id } });
+    if (!subscriber) return { success: false, error: "Abonné introuvable." };
 
-    subscribers[idx].status = status;
-    await writeJsonWithFallback(
-      SUBSCRIBERS_PATH,
-      SUBSCRIBERS_FALLBACK_PATH,
-      subscribers
-    );
-    revalidatePath("/admin/newsletter");
+    const nextStatus = statusFromUi(status);
+    await prisma.subscriber.update({
+      where: { id },
+      data: {
+        status: nextStatus,
+        unsubscribedAt: nextStatus === SubscriberStatus.UNSUBSCRIBED ? new Date() : null,
+      },
+    });
+
+    revalidateNewsletterPaths();
     return { success: true };
   } catch (error) {
     console.error("Failed to toggle subscriber status:", error);
@@ -116,20 +130,17 @@ export async function toggleSubscriberStatus(id: string, status: "active" | "uns
   }
 }
 
-
 export async function deleteSubscriber(id: string) {
   try {
     const isAdmin = await verifySession();
     if (!isAdmin) return { success: false, error: "Non autorisé." };
 
-    let subscribers = await readSubscribers();
-    subscribers = subscribers.filter((s) => s.id !== id);
-    await writeJsonWithFallback(
-      SUBSCRIBERS_PATH,
-      SUBSCRIBERS_FALLBACK_PATH,
-      subscribers
-    );
-    revalidatePath("/admin/newsletter");
+    const subscriber = await prisma.subscriber.findUnique({ where: { id } });
+    if (!subscriber) return { success: false, error: "Abonné introuvable." };
+
+    await prisma.subscriber.delete({ where: { id } });
+
+    revalidateNewsletterPaths();
     return { success: true };
   } catch (error) {
     console.error("Failed to delete subscriber:", error);
@@ -137,42 +148,89 @@ export async function deleteSubscriber(id: string) {
   }
 }
 
-
 export async function getNewsletterLogs(): Promise<NewsletterLog[]> {
   const isAdmin = await verifySession();
   if (!isAdmin) return [];
-  return readLogs();
-}
 
+  const campaigns = await prisma.newsletterCampaign.findMany({
+    include: {
+      recipients: {
+        orderBy: { createdAt: "asc" },
+      },
+    },
+    orderBy: { sentAt: "desc" },
+  });
+
+  return campaigns.map((campaign) => ({
+    id: campaign.id,
+    subject: campaign.subject,
+    message: campaign.message,
+    recipients: campaign.recipients.map((recipient) => recipient.email),
+    sentAt: campaign.sentAt.toISOString(),
+  }));
+}
 
 export async function sendNewsletter(subject: string, message: string, recipientEmails: string[]) {
   try {
     const isAdmin = await verifySession();
     if (!isAdmin) return { success: false, error: "Non autorisé." };
 
-    if (!subject.trim() || !message.trim()) {
+    const cleanSubject = subject.trim();
+    const cleanMessage = message.trim();
+    const cleanRecipients = Array.from(
+      new Set(recipientEmails.map((email) => email.trim().toLowerCase()).filter(Boolean))
+    );
+
+    if (!cleanSubject || !cleanMessage) {
       return { success: false, error: "Le sujet et le message ne peuvent pas être vides." };
     }
-    if (recipientEmails.length === 0) {
+    if (cleanRecipients.length === 0) {
       return { success: false, error: "Aucun destinataire sélectionné." };
     }
 
-    const logs = await readLogs();
-    const newCampaignLog: NewsletterLog = {
-      id: "campaign-" + Math.random().toString(36).substring(2, 11),
-      subject: subject.trim(),
-      message: message.trim(),
-      recipients: recipientEmails,
-      sentAt: new Date().toISOString(),
+    const subscribers = await prisma.subscriber.findMany({
+      where: {
+        email: { in: cleanRecipients },
+        status: SubscriberStatus.ACTIVE,
+      },
+    });
+    const subscriberByEmail = new Map(subscribers.map((subscriber) => [subscriber.email, subscriber]));
+
+    const campaign = await prisma.newsletterCampaign.create({
+      data: {
+        subject: cleanSubject,
+        message: cleanMessage,
+        recipients: {
+          create: cleanRecipients.map((email) => ({
+            email,
+            subscriberId: subscriberByEmail.get(email)?.id,
+            status: subscriberByEmail.has(email)
+              ? NewsletterRecipientStatus.SENT
+              : NewsletterRecipientStatus.SKIPPED,
+            error: subscriberByEmail.has(email) ? null : "Destinataire non actif ou introuvable.",
+          })),
+        },
+      },
+      include: { recipients: true },
+    });
+
+    await logAuditEvent(
+      "NEWSLETTER_SEND",
+      `Newsletter envoyée: ${cleanSubject}`,
+      `${campaign.recipients.length} destinataire(s)`
+    );
+
+    revalidateNewsletterPaths();
+    return {
+      success: true,
+      log: {
+        id: campaign.id,
+        subject: campaign.subject,
+        message: campaign.message,
+        recipients: campaign.recipients.map((recipient) => recipient.email),
+        sentAt: campaign.sentAt.toISOString(),
+      } satisfies NewsletterLog,
     };
-
-    logs.push(newCampaignLog);
-
-    logs.sort((a, b) => new Date(b.sentAt).getTime() - new Date(a.sentAt).getTime());
-
-    await writeJsonWithFallback(LOGS_PATH, LOGS_FALLBACK_PATH, logs);
-    revalidatePath("/admin/newsletter");
-    return { success: true };
   } catch (error) {
     console.error("Failed to send newsletter:", error);
     return { success: false, error: "Erreur serveur lors de l'envoi." };

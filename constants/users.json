@@ -1,12 +1,1 @@
-[
-  {
-    "id": "super-admin",
-    "email": "admin@fluxion.cd",
-    "name": "Super Admin Principal",
-    "role": "super_admin",
-    "salt": "",
-    "passwordHash": "",
-    "createdAt": "2026-06-03T12:46:06.717Z",
-    "avatarUrl": ""
-  }
-]
+[]

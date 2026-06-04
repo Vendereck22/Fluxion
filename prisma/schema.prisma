@@ -1,104 +1,319 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// Fluxion backend schema.
+// Prisma 7 reads DATABASE_URL from prisma.config.ts.
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
 
 datasource db {
   provider = "postgresql"
 }
 
-generator client {
-  provider = "prisma-client-js"
+enum AdminRole {
+  SUPER_ADMIN @map("super_admin")
+  ADMIN       @map("admin")
+  EDITOR      @map("editor")
 }
 
-model User {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  password  String   // Mot de passe hashé
-  name      String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum AuditActionType {
+  LOGIN
+  LOGOUT
+  CMS_UPDATE
+  USER_CREATE
+  USER_DELETE
+  MEDIA_UPLOAD
+  LEAD_UPDATE
+  NEWSLETTER_SEND
 }
 
-model TeamMember {
-  id        Int      @id @default(autoincrement())
-  name      String
-  role      String
-  bio       String
-  img       String
-  linkedin  String?
-  twitter   String?
-  instagram String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+enum LeadStatus {
+  NEW       @map("new")
+  CONTACTED @map("contacted")
+  ARCHIVED  @map("archived")
+}
+
+enum SubscriberStatus {
+  ACTIVE       @map("active")
+  UNSUBSCRIBED @map("unsubscribed")
+}
+
+enum NewsletterRecipientStatus {
+  SENT
+  FAILED
+  SKIPPED
+}
+
+enum ProductTheme {
+  RED    @map("red")
+  PURPLE @map("purple")
+}
+
+model AdminUser {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  firstName    String?
+  middleName   String?
+  lastName     String?
+  role         AdminRole @default(ADMIN)
+  salt         String?
+  passwordHash String?
+  avatarUrl    String?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  lastLoginAt  DateTime?
+  deletedAt    DateTime?
+
+  sessions           AdminSession[]
+  auditLogs          AuditLog[]
+  uploadedMedia      MediaAsset[]
+  updatedCmsSections CmsSection[]
+  createdCampaigns   NewsletterCampaign[]
+  leadNotes          LeadNote[]
+
+  @@index([role])
+  @@index([deletedAt])
+}
+
+model AdminSession {
+  id        String    @id @default(cuid())
+  tokenHash String    @unique
+  userId    String?
+  userEmail String
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  revokedAt DateTime?
+
+  user AdminUser? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([userEmail])
+  @@index([expiresAt])
+}
+
+model AuditLog {
+  id         String          @id @default(cuid())
+  timestamp  DateTime        @default(now())
+  userEmail  String
+  actionType AuditActionType
+  message    String
+  details    String?         @db.Text
+  ipAddress  String?
+  userId     String?
+
+  user AdminUser? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([timestamp])
+  @@index([userEmail])
+  @@index([actionType])
 }
 
 model Lead {
+  id         String     @id @default(cuid())
+  name       String
+  firstName  String?
+  lastName   String?
+  middleName String?
+  email      String
+  phone      String?
+  company    String?
+  message    String     @db.Text
+  budget     String?
+  service    String?
+  status     LeadStatus @default(NEW)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  archivedAt DateTime?
+
+  notes LeadNote[]
+
+  @@index([email])
+  @@index([phone])
+  @@index([status])
+  @@index([createdAt])
+}
+
+model LeadNote {
   id        String   @id @default(cuid())
-  name      String
-  email     String
-  company   String?
-  message   String
-  budget    String?
-  service   String?
-  status    String   @default("new") // "new" | "contacted" | "archived"
+  leadId    String
+  authorId  String?
+  content   String   @db.Text
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  lead   Lead       @relation(fields: [leadId], references: [id], onDelete: Cascade)
+  author AdminUser? @relation(fields: [authorId], references: [id], onDelete: SetNull)
+
+  @@index([leadId])
 }
 
 model Subscriber {
-  id           String   @id @default(cuid())
-  email        String   @unique
-  status       String   @default("active") // "active" | "unsubscribed"
-  subscribedAt DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id             String           @id @default(cuid())
+  email          String           @unique
+  status         SubscriberStatus @default(ACTIVE)
+  subscribedAt   DateTime         @default(now())
+  unsubscribedAt DateTime?
+  updatedAt      DateTime         @updatedAt
+
+  recipients NewsletterRecipient[]
+
+  @@index([status])
+  @@index([subscribedAt])
 }
 
 model NewsletterCampaign {
-  id         String   @id @default(cuid())
-  subject    String
-  message    String
-  recipients String[] // Liste des adresses emails cibles
-  sentAt     DateTime @default(now())
+  id          String   @id @default(cuid())
+  subject     String
+  message     String   @db.Text
+  sentAt      DateTime @default(now())
+  createdById String?
+
+  createdBy  AdminUser?            @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  recipients NewsletterRecipient[]
+
+  @@index([sentAt])
+}
+
+model NewsletterRecipient {
+  id           String                    @id @default(cuid())
+  campaignId   String
+  subscriberId String?
+  email        String
+  status       NewsletterRecipientStatus @default(SENT)
+  error        String?
+  createdAt    DateTime                  @default(now())
+
+  campaign   NewsletterCampaign @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  subscriber Subscriber?        @relation(fields: [subscriberId], references: [id], onDelete: SetNull)
+
+  @@unique([campaignId, email])
+  @@index([subscriberId])
+}
+
+model CmsSection {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  title       String?
+  data        Json
+  updatedAt   DateTime @updatedAt
+  updatedById String?
+
+  updatedBy AdminUser? @relation(fields: [updatedById], references: [id], onDelete: SetNull)
+
+  @@index([updatedAt])
+}
+
+model ServiceFeature {
+  id          String   @id @default(cuid())
+  title       String
+  description String   @db.Text
+  moreLabel   String?
+  position    Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([position])
+  @@index([isActive])
 }
 
 model Partner {
   id        String   @id @default(cuid())
-  name      String   @unique
+  name      String
+  logoSrc   String
+  website   String?
+  position  Int      @default(0)
+  isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([position])
+  @@index([isActive])
+}
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  bio       String?  @db.Text
+  imageSrc  String?
+  linkedin  String?
+  twitter   String?
+  instagram String?
+  position  Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([position])
+  @@index([isActive])
 }
 
 model Project {
   id          String   @id @default(cuid())
   slug        String   @unique
   title       String
-  description String
+  description String   @db.Text
   category    String
   imageSrc    String
-  tags        String[]
   href        String?
+  tags        String[] @default([])
+  position    Int      @default(0)
+  isPublished Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+
+  @@index([category])
+  @@index([position])
+  @@index([isPublished])
 }
 
 model Product {
-  id               String   @id @default(cuid())
-  slug             String   @unique
+  id               String       @id @default(cuid())
+  slug             String       @unique
   name             String
   onlineUrl        String?
-  shortDescription String
-  description      String
-  theme            String   @default("blue")
+  shortDescription String?
+  description      String       @db.Text
+  theme            ProductTheme @default(RED)
   imageSrc         String
   rightImageSrc    String?
-  gallery          Json?
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @updatedAt
+  position         Int          @default(0)
+  isPublished      Boolean      @default(true)
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  gallery ProductGalleryImage[]
+
+  @@index([position])
+  @@index([isPublished])
 }
 
-model SiteContent {
+model ProductGalleryImage {
   id        String   @id @default(cuid())
-  key       String   @unique // ex: "hero", "features-header", "aboutPage"
-  value     Json     // Contenu JSON structuré
+  productId String
+  src       String
+  alt       String
+  position  Int      @default(0)
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, position])
+}
+
+model MediaAsset {
+  id           String   @id @default(cuid())
+  url          String   @unique
+  filename     String
+  mimeType     String
+  sizeBytes    Int
+  width        Int?
+  height       Int?
+  uploadedById String?
+  createdAt    DateTime @default(now())
+
+  uploadedBy AdminUser? @relation(fields: [uploadedById], references: [id], onDelete: SetNull)
+
+  @@index([mimeType])
+  @@index([createdAt])
 }

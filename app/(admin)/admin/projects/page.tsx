@@ -1,27 +1,26 @@
-import fs from "fs/promises";
-import path from "path";
 import ProjectsManager from "./ProjectsManager";
 import { LuLayers } from "react-icons/lu";
+import { prisma } from "@/lib/prisma";
 
 export const revalidate = 0;
 
 export default async function ProjectsCMSPage() {
-  const filePath = path.join(process.cwd(), "constants", "site-content.json");
-  let projects = [];
-  let filters = ["Identite visuelle", "UI/UX", "Developpement", "Video"];
+  const projects = (
+    await prisma.project.findMany({
+      where: { isPublished: true },
+      orderBy: { position: "asc" },
+    })
+  ).map((project) => ({
+    slug: project.slug,
+    title: project.title,
+    description: project.description,
+    category: project.category,
+    imageSrc: project.imageSrc,
+    tags: project.tags,
+    href: project.href ?? `/nos-projets/${project.slug}`,
+  }));
 
-  try {
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    const data = JSON.parse(fileContent);
-    projects = data.projectsPage?.items || [];
-    
-    // Filter out "Tous" since it is a client-side utility filter
-    if (data.projectsPage?.filters) {
-      filters = data.projectsPage.filters.filter((f: string) => f !== "Tous");
-    }
-  } catch (error) {
-    console.error("Failed to read site-content.json for projects CMS:", error);
-  }
+  const filters = Array.from(new Set(projects.map((project) => project.category))).filter(Boolean);
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-sans">

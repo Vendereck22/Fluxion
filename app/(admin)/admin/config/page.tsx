@@ -12,8 +12,8 @@ export default async function ConfigPage() {
     socialBadge: "Suivez l'agence",
     location: "Kinshasa, RD Congo",
     email: "contact@fluxion.cd",
-    privacy: "Privacy",
-    terms: "Terms"
+    privacy: "Confidentialité",
+    terms: "Conditions"
   };
 
   let socialData = {

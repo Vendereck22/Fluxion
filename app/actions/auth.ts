@@ -1,27 +1,35 @@
 "use server";
 
 import { cookies } from "next/headers";
-import crypto from "crypto";
-import path from "path";
-import {
-  readJsonPreferFallback,
-  tmpDataPath,
-  writeJsonWithFallback,
-} from "@/lib/server/json-store";
+import { AuthError } from "next-auth";
+import { auth, signIn, signOut } from "@/auth";
+import { prisma } from "@/lib/prisma";
+import { AdminRole, type AdminUser } from "@/lib/generated/prisma/client";
+import { hashPassword, verifyPassword } from "@/lib/server/password";
 import { logAuditEvent } from "@/app/actions/audit";
 
 const ADMIN_EMAIL = process.env.FLUXION_ADMIN_EMAIL ?? "admin@fluxion.cd";
 const ADMIN_PASSWORD = process.env.FLUXION_ADMIN_PASSWORD ?? "fluxion2026";
 
-const USERS_PATH = path.join(process.cwd(), "constants", "users.json");
-const USERS_FALLBACK_PATH = tmpDataPath("users.json");
+const COOKIE_MAX_AGE = 60 * 60 * 24;
+
+type LoginUser = {
+  id: string;
+  email: string;
+  name: string;
+  avatarUrl?: string | null;
+  firstName?: string | null;
+  middleName?: string | null;
+  lastName?: string | null;
+  role?: string | null;
+};
 
 export interface UserAccount {
   id: string;
   email: string;
   name: string;
   firstName?: string;
-  middleName?: string; // post-nom
+  middleName?: string;
   lastName?: string;
   role: string;
   salt: string;
@@ -30,16 +38,90 @@ export interface UserAccount {
   avatarUrl?: string;
 }
 
+function roleFromForm(role: string): AdminRole {
+  if (role === "super_admin" || role === "SUPER_ADMIN") return AdminRole.SUPER_ADMIN;
+  if (role === "editor" || role === "EDITOR") return AdminRole.EDITOR;
+  return AdminRole.ADMIN;
+}
+
+function roleToUi(role: AdminRole | string) {
+  if (role === AdminRole.SUPER_ADMIN || role === "SUPER_ADMIN") return "super_admin";
+  if (role === AdminRole.EDITOR || role === "EDITOR") return "editor";
+  return "admin";
+}
+
+function mapDbUser(user: AdminUser): UserAccount {
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    firstName: user.firstName ?? "",
+    middleName: user.middleName ?? "",
+    lastName: user.lastName ?? "",
+    role: roleToUi(user.role),
+    salt: user.salt ?? "",
+    passwordHash: user.passwordHash ?? "",
+    createdAt: user.createdAt.toISOString(),
+    avatarUrl: user.avatarUrl ?? "",
+  };
+}
+
+async function setLegacyUserCookies(user: LoginUser) {
+  const cookieStore = await cookies();
+  const cookieOptions = {
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "lax" as const,
+    maxAge: COOKIE_MAX_AGE,
+    path: "/",
+  };
+
+  cookieStore.set("fluxion_session", "active", {
+    ...cookieOptions,
+    httpOnly: true,
+  });
+  cookieStore.set("fluxion_user_email", user.email, {
+    ...cookieOptions,
+    httpOnly: false,
+  });
+  cookieStore.set("fluxion_user_name", user.name, {
+    ...cookieOptions,
+    httpOnly: false,
+  });
+
+  const optionalCookies = [
+    ["fluxion_user_avatar", user.avatarUrl],
+    ["fluxion_user_firstname", user.firstName],
+    ["fluxion_user_middlename", user.middleName],
+    ["fluxion_user_lastname", user.lastName],
+  ] as const;
+
+  for (const [key, value] of optionalCookies) {
+    if (value) {
+      cookieStore.set(key, value, { ...cookieOptions, httpOnly: false });
+    } else {
+      cookieStore.delete(key);
+    }
+  }
+}
+
+async function getSessionEmail() {
+  const authSession = await auth();
+  if (authSession?.user?.email) return authSession.user.email;
+
+  const cookieStore = await cookies();
+  return cookieStore.get("fluxion_user_email")?.value ?? null;
+}
+
 export async function getUsersList(): Promise<UserAccount[]> {
   try {
-    const list = await readJsonPreferFallback<UserAccount[]>(
-      USERS_PATH,
-      USERS_FALLBACK_PATH,
-      []
-    );
-    return list;
+    const users = await prisma.adminUser.findMany({
+      where: { deletedAt: null },
+      orderBy: [{ role: "asc" }, { createdAt: "asc" }],
+    });
+
+    return users.map(mapDbUser);
   } catch (error) {
-    console.error("Failed to read users.json:", error);
+    console.error("Failed to read admin users from Prisma:", error);
     return [];
   }
 }
@@ -60,31 +142,36 @@ export async function createUserAction(formData: FormData) {
       return { success: false, error: "Tous les champs sont obligatoires." };
     }
 
-    const users = await getUsersList();
-    const exists = users.some((u) => u.email.toLowerCase() === email);
-    if (exists || email === ADMIN_EMAIL.toLowerCase()) {
+    const exists = await prisma.adminUser.findUnique({ where: { email } });
+    if (exists && !exists.deletedAt) {
       return { success: false, error: "Un utilisateur avec cet email existe déjà." };
     }
 
-    const salt = crypto.randomBytes(16).toString("hex");
-    const passwordHash = crypto.pbkdf2Sync(password, salt, 1000, 64, "sha512").toString("hex");
-
-    const newUser: UserAccount = {
-      id: Date.now().toString(),
-      email,
-      name,
-      role,
-      salt,
-      passwordHash,
-      createdAt: new Date().toISOString(),
-    };
-
-    users.push(newUser);
-    await writeJsonWithFallback(USERS_PATH, USERS_FALLBACK_PATH, users);
+    const passwordHash = await hashPassword(password);
+    const savedUser = exists
+      ? await prisma.adminUser.update({
+          where: { id: exists.id },
+          data: {
+            name,
+            role: roleFromForm(role),
+            salt: "bcrypt",
+            passwordHash,
+            deletedAt: null,
+          },
+        })
+      : await prisma.adminUser.create({
+          data: {
+            email,
+            name,
+            role: roleFromForm(role),
+            salt: "bcrypt",
+            passwordHash,
+          },
+        });
 
     await logAuditEvent("USER_CREATE", `Création du compte administrateur: ${email}`, `Nom: ${name}, Rôle: ${role}`);
 
-    return { success: true };
+    return { success: true, user: mapDbUser(savedUser) };
   } catch (error) {
     console.error("Failed to create user:", error);
     return { success: false, error: "Erreur lors de la création du compte." };
@@ -98,14 +185,27 @@ export async function deleteUserAction(id: string) {
       return { success: false, error: "Non autorisé." };
     }
 
-    const users = await getUsersList();
-    const targetUser = users.find((u) => u.id === id);
-    const userDesc = targetUser ? `${targetUser.email} (${targetUser.name})` : `ID: ${id}`;
+    const currentEmail = await getSessionEmail();
+    const targetUser = await prisma.adminUser.findUnique({ where: { id } });
+    if (!targetUser || targetUser.deletedAt) {
+      return { success: false, error: "Utilisateur introuvable." };
+    }
 
-    const updated = users.filter((u) => u.id !== id);
-    await writeJsonWithFallback(USERS_PATH, USERS_FALLBACK_PATH, updated);
+    if (currentEmail?.toLowerCase() === targetUser.email.toLowerCase()) {
+      return { success: false, error: "Vous ne pouvez pas supprimer votre propre compte." };
+    }
 
-    await logAuditEvent("USER_DELETE", `Suppression du compte administrateur: ${userDesc}`, `ID: ${id}`);
+    const activeAdmins = await prisma.adminUser.count({ where: { deletedAt: null } });
+    if (activeAdmins <= 1) {
+      return { success: false, error: "Impossible de supprimer le dernier administrateur actif." };
+    }
+
+    await prisma.adminUser.update({
+      where: { id },
+      data: { deletedAt: new Date() },
+    });
+
+    await logAuditEvent("USER_DELETE", `Suppression du compte administrateur: ${targetUser.email} (${targetUser.name})`, `ID: ${id}`);
 
     return { success: true };
   } catch (error) {
@@ -120,109 +220,50 @@ export async function login(formData: FormData) {
   const email = typeof emailRaw === "string" ? emailRaw.trim().toLowerCase() : "";
   const password = typeof passwordRaw === "string" ? passwordRaw : "";
 
-  let matchedUser = null;
+  let matchedUser: LoginUser | null = null;
 
   try {
-    const users = await getUsersList();
-    const user = users.find((u) => u.email.toLowerCase() === email);
-    if (user) {
-      if (user.salt && user.passwordHash) {
-        const hash = crypto.pbkdf2Sync(password, user.salt, 1000, 64, "sha512").toString("hex");
-        if (hash === user.passwordHash) {
-          matchedUser = {
-            email: user.email,
-            name: user.name,
-            avatarUrl: user.avatarUrl,
-            firstName: user.firstName || "",
-            middleName: user.middleName || "",
-            lastName: user.lastName || "",
-          };
-        }
-      } else if (email === ADMIN_EMAIL.toLowerCase() && password === ADMIN_PASSWORD) {
-        matchedUser = {
-          email: user.email,
-          name: user.name,
-          avatarUrl: user.avatarUrl,
-          firstName: user.firstName || "",
-          middleName: user.middleName || "",
-          lastName: user.lastName || "",
-        };
+    const dbUser = await prisma.adminUser.findUnique({ where: { email } });
+
+    if (dbUser?.passwordHash && !dbUser.deletedAt) {
+      const isValidPassword = await verifyPassword(password, {
+        hash: dbUser.passwordHash,
+        salt: dbUser.salt,
+      });
+
+      if (isValidPassword) {
+        matchedUser = dbUser;
       }
-    } else if (email === ADMIN_EMAIL.toLowerCase() && password === ADMIN_PASSWORD) {
+    }
+
+    if (!matchedUser && email === ADMIN_EMAIL.toLowerCase() && password === ADMIN_PASSWORD) {
       matchedUser = {
+        id: "env-super-admin",
         email: ADMIN_EMAIL,
-        name: "Super Administrateur",
-        firstName: "",
-        middleName: "",
-        lastName: "",
+        name: "Fluxion Admin",
+        role: "super_admin",
       };
     }
   } catch (e) {
-    console.error("Error fetching user list during login:", e);
+    console.error("Error fetching admin user during login:", e);
   }
 
   if (matchedUser) {
-    const cookieStore = await cookies();
-    cookieStore.set("fluxion_session", "active", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24,
-      path: "/",
-    });
-    cookieStore.set("fluxion_user_email", matchedUser.email, {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24,
-      path: "/",
-    });
-    cookieStore.set("fluxion_user_name", matchedUser.name, {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24,
-      path: "/",
-    });
-
-    if (matchedUser.avatarUrl) {
-      cookieStore.set("fluxion_user_avatar", matchedUser.avatarUrl, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24,
-        path: "/",
+    try {
+      await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
       });
+    } catch (error) {
+      if (error instanceof AuthError) {
+        console.warn("Auth.js sign-in skipped:", error.type);
+      } else {
+        console.warn("Auth.js sign-in skipped:", error);
+      }
     }
 
-    if (matchedUser.firstName) {
-      cookieStore.set("fluxion_user_firstname", matchedUser.firstName, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24,
-        path: "/",
-      });
-    }
-    if (matchedUser.middleName) {
-      cookieStore.set("fluxion_user_middlename", matchedUser.middleName, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24,
-        path: "/",
-      });
-    }
-    if (matchedUser.lastName) {
-      cookieStore.set("fluxion_user_lastname", matchedUser.lastName, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24,
-        path: "/",
-      });
-    }
-
+    await setLegacyUserCookies(matchedUser);
     await logAuditEvent("LOGIN", "Connexion réussie de l'administrateur", undefined, matchedUser.email);
 
     return { success: true };
@@ -236,6 +277,12 @@ export async function login(formData: FormData) {
 export async function logout() {
   const cookieStore = await cookies();
   const email = cookieStore.get("fluxion_user_email")?.value;
+
+  try {
+    await signOut({ redirect: false });
+  } catch (error) {
+    console.warn("Auth.js sign-out skipped:", error);
+  }
 
   cookieStore.delete("fluxion_session");
   cookieStore.delete("fluxion_user_email");
@@ -251,9 +298,12 @@ export async function logout() {
 }
 
 export async function verifySession() {
+  const authSession = await auth();
+  if (authSession?.user?.email) return true;
+
   const cookieStore = await cookies();
-  const session = cookieStore.get("fluxion_session");
-  return session?.value === "active";
+  const legacySession = cookieStore.get("fluxion_session");
+  return legacySession?.value === "active";
 }
 
 export async function getCurrentUser() {
@@ -261,18 +311,16 @@ export async function getCurrentUser() {
     const isAdmin = await verifySession();
     if (!isAdmin) return null;
 
-    const cookieStore = await cookies();
-    const email = cookieStore.get("fluxion_user_email")?.value;
+    const email = await getSessionEmail();
     if (!email) return null;
 
-    const users = await getUsersList();
-    const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+    const user = await prisma.adminUser.findUnique({ where: { email: email.toLowerCase() } });
 
     if (!user && email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
       return {
-        id: "super-admin",
+        id: "env-super-admin",
         email: ADMIN_EMAIL,
-        name: "Super Administrateur",
+        name: "Fluxion Admin",
         firstName: "",
         middleName: "",
         lastName: "",
@@ -281,7 +329,7 @@ export async function getCurrentUser() {
       };
     }
 
-    if (user) {
+    if (user && !user.deletedAt) {
       return {
         id: user.id,
         email: user.email,
@@ -289,7 +337,7 @@ export async function getCurrentUser() {
         firstName: user.firstName || "",
         middleName: user.middleName || "",
         lastName: user.lastName || "",
-        role: user.role,
+        role: roleToUi(user.role),
         avatarUrl: user.avatarUrl || "",
       };
     }
@@ -326,144 +374,80 @@ export async function updateProfile({
       return { success: false, error: "Non autorisé." };
     }
 
-    const cookieStore = await cookies();
-    const email = cookieStore.get("fluxion_user_email")?.value;
+    const email = await getSessionEmail();
     if (!email) {
       return { success: false, error: "Utilisateur non trouvé." };
     }
 
-    const users = await getUsersList();
-    let user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
+    let user = await prisma.adminUser.findUnique({ where: { email: email.toLowerCase() } });
 
     if (!user && email.toLowerCase() === ADMIN_EMAIL.toLowerCase()) {
-      user = {
-        id: "super-admin",
-        email: ADMIN_EMAIL,
-        name: "Super Administrateur",
-        role: "super_admin",
-        salt: "",
-        passwordHash: "",
-        createdAt: new Date().toISOString(),
-      };
-      users.push(user);
+      const passwordHash = await hashPassword(ADMIN_PASSWORD);
+      user = await prisma.adminUser.create({
+        data: {
+          email: ADMIN_EMAIL.toLowerCase(),
+          name: "Fluxion Admin",
+          role: AdminRole.SUPER_ADMIN,
+          salt: "bcrypt",
+          passwordHash,
+        },
+      });
     }
 
-    if (!user) {
+    if (!user || user.deletedAt) {
       return { success: false, error: "Utilisateur introuvable." };
     }
+
+    const updateData: Partial<AdminUser> = {
+      name: name.trim(),
+      firstName: firstName?.trim() ?? "",
+      middleName: middleName?.trim() ?? "",
+      lastName: lastName?.trim() ?? "",
+      avatarUrl: avatarUrl ?? user.avatarUrl,
+    };
 
     if (newPassword) {
       if (!currentPassword) {
         return { success: false, error: "Le mot de passe actuel est requis." };
       }
 
-      let currentHashValid = false;
-      if (user.salt === "" && user.passwordHash === "") {
-        currentHashValid = currentPassword === ADMIN_PASSWORD;
-      } else {
-        const currentHash = crypto.pbkdf2Sync(currentPassword, user.salt, 1000, 64, "sha512").toString("hex");
-        currentHashValid = currentHash === user.passwordHash;
-      }
+      const currentHashValid = await verifyPassword(currentPassword, {
+        hash: user.passwordHash,
+        salt: user.salt,
+      });
 
       if (!currentHashValid) {
         return { success: false, error: "Le mot de passe actuel est incorrect." };
       }
 
-      const salt = crypto.randomBytes(16).toString("hex");
-      const passwordHash = crypto.pbkdf2Sync(newPassword, salt, 1000, 64, "sha512").toString("hex");
-      user.salt = salt;
-      user.passwordHash = passwordHash;
+      updateData.salt = "bcrypt";
+      updateData.passwordHash = await hashPassword(newPassword);
     }
 
-    user.name = name.trim();
-    if (firstName !== undefined) user.firstName = firstName.trim();
-    if (middleName !== undefined) user.middleName = middleName.trim();
-    if (lastName !== undefined) user.lastName = lastName.trim();
-    if (avatarUrl !== undefined) user.avatarUrl = avatarUrl;
-
-    // Update email if provided and changed
     const emailChanged = newEmail && newEmail.trim().toLowerCase() !== email.toLowerCase();
     if (emailChanged) {
-      const conflict = users.some(
-        (u) => u.id !== user!.id && u.email.toLowerCase() === newEmail!.trim().toLowerCase()
-      );
-      if (conflict) {
+      const cleanEmail = newEmail.trim().toLowerCase();
+      const conflict = await prisma.adminUser.findUnique({ where: { email: cleanEmail } });
+      if (conflict && conflict.id !== user.id && !conflict.deletedAt) {
         return { success: false, error: "Cet email est déjà utilisé par un autre compte." };
       }
-      user.email = newEmail!.trim().toLowerCase();
+      updateData.email = cleanEmail;
     }
 
-    await writeJsonWithFallback(USERS_PATH, USERS_FALLBACK_PATH, users);
-
-    const cookieEmail = emailChanged ? user.email : email;
-    cookieStore.set("fluxion_user_email", cookieEmail, {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24,
-      path: "/",
-    });
-    cookieStore.set("fluxion_user_name", user.name, {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      maxAge: 60 * 60 * 24,
-      path: "/",
+    const savedUser = await prisma.adminUser.update({
+      where: { id: user.id },
+      data: updateData,
     });
 
-    if (user.avatarUrl) {
-      cookieStore.set("fluxion_user_avatar", user.avatarUrl, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24,
-        path: "/",
-      });
-    }
-
-    if (user.firstName) {
-      cookieStore.set("fluxion_user_firstname", user.firstName, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24,
-        path: "/",
-      });
-    } else {
-      cookieStore.delete("fluxion_user_firstname");
-    }
-    if (user.middleName) {
-      cookieStore.set("fluxion_user_middlename", user.middleName, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24,
-        path: "/",
-      });
-    } else {
-      cookieStore.delete("fluxion_user_middlename");
-    }
-    if (user.lastName) {
-      cookieStore.set("fluxion_user_lastname", user.lastName, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        maxAge: 60 * 60 * 24,
-        path: "/",
-      });
-    } else {
-      cookieStore.delete("fluxion_user_lastname");
-    }
+    await setLegacyUserCookies(savedUser);
 
     await logAuditEvent(
       "CMS_UPDATE",
       `Mise à jour du profil de: ${email}`,
-      `Nom: ${user.name}${
-        emailChanged ? `, Nouvel email: ${user.email}` : ""
-      }`
+      `Nom: ${savedUser.name}${emailChanged ? `, Nouvel email: ${savedUser.email}` : ""}`
     );
 
-    return { success: true, newEmail: emailChanged ? user.email : undefined };
+    return { success: true, newEmail: emailChanged ? savedUser.email : undefined };
   } catch (error) {
     console.error("Failed to update profile:", error);
     return { success: false, error: "Erreur lors de la mise à jour." };
