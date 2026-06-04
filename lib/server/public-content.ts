@@ -105,11 +105,13 @@ function fallbackPublicPartners() {
 
   return {
     badge: stringValue(siteContent.partners?.badge, "Ils propulsent leur vision avec nous"),
-    logos: logos.map((partner) => ({
-      name: stringValue(partner.name, "Partenaire"),
-      logoSrc: stringValue(partner.logoSrc, "/images/partners/apple.svg"),
-      website: stringValue(partner.website) || undefined,
-    })),
+    logos: logos
+      .map((partner) => ({
+        name: stringValue(partner.name, "Partenaire"),
+        logoSrc: stringValue(partner.logoSrc),
+        website: stringValue(partner.website) || undefined,
+      }))
+      .filter((partner) => partner.logoSrc),
   };
 }
 
@@ -120,18 +122,20 @@ function fallbackPublicTeam() {
 
   return {
     title: stringValue(siteContent.team?.title, "NOTRE EQUIPE"),
-    members: members.map<PublicTeamMember>((member, index) => ({
-      id: typeof member.id === "number" ? member.id : index + 1,
-      name: stringValue(member.name, "Membre Fluxion"),
-      role: stringValue(member.role, "Equipe Fluxion"),
-      bio: stringValue(member.bio),
-      img: stringValue(member.img, "/images/about/team.jpg"),
-      socials: {
-        linkedin: stringValue(member.socials?.linkedin),
-        twitter: stringValue(member.socials?.twitter),
-        instagram: stringValue(member.socials?.instagram),
-      },
-    })),
+    members: members
+      .map<PublicTeamMember>((member, index) => ({
+        id: typeof member.id === "number" ? member.id : index + 1,
+        name: stringValue(member.name, "Membre Fluxion"),
+        role: stringValue(member.role, "Equipe Fluxion"),
+        bio: stringValue(member.bio),
+        img: stringValue(member.img),
+        socials: {
+          linkedin: stringValue(member.socials?.linkedin),
+          twitter: stringValue(member.socials?.twitter),
+          instagram: stringValue(member.socials?.instagram),
+        },
+      }))
+      .filter((member) => member.img),
   };
 }
 
@@ -212,7 +216,7 @@ async function loadPublicPartners() {
         name: partner.name,
         logoSrc: partner.logoSrc,
         website: partner.website ?? undefined,
-      })),
+      })).filter((partner) => partner.logoSrc),
     };
   } catch {
     return fallbackPublicPartners();
@@ -234,13 +238,13 @@ async function loadPublicTeam() {
         name: member.name,
         role: member.role,
         bio: member.bio ?? "",
-        img: member.imageSrc ?? "/images/about/team.jpg",
+        img: member.imageSrc ?? "",
         socials: {
           linkedin: member.linkedin ?? "",
           twitter: member.twitter ?? "",
           instagram: member.instagram ?? "",
         },
-      })),
+      })).filter((member) => member.img),
     };
   } catch {
     return fallbackPublicTeam();

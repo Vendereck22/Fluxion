@@ -93,32 +93,32 @@
     "logos": [
       {
         "name": "Apple",
-        "logoSrc": "/images/partners/apple.svg",
+        "logoSrc": "",
         "website": "https://www.apple.com"
       },
       {
         "name": "Samsung",
-        "logoSrc": "/images/partners/samsung.svg",
+        "logoSrc": "",
         "website": "https://www.samsung.com"
       },
       {
         "name": "Microsoft",
-        "logoSrc": "/images/partners/microsoft.svg",
+        "logoSrc": "",
         "website": "https://www.microsoft.com"
       },
       {
         "name": "Google",
-        "logoSrc": "/images/partners/google.svg",
+        "logoSrc": "",
         "website": "https://www.google.com"
       },
       {
         "name": "AWS",
-        "logoSrc": "/images/partners/aws.svg",
+        "logoSrc": "",
         "website": "https://aws.amazon.com"
       },
       {
         "name": "Meta",
-        "logoSrc": "/images/partners/meta.svg",
+        "logoSrc": "",
         "website": "https://about.meta.com"
       }
     ]
@@ -444,7 +444,7 @@
         "name": "Doxel Kanda",
         "role": "Design & Dev",
         "bio": "Conception d'identités digitales, interfaces web et expériences produit avec une attention forte portée aux détails.",
-        "img": "/images/about/team.jpg",
+        "img": "",
         "socials": {
           "linkedin": "",
           "twitter": "",
@@ -456,7 +456,7 @@
         "name": "Precieux Mwanza",
         "role": "Expert UI/UX",
         "bio": "Création d'interfaces intuitives et esthétiques centrées sur l'utilisateur.",
-        "img": "/images/about/team.jpg",
+        "img": "",
         "socials": {
           "linkedin": "",
           "twitter": "",
@@ -468,7 +468,7 @@
         "name": "Ciel Wembi",
         "role": "Tech Lead",
         "bio": "Architecture robuste et expertise technique avancée pour Fluxion.",
-        "img": "/images/about/team.jpg",
+        "img": "",
         "socials": {
           "linkedin": "",
           "twitter": "",
@@ -480,7 +480,7 @@
         "name": "Emmanuel Tansia",
         "role": "Marketing",
         "bio": "Stratégies de communication et marketing digital innovantes.",
-        "img": "/images/about/team.jpg",
+        "img": "",
         "socials": {
           "linkedin": "",
           "twitter": "",
@@ -492,7 +492,7 @@
         "name": "Junior Smoda",
         "role": "Product Manager",
         "bio": "Gestion de produit et vision stratégique à long terme.",
-        "img": "/images/about/team.jpg",
+        "img": "",
         "socials": {
           "linkedin": "",
           "twitter": "",
@@ -504,7 +504,7 @@
         "name": "Vendereck Nguala",
         "role": "Développeur Fullstack",
         "bio": "Développement d'applications modernes et d'architectures scalables.",
-        "img": "/images/about/team.jpg",
+        "img": "",
         "socials": {
           "linkedin": "",
           "twitter": "",

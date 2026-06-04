@@ -34,8 +34,6 @@ interface PartnersManagerProps {
   initialData: PartnersData;
 }
 
-const DEFAULT_LOGO = "/images/partners/apple.svg";
-
 function normalizePartners(data: PartnersData): Required<PartnersData> {
   const logos =
     data.logos && data.logos.length > 0
@@ -59,7 +57,7 @@ export default function PartnersManager({ initialData }: PartnersManagerProps) {
   );
   const [draft, setDraft] = useState<PartnerLogo>({
     name: "",
-    logoSrc: DEFAULT_LOGO,
+    logoSrc: "",
     website: "",
   });
   const [isSaving, setIsSaving] = useState(false);
@@ -132,7 +130,7 @@ export default function PartnersManager({ initialData }: PartnersManagerProps) {
         logos,
       };
     });
-    setDraft({ name: "", logoSrc: DEFAULT_LOGO, website: "" });
+    setDraft({ name: "", logoSrc: "", website: "" });
     setStatus("idle");
   };
 
@@ -262,7 +260,7 @@ export default function PartnersManager({ initialData }: PartnersManagerProps) {
                 <div className="space-y-1.5 md:col-span-5">
                   <Label className="text-[10px] uppercase text-slate-500">Logo SVG / image</Label>
                   <Input
-                    placeholder="/images/partners/apple.svg"
+                    placeholder="Collez une URL ou importez un logo"
                     value={draft.logoSrc}
                     onChange={(e) => setDraft((prev) => ({ ...prev, logoSrc: e.target.value }))}
                     className="h-9"
