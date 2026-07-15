@@ -17,6 +17,7 @@ export default function Partners({
 }) {
   const partnerLogos = logos;
   const animatedLogos = [...partnerLogos, ...partnerLogos];
+  const hasLogos = partnerLogos.length > 0;
 
   return (
     <section className="py-16 bg-fluxion-blue relative overflow-hidden" aria-labelledby="partners-title">
@@ -28,6 +29,7 @@ export default function Partners({
             {badge}
           </p>
 
+          {hasLogos ? (
           <div className="relative w-full overflow-hidden">
             <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-24 bg-gradient-to-r from-fluxion-blue to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-24 bg-gradient-to-l from-fluxion-blue to-transparent" />
@@ -70,6 +72,16 @@ export default function Partners({
             })}
             </div>
           </div>
+          ) : (
+            <div className="w-full max-w-3xl rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-10 text-center backdrop-blur-sm">
+              <p className="text-sm font-bold uppercase tracking-[0.3em] text-white/80">
+                Logos partenaires en attente
+              </p>
+              <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed text-white/55">
+                Les partenaires sont déjà configurés dans l'administration. Ajoutez leurs logos pour activer le défilement animé sur le site.
+              </p>
+            </div>
+          )}
         </div>
       </div>
       <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />

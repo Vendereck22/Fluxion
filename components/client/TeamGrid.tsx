@@ -52,7 +52,27 @@ export default function TeamInteractive({
   const activeMember = teamData[activeIndex];
 
   if (teamData.length === 0 || !activeMember) {
-    return null;
+    return (
+      <section className="relative w-full overflow-hidden bg-white px-6 py-24">
+        <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#ffd5db]/50 to-transparent" />
+        <div className="relative mx-auto flex max-w-5xl flex-col items-center rounded-3xl border border-slate-200 bg-slate-50 px-6 py-16 text-center">
+          <div className="mb-8 flex gap-3">
+            <div className="h-20 w-14 rounded-2xl bg-gradient-to-b from-slate-300 to-slate-100" />
+            <div className="mt-6 h-20 w-14 rounded-2xl bg-gradient-to-b from-fluxion-rose/30 to-slate-100" />
+            <div className="h-20 w-14 rounded-2xl bg-gradient-to-b from-slate-300 to-slate-100" />
+          </div>
+          <p className="text-[10px] font-black uppercase tracking-[0.35em] text-fluxion-rose">
+            Équipe en cours d'intégration
+          </p>
+          <h2 className="mt-4 text-4xl font-black uppercase tracking-tight text-fluxion-blue md:text-6xl">
+            {title}
+          </h2>
+          <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-500 md:text-base">
+            Les profils existent déjà dans l'administration. Ajoutez les photos des membres pour activer le carrousel interactif de l'équipe.
+          </p>
+        </div>
+      </section>
+    );
   }
 
   const socialLinks = [
