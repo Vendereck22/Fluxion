@@ -29,6 +29,33 @@ const InstagramIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+function getInitials(name: string) {
+  return name
+    .split(" ")
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("") || "FX";
+}
+
+function MemberAvatar({
+  member,
+  sizes,
+}: {
+  member: Pick<TeamMember, "name" | "img">;
+  sizes: string;
+}) {
+  if (member.img) {
+    return <Image src={member.img} alt={member.name} fill sizes={sizes} className="object-cover" />;
+  }
+
+  return (
+    <span className="flex h-full w-full items-center justify-center bg-slate-100 text-[10px] font-black uppercase tracking-wider text-slate-500">
+      {getInitials(member.name)}
+    </span>
+  );
+}
+
 interface TeamMember {
   id: number;
   name: string;
@@ -406,7 +433,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                           className="relative w-12 h-12 rounded-xl overflow-hidden border border-slate-200 shadow-sm cursor-pointer hover:opacity-85"
                           onClick={() => setSelectedPreviewId(member.id)}
                         >
-                          <Image src={member.img} alt={member.name} fill sizes="48px" className="object-cover" />
+                          <MemberAvatar member={member} sizes="48px" />
                         </button>
                         <div>
                           <div className="flex items-center gap-2">
@@ -493,7 +520,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                   >
 
                     <div className="relative w-12 h-12 rounded-full mx-auto overflow-hidden border border-slate-200 transition-transform hover:scale-105">
-                      <Image src={m.img} alt={m.name} fill sizes="48px" className="object-cover" />
+                      <MemberAvatar member={m} sizes="48px" />
                     </div>
                     <div>
                       <h5 className="text-[10px] font-bold text-slate-900 uppercase tracking-tight truncate">{m.name}</h5>
@@ -510,7 +537,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
                 <div className="flex gap-4">
 
                   <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-slate-200 shadow flex-shrink-0">
-                    <Image src={selectedMember.img} alt={selectedMember.name} fill sizes="64px" className="object-cover" />
+                    <MemberAvatar member={selectedMember} sizes="64px" />
                   </div>
                   <div className="space-y-1 flex-1 min-w-0">
                     <h4 className="font-heading font-black text-xs text-slate-900 uppercase tracking-tight truncate">
