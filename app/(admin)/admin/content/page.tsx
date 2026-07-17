@@ -51,9 +51,9 @@ export default function ContentPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {SECTIONS.map((section) => (
           <Link key={section.id} href={`/admin/content/${section.id}`} className="group">
-            <Card className="h-full border-slate-200 transition-all duration-300 hover:border-fluxion-cobalt/30 hover:bg-slate-50/70">
+            <Card className="h-full border-slate-200 bg-white transition-all duration-300 hover:border-fluxion-cobalt/35 hover:bg-slate-50/70">
               <CardHeader>
-                <div className="h-10 w-10 rounded-lg bg-slate-50 flex items-center justify-center text-slate-500 group-hover:bg-fluxion-gradient group-hover:text-white transition-all duration-500">
+                <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 bg-white text-fluxion-cobalt transition-all duration-300 group-hover:border-fluxion-cobalt group-hover:bg-fluxion-cobalt group-hover:text-white group-hover:shadow-sm">
                   <section.icon size={20} />
                 </div>
                 <CardTitle className="text-lg font-bold mt-4 group-hover:text-fluxion-cobalt transition-colors">{section.title}</CardTitle>

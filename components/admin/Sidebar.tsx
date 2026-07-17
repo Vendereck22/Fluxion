@@ -81,7 +81,7 @@ export function Sidebar() {
                 if (!isActive) setLoadingHref(item.href);
               }}
               className={cn(
-                "flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm border border-transparent",
+                "group flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all duration-200 font-medium text-sm border border-transparent",
                 isActive
                   ? "bg-slate-50 text-fluxion-pink-neon border-slate-200/60 shadow-sm"
                   : "text-slate-600 hover:text-slate-900 hover:bg-slate-50/50",
@@ -95,7 +95,9 @@ export function Sidebar() {
                   size={20}
                   className={cn(
                     "flex-shrink-0 transition-colors",
-                    isActive ? "text-fluxion-pink-neon" : "text-slate-400",
+                    isActive
+                      ? "text-fluxion-pink-neon"
+                      : "text-slate-400 group-hover:text-fluxion-pink-neon",
                   )}
                 />
               )}
