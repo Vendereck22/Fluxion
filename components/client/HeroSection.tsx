@@ -10,14 +10,14 @@ import HeroBackground from "./HeroBackground";
 export default function HeroSection() {
   const siteContent = useSiteContent();
   return (
-    <section className="relative w-full min-h-screen flex flex-col justify-center py-20 px-6 overflow-hidden bg-[#050505] antialiased">
+    <section className="relative w-full min-h-screen flex flex-col justify-center py-20 overflow-hidden bg-[#050505] antialiased">
 
       <HeroBackground />
 
 
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/20 to-[#050505] z-1" />
 
-      <div className="container mx-auto max-w-5xl flex flex-col items-center text-center space-y-10 relative z-10">
+      <div className="fluxion-container flex flex-col items-center text-center space-y-10 relative z-10">
         <header className="flex flex-col items-center space-y-4">
           <Badge
             variant="secondary"
@@ -29,7 +29,7 @@ export default function HeroSection() {
         </header>
 
         <div className="space-y-6 animate-in fade-in slide-in-from-bottom-6 duration-1000 delay-150">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-normal tracking-tighter text-white leading-[0.9]">
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-normal tracking-tighter text-white leading-[0.92]">
             {siteContent.hero.title.split(" ").map((word, i) => (
               <span
                 key={i}

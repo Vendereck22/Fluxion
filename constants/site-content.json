@@ -35,7 +35,7 @@
     "cta": "Nous contacter"
   },
   "hero": {
-    "badge": "Expertise Digitale",
+    "badge": "",
     "title": "Suivez le flux.",
     "description": "Nous créons des expériences numériques de pointe, alliant design de luxe et ingénierie robuste pour propulser votre entreprise dans l'ère technologique.",
     "cta": "Rejoignez le flux"
@@ -215,7 +215,7 @@
   "newsletter": {
     "title": "Restez dans le flux.",
     "description": "Inscrivez-vous pour recevoir nos analyses tech et nos dernières réalisations **FLUXION**.",
-    "placeholder": "votre@email.com",
+    "placeholder": "Veuillez saisr votre Email ",
     "button": "Rejoindre",
     "successTitle": "Bienvenue dans le flux !",
     "successMessage": "Vérifiez votre boîte mail pour confirmer.",

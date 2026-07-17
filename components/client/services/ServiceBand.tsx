@@ -23,17 +23,21 @@ export default function ServiceBand(props: {
     priority?: boolean;
   };
 }) {
-  const objectFit = props.rightImage?.fit === "cover" ? "object-cover" : "object-contain";
+  const objectFit =
+    props.rightImage?.fit === "cover" ? "object-cover" : "object-contain";
   const variant = props.variant ?? "card";
 
   return (
-    <section className={cn("w-full", variant === "card" ? "px-6 md:px-10" : undefined)}>
+    <section
+      className={cn(
+        variant === "card" ? "fluxion-container" : "w-full",
+      )}
+    >
       <Card
         className={cn(
           variant === "band"
             ? "rounded-none border-0 ring-0 bg-transparent py-0 text-white overflow-visible"
             : [
-
                 "rounded-2xl border border-white/10 ring-0 text-white overflow-hidden",
                 "py-0 gap-0",
               ].join(" "),
@@ -41,25 +45,51 @@ export default function ServiceBand(props: {
         )}
       >
         <CardContent className={cn(variant === "band" ? "px-0" : "px-0 py-0")}>
-          <div className={cn("flex flex-col md:flex-row min-h-[320px]", variant === "card" ? "backdrop-blur-[1px]" : undefined)}>
-            <div className={cn("flex items-center", variant === "card" ? "px-8 md:px-10 lg:px-14 py-10 md:py-0 md:w-[520px]" : "px-6 md:px-10 lg:px-14 py-10 md:py-0 md:w-[520px]")}>
-              <div className={cn("space-y-4", variant === "card" ? "drop-shadow-[0_1px_0_rgba(0,0,0,0.35)]" : undefined)}>
-                <h2 className="text-5xl md:text-6xl font-heading font-normal tracking-tight">
+          <div
+            className={cn(
+              "flex flex-col md:flex-row min-h-[420px] md:min-h-[480px]",
+              variant === "card" ? "backdrop-blur-[1px]" : undefined,
+            )}
+          >
+            <div
+              className={cn(
+                "flex items-center",
+                variant === "card"
+                  ? "px-8 md:px-10 lg:px-14 py-10 md:py-0 md:w-[520px]"
+                  : "px-6 md:px-10 lg:px-14 py-10 md:py-0 md:w-[520px]",
+              )}
+            >
+              <div
+                className={cn(
+                  "space-y-4",
+                  variant === "card"
+                    ? "drop-shadow-[0_1px_0_rgba(0,0,0,0.35)]"
+                    : undefined,
+                )}
+              >
+                <h2 className="text-4xl sm:text-5xl md:text-6xl font-heading font-normal tracking-tight">
                   {props.title}
                 </h2>
-                <p className="text-[#ff2b5d] text-sm font-semibold">• {props.accent}</p>
-                <p className={cn("text-white/80 text-xs leading-relaxed max-w-[360px]", variant === "card" ? "text-white/85" : undefined)}>
+                <p className="text-[#ff2b5d] text-sm font-semibold">
+                  • {props.accent}
+                </p>
+                <p
+                  className={cn(
+                    "text-white/80 text-xs leading-relaxed max-w-[360px]",
+                    variant === "card" ? "text-white/85" : undefined,
+                  )}
+                >
                   {props.description}
                 </p>
               </div>
             </div>
 
             {props.right ? (
-              <div className="relative flex-1 min-h-[260px] md:min-h-[320px] overflow-hidden">
+              <div className="relative flex-1 min-h-[360px] md:min-h-[480px] overflow-hidden">
                 {props.right}
               </div>
             ) : props.rightImage ? (
-              <div className="relative flex-1 min-h-[260px] md:min-h-[320px] overflow-hidden">
+              <div className="relative flex-1 min-h-[360px] md:min-h-[480px] overflow-hidden">
                 <Image
                   src={props.rightImage.src}
                   alt={props.rightImage.alt}

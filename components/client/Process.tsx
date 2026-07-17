@@ -8,17 +8,17 @@ export default function Process() {
 
   return (
     <section id="process" className="py-24 bg-fluxion-blue text-white">
-      <div className="container mx-auto px-6">
-        <div className="text-center max-w-2xl mx-auto mb-20">
-          <h2 className="text-4xl md:text-5xl font-heading font-black mb-6">
+      <div className="fluxion-container">
+        <div className="mb-20 grid gap-6 text-center md:grid-cols-[0.8fr_1.2fr] md:text-left md:items-end">
+          <h2 className="text-4xl md:text-5xl font-heading font-black">
             {siteContent.process.title}
           </h2>
-          <p className="opacity-70 text-lg">
+          <p className="opacity-70 text-base md:text-lg leading-relaxed">
             {siteContent.process.description}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 lg:gap-12 relative">
           <div className="hidden md:block absolute top-1/4 left-0 w-full h-[2px] bg-gradient-to-r from-fluxion-rose to-transparent opacity-20" />
 
           {steps.map((step, index) => (

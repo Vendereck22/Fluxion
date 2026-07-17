@@ -2,8 +2,8 @@ import Link from "next/link";
 
 export default function TermsPage() {
   return (
-    <main className="min-h-screen bg-slate-50 px-6 pb-20 pt-32 text-slate-800">
-      <section className="mx-auto max-w-4xl rounded-2xl border border-slate-200 bg-white p-8 md:p-12">
+    <main className="min-h-screen bg-slate-50 pb-20 pt-32 text-slate-800">
+      <section className="fluxion-container rounded-2xl border border-slate-200 bg-white p-8 md:p-12">
         <p className="text-xs font-bold uppercase tracking-[0.25em] text-fluxion-rose">
           Fluxion
         </p>

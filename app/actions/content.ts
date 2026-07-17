@@ -67,6 +67,14 @@ type PartnerLogoInput = {
   website?: string;
 };
 
+type ServiceFeatureInput = {
+  title?: string;
+  description?: string;
+  moreLabel?: string;
+  imageSrc?: string;
+  gallery?: { src?: string; alt?: string }[];
+};
+
 type ProjectInput = {
   slug?: string;
   title?: string;
@@ -129,7 +137,7 @@ async function syncSectionToPrisma(section: string, data: Record<string, unknown
 
   if (section === "features") {
     const items = Array.isArray(data.items)
-      ? (data.items as Array<{ title?: string; description?: string }>)
+      ? (data.items as ServiceFeatureInput[])
       : [];
 
     await prisma.serviceFeature.deleteMany({});
@@ -142,7 +150,18 @@ async function syncSectionToPrisma(section: string, data: Record<string, unknown
           id: `feature-${position + 1}`,
           title: item.title.trim(),
           description: item.description.trim(),
-          moreLabel: cleanOptional(data.more),
+          moreLabel: cleanOptional(item.moreLabel) ?? cleanOptional(data.more),
+          imageSrc: cleanOptional(item.imageSrc),
+          gallery: Array.isArray(item.gallery)
+            ? item.gallery
+                .filter((image) => image.src?.trim())
+                .map((image, galleryPosition) => ({
+                  src: image.src?.trim(),
+                  alt:
+                    image.alt?.trim() ||
+                    `${item.title?.trim()} - image ${galleryPosition + 1}`,
+                }))
+            : Prisma.JsonNull,
           position,
           isActive: true,
         },

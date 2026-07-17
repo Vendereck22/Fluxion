@@ -73,7 +73,7 @@ export default function ContactPage() {
       <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-fluxion-cobalt/5 rounded-full blur-[120px] pointer-events-none" />
       <div className="absolute bottom-10 right-1/4 w-[400px] h-[400px] bg-fluxion-rose/5 rounded-full blur-[100px] pointer-events-none" />
 
-      <div className="container mx-auto px-6 max-w-6xl relative z-10">
+      <div className="fluxion-container relative z-10">
         <div className="text-center max-w-2xl mx-auto mb-16 space-y-4">
           <span className="px-3 py-1 rounded-full bg-fluxion-cobalt/10 text-fluxion-cobalt text-xs font-bold uppercase tracking-[0.25em]">
             {siteContent.pages.contact.title}

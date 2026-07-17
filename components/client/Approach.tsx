@@ -26,13 +26,13 @@ export default function Approach() {
 
   return (
     <section id="about" className="py-24 bg-white overflow-hidden">
-      <div className="container mx-auto px-6">
+      <div className="fluxion-container">
 
         <div className="text-center max-w-3xl mx-auto mb-20">
           <Badge className="bg-fluxion-rose/10 text-fluxion-rose border-none mb-4 uppercase tracking-widest px-4 py-1">
             {siteContent.approach.badge}
           </Badge>
-          <h2 className="text-4xl md:text-6xl font-heading font-black text-fluxion-blue leading-tight">
+          <h2 className="text-4xl md:text-5xl font-heading font-black text-fluxion-blue leading-tight">
             L&apos;approche qui {siteContent.approach.title.split("qui")[1].split("standards")[0]} <br />
             <span className="text-fluxion-rose italic">standards.</span>
           </h2>

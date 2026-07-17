@@ -53,9 +53,9 @@ export default function TeamInteractive({
 
   if (teamData.length === 0 || !activeMember) {
     return (
-      <section className="relative w-full overflow-hidden bg-white px-6 py-24">
+      <section className="relative w-full overflow-hidden bg-white py-24">
         <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-[#ffd5db]/50 to-transparent" />
-        <div className="relative mx-auto flex max-w-5xl flex-col items-center rounded-3xl border border-slate-200 bg-slate-50 px-6 py-16 text-center">
+        <div className="fluxion-container relative flex flex-col items-center rounded-3xl border border-slate-200 bg-slate-50 px-6 py-16 text-center">
           <div className="mb-8 flex gap-3">
             <div className="h-20 w-14 rounded-2xl bg-gradient-to-b from-slate-300 to-slate-100" />
             <div className="mt-6 h-20 w-14 rounded-2xl bg-gradient-to-b from-fluxion-rose/30 to-slate-100" />
@@ -64,7 +64,7 @@ export default function TeamInteractive({
           <p className="text-[10px] font-black uppercase tracking-[0.35em] text-fluxion-rose">
             Équipe en cours d'intégration
           </p>
-          <h2 className="mt-4 text-4xl font-black uppercase tracking-tight text-fluxion-blue md:text-6xl">
+          <h2 className="mt-4 text-4xl font-black uppercase tracking-tight text-fluxion-blue md:text-5xl">
             {title}
           </h2>
           <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-500 md:text-base">
@@ -200,7 +200,7 @@ export default function TeamInteractive({
   };
 
   return (
-    <section className="relative w-full min-h-screen bg-white flex flex-col justify-center overflow-hidden py-20 px-4 md:px-10">
+    <section className="relative w-full min-h-screen bg-white flex flex-col justify-center overflow-hidden py-20">
 
 
       <div className="w-full flex flex-col items-center md:hidden space-y-8">
@@ -269,15 +269,15 @@ export default function TeamInteractive({
       </div>
 
 
-      <div className="container mx-auto hidden md:grid md:grid-cols-2 gap-10 items-center">
+      <div className="fluxion-container hidden md:grid md:grid-cols-2 gap-10 items-center">
 
         <div className="z-10 space-y-12">
-          <h2 className="text-fluxion-rose text-5xl md:text-7xl font-black uppercase tracking-tighter">
+          <h2 className="text-fluxion-rose text-4xl md:text-6xl font-black uppercase tracking-tighter">
             {title}
           </h2>
 
           <div className="team-text-anim space-y-4">
-            <h3 className="text-4xl md:text-6xl font-bold text-black">
+            <h3 className="text-4xl md:text-5xl font-bold text-black">
               {activeMember.name}
             </h3>
             <p className="text-black text-lg font-medium max-w-sm leading-tight">

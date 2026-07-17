@@ -40,7 +40,7 @@ export default function ProjectsGrid({
 
   return (
     <section className="w-full bg-slate-50 pb-16 md:pb-20">
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="fluxion-container">
 
         <div className="flex flex-wrap items-center justify-center gap-2 md:gap-3 pb-10">
           {filters.map((f) => (

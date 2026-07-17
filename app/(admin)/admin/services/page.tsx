@@ -24,6 +24,11 @@ export default async function ServicesCMSPage() {
     items: serviceFeatures.map((item) => ({
       title: item.title,
       description: item.description,
+      moreLabel: item.moreLabel ?? "",
+      imageSrc: item.imageSrc ?? "",
+      gallery: Array.isArray(item.gallery)
+        ? (item.gallery as { src: string; alt: string }[])
+        : [],
     })),
   };
 

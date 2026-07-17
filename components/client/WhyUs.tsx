@@ -25,7 +25,7 @@ export default function WhyUs() {
     >
       <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/4 w-96 h-96 bg-fluxion-rose/5 rounded-full blur-[100px]" />
 
-      <div className="container mx-auto px-6 relative z-10">
+      <div className="fluxion-container relative z-10">
         <div className="max-w-3xl mb-16 text-center md:text-left">
           <h2 className="text-fluxion-rose font-bold uppercase tracking-widest text-sm mb-4">
             {siteContent.whyUs.badge}

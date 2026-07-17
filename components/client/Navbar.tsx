@@ -24,7 +24,7 @@ export default function Navbar() {
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-white/10 bg-white/70 backdrop-blur-xl antialiased transition-all duration-300">
-      <div className="container mx-auto px-6 h-20 flex items-center justify-between">
+      <div className="fluxion-container h-20 flex items-center justify-between">
         <Logo size="sm" className="group transition-transform active:scale-95" />
         <div className="hidden md:flex items-center gap-10">
           <ul className="flex items-center gap-8">

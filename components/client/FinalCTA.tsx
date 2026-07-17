@@ -7,14 +7,14 @@ import { useSiteContent } from "@/components/client/SiteContentProvider";
 export default function FinalCTA() {
   const siteContent = useSiteContent();
   return (
-    <section className="py-24 px-6 bg-white">
-      <div className="container mx-auto">
+    <section className="py-24 bg-white">
+      <div className="fluxion-container">
         <div className="relative rounded-[3rem] bg-fluxion-blue p-12 md:p-24 overflow-hidden text-center">
 
           <div className="absolute inset-0 bg-fluxion-gradient opacity-20" />
 
           <div className="relative z-10 max-w-3xl mx-auto space-y-8">
-            <h2 className="text-4xl md:text-6xl font-heading font-black text-white leading-tight">
+            <h2 className="text-4xl md:text-5xl font-heading font-black text-white leading-tight">
               {siteContent.finalCta.title.split(".")[0]}. <br /> {siteContent.finalCta.title.split(".")[1]}
             </h2>
             <p className="text-white/70 text-lg md:text-xl font-medium">

@@ -17,7 +17,13 @@ const prisma = new PrismaClient({
 
 type SiteContent = {
   features?: {
-    items?: Array<{ title: string; description: string }>;
+    items?: Array<{
+      title: string;
+      description: string;
+      moreLabel?: string;
+      imageSrc?: string;
+      gallery?: Array<{ src: string; alt: string }>;
+    }>;
     more?: string;
   };
   partners?: {
@@ -136,14 +142,18 @@ async function seedServiceFeatures() {
         id: `seed-feature-${position + 1}`,
         title: item.title,
         description: item.description,
-        moreLabel: siteContent.features?.more,
+        moreLabel: item.moreLabel ?? siteContent.features?.more,
+        imageSrc: cleanNullable(item.imageSrc),
+        gallery: item.gallery ?? [],
         position,
         isActive: true,
       },
       update: {
         title: item.title,
         description: item.description,
-        moreLabel: siteContent.features?.more,
+        moreLabel: item.moreLabel ?? siteContent.features?.more,
+        imageSrc: cleanNullable(item.imageSrc),
+        gallery: item.gallery ?? [],
         position,
         isActive: true,
       },

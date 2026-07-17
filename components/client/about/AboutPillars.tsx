@@ -11,7 +11,7 @@ export default function AboutPillars() {
 
   return (
     <section className="w-full bg-gradient-to-b from-slate-50 via-white to-[#ffd5db] pt-10 md:pt-14 pb-10 md:pb-14">
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="fluxion-container">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-2xl md:text-3xl font-heading font-black text-fluxion-blue">
             {who?.title ?? "Qui sommes-nous ?"}

@@ -26,7 +26,7 @@ export default function FeaturesSection() {
 
   return (
     <section className="w-full py-24 bg-white antialiased">
-      <div className="container mx-auto px-6">
+      <div className="fluxion-container">
 
 
         <div className="text-center max-w-3xl mx-auto mb-20 space-y-4">

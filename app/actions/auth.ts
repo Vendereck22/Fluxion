@@ -104,12 +104,22 @@ async function setLegacyUserCookies(user: LoginUser) {
   }
 }
 
-async function getSessionEmail() {
-  const authSession = await auth();
-  if (authSession?.user?.email) return authSession.user.email;
+async function getSafeAuthSession() {
+  try {
+    return await auth();
+  } catch (error) {
+    console.warn("Auth.js session ignored:", error);
+    return null;
+  }
+}
 
+async function getSessionEmail() {
   const cookieStore = await cookies();
-  return cookieStore.get("fluxion_user_email")?.value ?? null;
+  const legacyEmail = cookieStore.get("fluxion_user_email")?.value;
+  if (legacyEmail) return legacyEmail;
+
+  const authSession = await getSafeAuthSession();
+  return authSession?.user?.email ?? null;
 }
 
 export async function getUsersList(): Promise<UserAccount[]> {
@@ -291,6 +301,10 @@ export async function logout() {
   cookieStore.delete("fluxion_user_firstname");
   cookieStore.delete("fluxion_user_middlename");
   cookieStore.delete("fluxion_user_lastname");
+  cookieStore.delete("authjs.session-token");
+  cookieStore.delete("__Secure-authjs.session-token");
+  cookieStore.delete("next-auth.session-token");
+  cookieStore.delete("__Secure-next-auth.session-token");
 
   await logAuditEvent("LOGOUT", "Déconnexion de l'administrateur", undefined, email);
 
@@ -298,12 +312,12 @@ export async function logout() {
 }
 
 export async function verifySession() {
-  const authSession = await auth();
-  if (authSession?.user?.email) return true;
-
   const cookieStore = await cookies();
   const legacySession = cookieStore.get("fluxion_session");
-  return legacySession?.value === "active";
+  if (legacySession?.value === "active") return true;
+
+  const authSession = await getSafeAuthSession();
+  return Boolean(authSession?.user?.email);
 }
 
 export async function getCurrentUser() {

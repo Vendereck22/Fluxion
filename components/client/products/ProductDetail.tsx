@@ -23,7 +23,7 @@ export default function ProductDetail({ product }: { product: ProductDetailData 
   return (
     <div className="w-full bg-slate-50">
       <section className="pt-28 pb-14">
-        <div className="container mx-auto px-6 max-w-6xl">
+        <div className="fluxion-container">
           <div className="mb-6">
             <Button asChild variant="outline" className="rounded-full">
               <Link href="/nos-produits" className="flex items-center gap-2">
@@ -72,7 +72,7 @@ export default function ProductDetail({ product }: { product: ProductDetailData 
                 </Badge>
               </div>
 
-              <h1 className="mt-5 text-4xl md:text-6xl font-heading font-black text-fluxion-blue tracking-tight">
+              <h1 className="mt-5 text-4xl md:text-5xl font-heading font-black text-fluxion-blue tracking-tight">
                 {product.name}
               </h1>
               {product.shortDescription && (

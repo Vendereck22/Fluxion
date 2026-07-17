@@ -20,7 +20,7 @@ export default function ProjectDetail({ project }: { project: ProjectDetailData 
   return (
     <div className="w-full bg-slate-50">
       <section className="pt-28 pb-10">
-        <div className="container mx-auto px-6 max-w-6xl">
+        <div className="fluxion-container">
           <div className="mb-6">
             <Button asChild variant="outline" className="rounded-full">
               <Link href="/nos-projets" className="flex items-center gap-2">
@@ -59,7 +59,7 @@ export default function ProjectDetail({ project }: { project: ProjectDetailData 
             <CardContent className="p-10 md:p-14">
               <div className="flex items-start justify-between gap-6">
                 <div className="max-w-3xl">
-                  <h1 className="text-4xl md:text-6xl font-heading font-black text-fluxion-blue tracking-tight">
+                  <h1 className="text-4xl md:text-5xl font-heading font-black text-fluxion-blue tracking-tight">
                     {project.title}
                   </h1>
                   <p className="mt-5 text-slate-700/90 leading-relaxed text-sm md:text-base">

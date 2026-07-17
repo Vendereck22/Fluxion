@@ -34,7 +34,7 @@ export default function ProductValueCards({
 
   return (
     <section className="w-full bg-slate-50 pb-6 md:pb-10">
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="fluxion-container">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
         {cards.slice(0, 2).map((c) => (
           <Card

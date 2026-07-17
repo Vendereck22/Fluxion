@@ -12,7 +12,7 @@ export default function FAQ() {
   const siteContent = useSiteContent();
   return (
     <section className="py-24 bg-white dark:bg-fluxion-dark">
-      <div className="container mx-auto px-6 max-w-3xl">
+      <div className="fluxion-container max-w-3xl">
         <h2 className="text-3xl md:text-4xl font-heading font-black text-fluxion-blue dark:text-white mb-12 text-center">
           {siteContent.faq.title}
         </h2>

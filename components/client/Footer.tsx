@@ -12,9 +12,9 @@ export default function Footer() {
 
   return (
     <footer className="bg-fluxion-blue text-white pt-16 md:pt-24 pb-12 overflow-hidden relative">
-      <div className="container mx-auto px-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
-          <div className="col-span-1 md:col-span-1 space-y-6 text-center md:text-left">
+      <div className="fluxion-container">
+        <div className="grid grid-cols-1 gap-12 mb-16 text-center md:grid-cols-4 md:items-start md:text-left">
+          <div className="space-y-6">
             <div>
               <div className="flex justify-center md:justify-start mb-6">
                 <Logo size="md" light />
@@ -24,7 +24,7 @@ export default function Footer() {
               </p>
             </div>
           </div>
-          <div className="col-span-1 md:col-span-1 space-y-8 text-center md:text-left">
+          <div className="space-y-8">
             <div className="flex flex-col items-center md:items-start text-center md:text-left">
               <p className="text-[10px] uppercase tracking-[0.3em] text-fluxion-rose font-black mb-4">
                 {siteContent.footer.socialBadge}
@@ -36,25 +36,25 @@ export default function Footer() {
 
             <Newsletter variant="compact" />
           </div>
-          <div className="col-span-1 text-center md:text-left">
+          <div className="flex flex-col items-center md:items-start">
             <h3 className="font-heading text-xl font-bold mb-6 relative inline-block md:block">
               Liens
               <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 w-8 h-1 bg-fluxion-rose rounded-full" />
             </h3>
-            <nav className="flex flex-row flex-wrap justify-center md:justify-start gap-x-6 gap-y-3">
+            <nav className="flex w-full max-w-xs flex-col items-center gap-3 md:items-start">
               {NavLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-blue-100/70 hover:text-white hover:translate-x-1 transition-all flex items-center gap-2 group text-sm whitespace-nowrap"
+                  className="group flex w-full items-center justify-center gap-2 text-sm text-blue-100/70 transition-all hover:text-white md:justify-start md:hover:translate-x-1"
                 >
-                  <span className="w-1 h-1 rounded-full bg-fluxion-rose opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <span className="h-1 w-1 rounded-full bg-fluxion-rose opacity-70 transition-opacity group-hover:opacity-100" />
                   {link.name}
                 </Link>
               ))}
             </nav>
           </div>
-          <div className="col-span-1 text-center md:text-left">
+          <div className="flex flex-col items-center md:items-start">
             <h3 className="font-heading text-xl font-bold mb-6 relative inline-block md:block">
               Contact
               <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 md:left-0 md:translate-x-0 w-8 h-1 bg-fluxion-rose rounded-full" />

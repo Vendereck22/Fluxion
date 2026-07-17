@@ -73,7 +73,7 @@ export default function ProductShowcase({
 
   return (
     <section className="w-full bg-slate-50 py-6 md:py-8">
-      <div className="container mx-auto px-6 max-w-6xl">
+      <div className="fluxion-container">
         <Card className="w-full border border-slate-200/70 overflow-hidden bg-white">
           <CardContent className="p-0">
           {layout === "single" ? (

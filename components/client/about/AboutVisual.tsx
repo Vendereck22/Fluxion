@@ -9,7 +9,7 @@ export default function AboutVisual() {
 
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_20%,rgba(201,9,73,0.10),transparent_55%)]" />
 
-        <div className="container mx-auto px-6 max-w-6xl relative">
+        <div className="fluxion-container relative">
 
           <div className="relative h-[220px] sm:h-[260px] md:h-[320px] lg:h-[360px]">
             <Image

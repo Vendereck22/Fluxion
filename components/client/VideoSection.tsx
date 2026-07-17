@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef } from "react";
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Play, Pause } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -12,6 +11,8 @@ export default function VideoSection() {
   const [isPlaying, setIsPlaying] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const videoId = "XC_VytVqLXI";
+  const videoSrc = `https://www.youtube.com/embed/${videoId}?autoplay=0&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=1`;
+
   const handleTogglePlay = () => {
     const nextState = !isPlaying;
     setIsPlaying(nextState);
@@ -34,8 +35,7 @@ export default function VideoSection() {
 
   return (
     <section
-      onClick={handleTogglePlay}
-      className="relative h-[65vh] md:h-[85vh] w-full flex items-center justify-center overflow-hidden bg-[#71717a] cursor-pointer antialiased"
+      className="relative h-[65vh] md:h-[85vh] w-full overflow-hidden bg-[#71717a] antialiased"
     >
       <div
         className={cn(
@@ -46,7 +46,7 @@ export default function VideoSection() {
         <iframe
           ref={iframeRef}
           className="w-[310%] h-[310%] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-          src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&showinfo=0&rel=0&iv_load_policy=3&modestbranding=1&enablejsapi=1&origin=${typeof window !== "undefined" ? window.location.origin : ""}`}
+          src={videoSrc}
           allow="autoplay; encrypted-media"
           frameBorder="0"
           title="Background Video"
@@ -56,48 +56,39 @@ export default function VideoSection() {
       {!isPlaying && (
         <div className="absolute inset-0 bg-fluxion-blue/20 backdrop-blur-[2px] z-10 pointer-events-none transition-all duration-700"></div>
       )}
-      <div className="relative z-20 text-center px-6 max-w-5xl mx-auto space-y-6">
-        <span className="text-white/60 font-black uppercase tracking-[0.3em] text-[10px] md:text-xs mb-4 block">
-          {siteContent.video.badge}
-        </span>
-        <h2 className="text-4xl md:text-7xl font-heading font-black text-white leading-[1.1] md:leading-tight tracking-tighter">
-          {siteContent.video.title.split("votre")[0]} <br />
-          de votre <span className="text-fluxion-rose">{siteContent.video.title.split("votre")[1]}</span>
-        </h2>
-        <p className="text-white/80 max-w-xl mx-auto text-base md:text-xl font-medium leading-relaxed">
-          {siteContent.video.description}
-        </p>
-        <div className="flex flex-wrap justify-center gap-4 pt-6">
-          <Button asChild className="h-14 px-10 rounded-2xl bg-fluxion-rose text-white font-bold text-lg shadow-xl shadow-fluxion-rose/20 hover:scale-105 transition-all border-none">
-            <Link href="/contact" onClick={(event) => event.stopPropagation()}>
-              {siteContent.video.ctaProject}
-            </Link>
-          </Button>
-
+      <div className="absolute inset-x-0 bottom-8 z-20 md:bottom-12">
+        <div className="fluxion-container flex flex-col items-center gap-6 text-center md:flex-row md:items-end md:justify-between md:text-left">
+          <div className="max-w-2xl">
+            <div className="mb-4 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.28em] text-white/55 md:justify-start md:text-xs">
+              <span
+                className={cn(
+                  "h-2 w-2 rounded-full",
+                  isPlaying ? "bg-fluxion-rose animate-pulse" : "bg-white",
+                )}
+              />
+              <span>{siteContent.video.badge}</span>
+              <span className="hidden h-px w-10 bg-white/25 md:block" />
+              <span className="hidden md:inline">
+                {isPlaying ? siteContent.video.statusStream : siteContent.video.statusStandby}
+              </span>
+            </div>
+            <p className="text-sm font-medium leading-relaxed text-white/80 md:text-base lg:text-lg">
+              {siteContent.video.description}
+            </p>
+          </div>
           <Button
-            variant="outline"
-            className="h-14 px-10 rounded-2xl border-white/40 text-white hover:bg-white hover:text-fluxion-blue font-bold text-lg backdrop-blur-md transition-colors"
+            type="button"
+            onClick={handleTogglePlay}
+            aria-label={isPlaying ? "Mettre la video en pause" : "Lire la video"}
+            className="group h-20 w-20 shrink-0 rounded-full border border-white/25 bg-white/10 p-0 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-fluxion-rose active:scale-95 md:h-24 md:w-24"
           >
             {isPlaying ? (
-              <span className="flex items-center gap-2">
-                <Pause className="w-5 h-5 fill-current" /> {siteContent.video.ctaPause}
-              </span>
+              <Pause className="h-8 w-8 fill-current transition-transform group-hover:scale-110 md:h-9 md:w-9" />
             ) : (
-              <span className="flex items-center gap-2">
-                <Play className="w-5 h-5 fill-current" /> {siteContent.video.ctaWatch}
-              </span>
+              <Play className="h-8 w-8 translate-x-0.5 fill-current transition-transform group-hover:scale-110 md:h-9 md:w-9" />
             )}
           </Button>
         </div>
-      </div>
-      <div className="absolute bottom-8 left-8 z-30 flex items-center gap-3 opacity-50 text-[10px] font-black uppercase tracking-widest text-white pointer-events-none">
-        <span
-          className={cn(
-            "w-2 h-2 rounded-full",
-            isPlaying ? "bg-fluxion-rose animate-pulse" : "bg-white",
-          )}
-        />
-        {isPlaying ? siteContent.video.statusStream : siteContent.video.statusStandby}
       </div>
     </section>
   );

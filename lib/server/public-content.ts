@@ -48,6 +48,8 @@ export type PublicServiceFeature = {
   title: string;
   description: string;
   moreLabel?: string;
+  imageSrc?: string;
+  gallery: { src: string; alt: string }[];
 };
 
 function asRecord(value: unknown) {
@@ -193,6 +195,8 @@ function fallbackPublicServiceFeatures() {
     items: items.map<PublicServiceFeature>((feature) => ({
       title: stringValue(feature.title, "Service Fluxion"),
       description: stringValue(feature.description, "Expertise Fluxion."),
+      imageSrc: undefined,
+      gallery: [],
     })),
   };
 }
@@ -309,6 +313,18 @@ async function loadPublicServiceFeatures() {
         title: feature.title,
         description: feature.description,
         moreLabel: feature.moreLabel ?? undefined,
+        imageSrc: feature.imageSrc ?? undefined,
+        gallery: Array.isArray(feature.gallery)
+          ? feature.gallery
+              .map((image) => {
+                const record = asRecord(image);
+                return {
+                  src: stringValue(record.src),
+                  alt: stringValue(record.alt, feature.title),
+                };
+              })
+              .filter((image) => image.src)
+          : [],
       })),
     };
   } catch {

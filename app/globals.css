@@ -127,6 +127,16 @@
 }
 
 @layer components {
+  .fluxion-container {
+    width: min(100% - 2rem, 72rem);
+    margin-inline: auto;
+  }
+
+  @media (min-width: 768px) {
+    .fluxion-container {
+      width: min(100% - 3rem, 72rem);
+    }
+  }
 
   .bg-fluxion-gradient {
     background: linear-gradient(135deg, var(--fluxion-cobalt) 0%, var(--fluxion-rose) 100%);
