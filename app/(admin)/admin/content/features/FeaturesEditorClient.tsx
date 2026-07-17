@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronLeft, RotateCcw, Layers } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,6 +21,7 @@ type FeaturesFormData = {
 };
 
 export default function FeaturesEditorClient({ initialData }: { initialData: FeaturesFormData }) {
+  const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "success" | "error">("idle");
   const [formData, setFormData] = useState(initialData);
@@ -44,6 +46,7 @@ export default function FeaturesEditorClient({ initialData }: { initialData: Fea
     setIsSaving(false);
     if (result.success) {
       setSaveStatus("success");
+      router.refresh();
       setTimeout(() => setSaveStatus("idle"), 3000);
     } else {
       setSaveStatus("error");

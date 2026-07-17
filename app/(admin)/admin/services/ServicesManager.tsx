@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { ImagePlus, Plus, Save, Trash2, Upload } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 import { uploadImage } from "@/app/actions/upload";
@@ -44,6 +45,7 @@ const emptyService = (): ServiceItem => ({
 });
 
 export default function ServicesManager({ initialData }: ServicesManagerProps) {
+  const router = useRouter();
   const [data, setData] = useState<ServicesData>({
     ...initialData,
     items: initialData.items.map((item) => ({
@@ -153,6 +155,7 @@ export default function ServicesManager({ initialData }: ServicesManagerProps) {
     try {
       const res = await updateContent("features", data);
       setStatus(res.success ? "success" : "error");
+      if (res.success) router.refresh();
     } catch {
       setStatus("error");
     } finally {

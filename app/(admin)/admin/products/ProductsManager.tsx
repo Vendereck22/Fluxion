@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Plus, Trash2, Edit2, Save, Upload, Link as LinkIcon } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 import { uploadImage } from "@/app/actions/upload";
@@ -29,6 +30,7 @@ interface ProductsManagerProps {
 }
 
 export default function ProductsManager({ initialProducts }: ProductsManagerProps) {
+  const router = useRouter();
   const [products, setProducts] = useState<ProductItem[]>(initialProducts);
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -186,6 +188,7 @@ export default function ProductsManager({ initialProducts }: ProductsManagerProp
       const res = await updateContent("productsPage", { items: products });
       if (res.success) {
         setStatus("success");
+        router.refresh();
       } else {
         setStatus("error");
       }

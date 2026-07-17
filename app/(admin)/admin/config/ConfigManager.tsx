@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Save, MapPin, Mail, Globe, MessageCircle, Code } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 
@@ -27,6 +28,7 @@ interface ConfigManagerProps {
 }
 
 export default function ConfigManager({ initialFooter, initialSocial }: ConfigManagerProps) {
+  const router = useRouter();
   const [footerData, setFooterData] = useState<FooterData>(initialFooter);
   const [socialData, setSocialData] = useState<SocialData>(initialSocial);
   const [isSaving, setIsSaving] = useState(false);
@@ -55,6 +57,7 @@ export default function ConfigManager({ initialFooter, initialSocial }: ConfigMa
 
       if (resFooter.success && resSocial.success) {
         setStatus("success");
+        router.refresh();
       } else {
         setStatus("error");
       }

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Plus, Trash2, Edit2, Save, Upload } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 import { uploadImage } from "@/app/actions/upload";
@@ -74,6 +75,7 @@ interface TeamManagerProps {
 }
 
 export default function TeamManager({ initialMembers }: TeamManagerProps) {
+  const router = useRouter();
   const [members, setMembers] = useState<TeamMember[]>(initialMembers);
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -193,6 +195,7 @@ export default function TeamManager({ initialMembers }: TeamManagerProps) {
       const res = await updateContent("team", { members });
       if (res.success) {
         setStatus("success");
+        router.refresh();
       } else {
         setStatus("error");
       }

@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Plus, Trash2, Edit2, Save, Upload, Link as LinkIcon } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 import { uploadImage } from "@/app/actions/upload";
@@ -23,6 +24,7 @@ interface ProjectsManagerProps {
 }
 
 export default function ProjectsManager({ initialProjects, filters }: ProjectsManagerProps) {
+  const router = useRouter();
   const [projects, setProjects] = useState<ProjectItem[]>(initialProjects);
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -182,6 +184,7 @@ export default function ProjectsManager({ initialProjects, filters }: ProjectsMa
       const res = await updateContent("projectsPage", { items: projects });
       if (res.success) {
         setStatus("success");
+        router.refresh();
       } else {
         setStatus("error");
       }

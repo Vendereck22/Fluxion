@@ -8,17 +8,25 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { getLeads } from "@/app/actions/leads";
-import { siteContent } from "@/constants/site-content";
 import { Badge } from "@/components/ui/badge";
+import { prisma } from "@/lib/prisma";
 
 export const revalidate = 0;
 
 export default async function AdminDashboard() {
-  const leads = await getLeads();
+  const [leads, teamCount, servicesCount, teamPreview] = await Promise.all([
+    getLeads(),
+    prisma.teamMember.count({ where: { isActive: true } }),
+    prisma.serviceFeature.count({ where: { isActive: true } }),
+    prisma.teamMember.findMany({
+      where: { isActive: true },
+      orderBy: { position: "asc" },
+      take: 1,
+      select: { name: true },
+    }),
+  ]);
   const newLeads = leads.filter((l) => l.status === "new");
   const contactedLeads = leads.filter((l) => l.status === "contacted");
-  const teamMembers = siteContent.team.members;
-  const teamCount = teamMembers.length;
 
   return (
     <div className="space-y-12 animate-in fade-in duration-500 font-sans">
@@ -91,7 +99,7 @@ export default async function AdminDashboard() {
           </div>
           <div className="space-y-1">
             <h3 className="text-3xl font-heading font-black text-slate-900 tracking-tight">
-              {siteContent.features.items.length}
+              {servicesCount}
             </h3>
             <p className="text-[10px] text-slate-500 font-inter">
               Piliers stratégiques d'offres éditables
@@ -281,11 +289,11 @@ export default async function AdminDashboard() {
             <span className="text-[10px] text-slate-400 font-mono">1 hour ago</span>
           </div>
 
-          {teamMembers.length > 0 ? (
+          {teamCount > 0 && teamPreview[0] ? (
             <div className="py-3 flex items-center justify-between text-slate-600">
               <span className="flex items-center gap-2">
                 <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
-                <span>Consultation de l'équipe : <strong className="text-slate-900">{teamMembers[0].name}</strong> et {teamMembers.length - 1} autres profils actifs</span>
+                <span>Consultation de l'équipe : <strong className="text-slate-900">{teamPreview[0].name}</strong> et {Math.max(teamCount - 1, 0)} autres profils actifs</span>
               </span>
               <span className="text-[10px] text-slate-400 font-mono">2 hours ago</span>
             </div>

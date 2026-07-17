@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronLeft, Save, RotateCcw, LayoutPanelTop } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -18,6 +19,7 @@ type HeroFormData = {
 };
 
 export default function HeroEditorClient({ initialData }: { initialData: HeroFormData }) {
+  const router = useRouter();
   const [isSaving, setIsSaving] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "success" | "error">("idle");
   const [formData, setFormData] = useState(initialData);
@@ -37,6 +39,7 @@ export default function HeroEditorClient({ initialData }: { initialData: HeroFor
     setIsSaving(false);
     if (result.success) {
       setSaveStatus("success");
+      router.refresh();
 
       setTimeout(() => setSaveStatus("idle"), 3000);
     } else {

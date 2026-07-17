@@ -39,6 +39,52 @@ const ALLOWED_SECTIONS = new Set([
   "projectsPage",
 ]);
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function mergeContentValue(fallback: unknown, override: unknown): unknown {
+  if (Array.isArray(fallback) || Array.isArray(override)) {
+    return override ?? fallback;
+  }
+
+  if (isPlainObject(fallback) && isPlainObject(override)) {
+    const merged: Record<string, unknown> = { ...fallback };
+
+    for (const [key, value] of Object.entries(override)) {
+      merged[key] = mergeContentValue(fallback[key], value);
+    }
+
+    return merged;
+  }
+
+  return override ?? fallback;
+}
+
+function asRecord(value: unknown): Record<string, unknown> {
+  return isPlainObject(value) ? value : {};
+}
+
+async function readContentJson() {
+  return readJsonPreferFallback<Record<string, unknown>>(
+    CONTENT_PATH,
+    CONTENT_FALLBACK_PATH,
+    {}
+  );
+}
+
+async function mergeCmsSectionsIntoContent(content: Record<string, unknown>) {
+  const sections = await prisma.cmsSection.findMany();
+  const merged: Record<string, unknown> = { ...content };
+
+  for (const section of sections) {
+    if (!ALLOWED_SECTIONS.has(section.key)) continue;
+    merged[section.key] = mergeContentValue(merged[section.key], section.data);
+  }
+
+  return merged;
+}
+
 export async function getContentSection(section: string) {
   const isAdmin = await verifySession();
   if (!isAdmin) {
@@ -49,15 +95,17 @@ export async function getContentSection(section: string) {
     return { success: false, error: "Section invalide.", data: null };
   }
 
-  const content = await readJsonPreferFallback<Record<string, unknown>>(
-    CONTENT_PATH,
-    CONTENT_FALLBACK_PATH,
-    {}
-  );
+  const [content, dbSection] = await Promise.all([
+    readContentJson(),
+    prisma.cmsSection.findUnique({ where: { key: section } }),
+  ]);
+
+  const fallbackSection = asRecord(content[section]);
+  const dbData = asRecord(dbSection?.data);
 
   return {
     success: true,
-    data: (content[section] as Record<string, unknown> | undefined) ?? {},
+    data: mergeContentValue(fallbackSection, dbData) as Record<string, unknown>,
   };
 }
 
@@ -299,24 +347,25 @@ export async function updateContent(section: string, data: unknown) {
     }
 
 
-    const content = await readJsonPreferFallback<Record<string, unknown>>(
-      CONTENT_PATH,
-      CONTENT_FALLBACK_PATH,
-      {}
-    );
+    const [content, dbSection] = await Promise.all([
+      readContentJson(),
+      prisma.cmsSection.findUnique({ where: { key: section } }),
+    ]);
 
-
-    const currentSection =
-      (content[section] as Record<string, unknown> | undefined) ?? {};
-    content[section] = { ...currentSection, ...(data as Record<string, unknown>) };
+    const currentSection = mergeContentValue(
+      asRecord(content[section]),
+      asRecord(dbSection?.data)
+    ) as Record<string, unknown>;
+    content[section] = mergeContentValue(currentSection, data) as Record<string, unknown>;
 
     await syncSectionToPrisma(section, content[section] as Record<string, unknown>);
 
+    const syncedContent = await mergeCmsSectionsIntoContent(content);
 
     const { used } = await writeJsonWithFallback(
       CONTENT_PATH,
       CONTENT_FALLBACK_PATH,
-      content
+      syncedContent
     );
 
 

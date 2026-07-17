@@ -1,38 +1,33 @@
-import fs from "fs/promises";
-import path from "path";
 import ConfigManager from "./ConfigManager";
 import { Sliders } from "lucide-react";
+import { getContentSection } from "@/app/actions/content";
+import { siteContent } from "@/constants/site-content";
 
 export const revalidate = 0;
 
+type FooterData = typeof siteContent.footer;
+type SocialData = typeof siteContent.social;
+
+function mergeRecord<T extends Record<string, unknown>>(fallback: T, value: unknown): T {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? ({ ...fallback, ...(value as Record<string, unknown>) } as T)
+    : fallback;
+}
+
 export default async function ConfigPage() {
-  const filePath = path.join(process.cwd(), "constants", "site-content.json");
+  const [footerResult, socialResult] = await Promise.all([
+    getContentSection("footer"),
+    getContentSection("social"),
+  ]);
 
-  let footerData = {
-    socialBadge: "Suivez l'agence",
-    location: "Kinshasa, RD Congo",
-    email: "contact@fluxion.cd",
-    privacy: "Confidentialité",
-    terms: "Conditions"
-  };
-
-  let socialData = {
-    badge: "Suivez l'agence",
-    platforms: {
-      linkedin: "LinkedIn",
-      instagram: "Instagram",
-      twitter: "Twitter"
-    }
-  };
-
-  try {
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    const data = JSON.parse(fileContent);
-    if (data.footer) footerData = data.footer;
-    if (data.social) socialData = data.social;
-  } catch (error) {
-    console.error("Failed to read site-content.json for config CMS:", error);
-  }
+  const footerData = mergeRecord<FooterData>(
+    siteContent.footer,
+    footerResult.success ? footerResult.data : null
+  );
+  const socialData = mergeRecord<SocialData>(
+    siteContent.social,
+    socialResult.success ? socialResult.data : null
+  );
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500 font-sans">

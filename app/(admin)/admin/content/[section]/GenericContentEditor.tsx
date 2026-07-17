@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ChevronLeft, Plus, RotateCcw, Save, Trash2 } from "lucide-react";
 import { updateContent } from "@/app/actions/content";
 import { Button } from "@/components/ui/button";
@@ -104,6 +105,7 @@ export default function GenericContentEditor({
   meta: SectionMeta;
   initialData: JsonValue;
 }) {
+  const router = useRouter();
   const [formData, setFormData] = useState<JsonValue>(initialData);
   const [isSaving, setIsSaving] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
@@ -120,6 +122,7 @@ export default function GenericContentEditor({
     setIsSaving(false);
     setStatus(result.success ? "success" : "error");
     if (result.success) {
+      router.refresh();
       setTimeout(() => setStatus("idle"), 3000);
     }
   };

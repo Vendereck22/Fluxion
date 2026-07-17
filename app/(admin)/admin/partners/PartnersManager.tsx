@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   LuImagePlus,
   LuPlus,
@@ -52,6 +53,7 @@ function normalizePartners(data: PartnersData): Required<PartnersData> {
 }
 
 export default function PartnersManager({ initialData }: PartnersManagerProps) {
+  const router = useRouter();
   const [data, setData] = useState<Required<PartnersData>>(
     normalizePartners(initialData)
   );
@@ -167,6 +169,7 @@ export default function PartnersManager({ initialData }: PartnersManagerProps) {
     try {
       const res = await updateContent("partners", payload);
       setStatus(res.success ? "success" : "error");
+      if (res.success) router.refresh();
     } catch {
       setStatus("error");
     } finally {
