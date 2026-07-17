@@ -56,10 +56,10 @@ export default function VideoSection() {
       {!isPlaying && (
         <div className="absolute inset-0 bg-fluxion-blue/20 backdrop-blur-[2px] z-10 pointer-events-none transition-all duration-700"></div>
       )}
-      <div className="absolute inset-x-0 bottom-8 z-20 md:bottom-12">
-        <div className="fluxion-container flex flex-col items-center gap-6 text-center md:flex-row md:items-end md:justify-between md:text-left">
-          <div className="max-w-2xl">
-            <div className="mb-4 flex items-center justify-center gap-3 text-[10px] font-black uppercase tracking-[0.28em] text-white/55 md:justify-start md:text-xs">
+      <div className="absolute inset-x-0 bottom-5 z-20 md:bottom-12">
+        <div className="fluxion-container flex items-end justify-between gap-4 text-left">
+          <div className="max-w-[calc(100%-5rem)] md:max-w-2xl">
+            <div className="mb-3 flex items-center gap-3 text-[9px] font-black uppercase tracking-[0.22em] text-white/55 md:mb-4 md:text-xs md:tracking-[0.28em]">
               <span
                 className={cn(
                   "h-2 w-2 rounded-full",
@@ -72,7 +72,7 @@ export default function VideoSection() {
                 {isPlaying ? siteContent.video.statusStream : siteContent.video.statusStandby}
               </span>
             </div>
-            <p className="text-sm font-medium leading-relaxed text-white/80 md:text-base lg:text-lg">
+            <p className="text-xs font-medium leading-relaxed text-white/80 sm:text-sm md:text-base lg:text-lg">
               {siteContent.video.description}
             </p>
           </div>
@@ -80,12 +80,12 @@ export default function VideoSection() {
             type="button"
             onClick={handleTogglePlay}
             aria-label={isPlaying ? "Mettre la video en pause" : "Lire la video"}
-            className="group h-20 w-20 shrink-0 rounded-full border border-white/25 bg-white/10 p-0 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-fluxion-rose active:scale-95 md:h-24 md:w-24"
+            className="group h-16 w-16 shrink-0 rounded-full border border-white/25 bg-white/10 p-0 text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-fluxion-rose active:scale-95 md:h-24 md:w-24"
           >
             {isPlaying ? (
-              <Pause className="h-8 w-8 fill-current transition-transform group-hover:scale-110 md:h-9 md:w-9" />
+              <Pause className="h-6 w-6 fill-current transition-transform group-hover:scale-110 md:h-9 md:w-9" />
             ) : (
-              <Play className="h-8 w-8 translate-x-0.5 fill-current transition-transform group-hover:scale-110 md:h-9 md:w-9" />
+              <Play className="h-6 w-6 translate-x-0.5 fill-current transition-transform group-hover:scale-110 md:h-9 md:w-9" />
             )}
           </Button>
         </div>
