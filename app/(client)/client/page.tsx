@@ -7,7 +7,7 @@ import WhyUs from "@/components/client/WhyUs";
 import TeamGrid from "@/components/client/TeamGrid";
 import { getPublicPartners, getPublicTeam } from "@/lib/server/public-content";
 
-export const revalidate = 300;
+export const revalidate = 1;
 
 export default async function ClientPage() {
   const [partners, team] = await Promise.all([

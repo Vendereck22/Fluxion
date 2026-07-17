@@ -5,7 +5,7 @@ import ProductsFinalSection from "@/components/client/products/ProductsFinalSect
 import { UtensilsCrossed, Type } from "lucide-react";
 import { getPublicProducts } from "@/lib/server/public-content";
 
-export const revalidate = 300;
+export const revalidate = 1;
 
 export default async function NosProduit() {
   const items = await getPublicProducts();

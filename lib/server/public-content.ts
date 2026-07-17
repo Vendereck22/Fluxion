@@ -335,35 +335,35 @@ async function loadPublicServiceFeatures() {
 export const getPublicProducts = unstable_cache(
   loadPublicProducts,
   ["public-products"],
-  { revalidate: 300, tags: ["public-products"] }
+  { revalidate: 1, tags: ["public-products"] }
 );
 
 export const getPublicProjects = unstable_cache(
   loadPublicProjects,
   ["public-projects"],
-  { revalidate: 300, tags: ["public-projects"] }
+  { revalidate: 1, tags: ["public-projects"] }
 );
 
 export const getPublicPartners = unstable_cache(
   loadPublicPartners,
   ["public-partners"],
-  { revalidate: 300, tags: ["public-partners"] }
+  { revalidate: 1, tags: ["public-partners"] }
 );
 
 export const getPublicTeam = unstable_cache(
   loadPublicTeam,
   ["public-team"],
-  { revalidate: 300, tags: ["public-team"] }
+  { revalidate: 1, tags: ["public-team"] }
 );
 
 export const getPublicServiceFeatures = unstable_cache(
   loadPublicServiceFeatures,
   ["public-services"],
-  { revalidate: 300, tags: ["public-services"] }
+  { revalidate: 1, tags: ["public-services"] }
 );
 
 export const getPublicSiteContent = unstable_cache(
   loadPublicSiteContent,
   ["public-site-content"],
-  { revalidate: 300, tags: ["public-site-content"] }
+  { revalidate: 1, tags: ["public-site-content"] }
 );

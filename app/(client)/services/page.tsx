@@ -6,7 +6,7 @@ import ProgrammationSection from "@/components/client/services/sections/Programm
 import VideoGraphieSection from "@/components/client/services/sections/VideoGraphieSection";
 import { getPublicServiceFeatures } from "@/lib/server/public-content";
 
-export const revalidate = 300;
+export const revalidate = 1;
 
 function normalize(value: string) {
   return value

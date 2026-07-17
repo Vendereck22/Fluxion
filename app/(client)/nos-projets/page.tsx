@@ -2,7 +2,7 @@ import ProjectsHero from "@/components/client/projects/ProjectsHero";
 import ProjectsGrid from "@/components/client/projects/ProjectsGrid";
 import { getPublicProjects } from "@/lib/server/public-content";
 
-export const revalidate = 300;
+export const revalidate = 1;
 
 export default async function NosProjets() {
   const projects = await getPublicProjects();

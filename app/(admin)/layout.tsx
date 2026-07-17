@@ -1,5 +1,6 @@
 import { Sidebar } from "@/components/admin/Sidebar";
 import Topbar from "@/components/admin/Topbar";
+import LiveRefresh from "@/components/shared/LiveRefresh";
 
 export default function AdminLayout({
   children,
@@ -8,6 +9,7 @@ export default function AdminLayout({
 }) {
   return (
     <div className="flex min-h-screen bg-slate-50 text-slate-900 antialiased font-sans">
+      <LiveRefresh intervalMs={4000} />
       <Sidebar />
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-slate-50">

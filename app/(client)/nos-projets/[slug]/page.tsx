@@ -2,7 +2,7 @@ import ProjectDetail from "@/components/client/projects/ProjectDetail";
 import { notFound } from "next/navigation";
 import { getPublicProjects } from "@/lib/server/public-content";
 
-export const revalidate = 300;
+export const revalidate = 1;
 
 export default async function ProjectPage({
   params,

@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
 import { useSiteContent } from "@/components/client/SiteContentProvider";
 
 export default function AboutHero() {

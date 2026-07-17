@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import ProductDetail from "@/components/client/products/ProductDetail";
 import { getPublicProducts } from "@/lib/server/public-content";
 
-export const revalidate = 300;
+export const revalidate = 1;
 
 export default async function ProductPage({
   params,
